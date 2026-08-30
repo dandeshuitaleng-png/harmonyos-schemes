@@ -1,0 +1,12 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "地球 Online · 观测站"
+    },
+    {
+      "name": "app_description",
+      "value": "用内置示例照片在本机记录自然目击。不是预报、图像识别或应急服务。"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# HarmonyOS / Hvigor generated output
+**/build/
+**/.hvigor/
+**/oh_modules/
+**/node_modules/
+*.hap
+*.app
+*.appx
+
+# Local signing material and secrets
+*.p7b
+*.p12
+*.pfx
+*.cer
+*.crt
+*.pem
+*.key
+local.properties
+signing.properties
+**/build-profile.local.json5
+
+# Logs and editor state
+*.log
+.idea/
+.vscode/

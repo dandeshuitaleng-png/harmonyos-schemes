@@ -1,0 +1,6 @@
+{
+  "string": [
+    { "name": "app_name", "value": "微光习惯" },
+    { "name": "app_description", "value": "离线、非竞争的微习惯练习。不记录连续天数，不评判健康状态。" }
+  ]
+}

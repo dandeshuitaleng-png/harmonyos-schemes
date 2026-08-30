@@ -1,0 +1,7 @@
+{
+  "string": [
+    { "name": "module_desc", "value": "农事口述簿入口模块：会话内手动农事记录" },
+    { "name": "ability_description", "value": "农事口述簿主界面" },
+    { "name": "entry_label", "value": "农事口述簿" }
+  ]
+}

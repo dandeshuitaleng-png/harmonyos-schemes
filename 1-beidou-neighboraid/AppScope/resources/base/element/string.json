@@ -1,0 +1,6 @@
+{
+  "string": [
+    { "name": "app_name", "value": "北斗邻援" },
+    { "name": "app_description", "value": "离线 SOS 演练记录。不是官方报警，不替代 110/119/120。" }
+  ]
+}

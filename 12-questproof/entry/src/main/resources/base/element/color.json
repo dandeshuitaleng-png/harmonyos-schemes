@@ -1,0 +1,12 @@
+{
+  "color": [
+    { "name": "canvas", "value": "#F7F8FC" },
+    { "name": "card", "value": "#FFFFFFFF" },
+    { "name": "notice", "value": "#F3EDFA" },
+    { "name": "text_primary", "value": "#28324A" },
+    { "name": "text_secondary", "value": "#65728B" },
+    { "name": "text_notice", "value": "#7652AA" },
+    { "name": "action", "value": "#6650A4" },
+    { "name": "on_action", "value": "#FFFFFFFF" }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "string": [
+    { "name": "app_name", "value": "可信任务贴" },
+    { "name": "app_description", "value": "本机任务状态演示。不是真实回执、身份证明或链上凭证。" }
+  ]
+}

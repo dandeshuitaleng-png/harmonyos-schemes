@@ -1,0 +1,6 @@
+{
+  "string": [
+    { "name": "app_name", "value": "步道通" },
+    { "name": "app_description", "value": "本地记录个人步道通行观察" }
+  ]
+}

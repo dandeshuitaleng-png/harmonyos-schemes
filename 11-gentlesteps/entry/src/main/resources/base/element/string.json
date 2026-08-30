@@ -1,0 +1,7 @@
+{
+  "string": [
+    { "name": "module_desc", "value": "微光习惯入口模块：离线微任务练习" },
+    { "name": "ability_description", "value": "微光习惯主界面" },
+    { "name": "entry_label", "value": "微光习惯" }
+  ]
+}

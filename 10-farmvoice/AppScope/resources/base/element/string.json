@@ -1,0 +1,6 @@
+{
+  "string": [
+    { "name": "app_name", "value": "农事口述簿" },
+    { "name": "app_description", "value": "无网手动农事记录。不录音、不上传，不提供种植或施药建议。" }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "string": [
+    { "name": "app_name", "value": "静伴空间" },
+    { "name": "app_description", "value": "离线、非医疗的安静练习计时。不是心理治疗或危机干预。" }
+  ]
+}
