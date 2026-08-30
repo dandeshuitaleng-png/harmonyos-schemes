@@ -4,15 +4,15 @@
 
 | 编号 | 工程目录 | 进度 |
 | --- | --- | --- |
-| 1 | `1-beidou-neighboraid` | 未签名构建通过；签名与真机待完成 |
-| 2 | `2-quietbeacon` | Node 4 验证中；未签名构建通过 |
-| 3 | `3-tidewatch` | Node 4 验证中；未签名构建通过 |
-| 4 | `4-sensecraft` | Node 4 验证中；未签名构建通过 |
-| 5 | `5-freshloop` | Node 4 验证中；未签名构建通过 |
-| 6 | `6-greenlens` | Node 4 验证中；未签名构建通过 |
-| 7 | `7-voicebridge` | Node 4 验证中；未签名构建通过 |
-| 8 | `8-aidtrace` | Node 4 构建中；未签名构建通过 |
-| 9 | `9-stillside` | 未签名构建通过；待真机验收 |
+| 1 | `01-beidou-neighboraid` | 未签名构建通过；签名与真机待完成 |
+| 2 | `02-quietbeacon` | Node 4 验证中；未签名构建通过 |
+| 3 | `03-tidewatch` | Node 4 验证中；未签名构建通过 |
+| 4 | `04-sensecraft` | Node 4 验证中；未签名构建通过 |
+| 5 | `05-freshloop` | Node 4 验证中；未签名构建通过 |
+| 6 | `06-greenlens` | Node 4 验证中；未签名构建通过 |
+| 7 | `07-voicebridge` | Node 4 验证中；未签名构建通过 |
+| 8 | `08-aidtrace` | Node 4 构建中；未签名构建通过 |
+| 9 | `09-stillside` | 未签名构建通过；待真机验收 |
 | 10 | `10-farmvoice` | 未签名构建通过；待真机验收 |
 | 11 | `11-gentlesteps` | 未签名构建通过；待真机验收 |
 | 12 | `12-questproof` | 未签名构建通过；待真机验收 |

@@ -16,10 +16,10 @@ done < <(find . -mindepth 1 -maxdepth 1 -type d -name '[0-9]*-*' -exec basename 
 
 expected=1
 for project in "${projects[@]}"; do
-  if [[ ! "$project" =~ ^([1-9][0-9]*)- ]]; then
+  if [[ ! "$project" =~ ^([0-9]+)- ]]; then
     fail "目录编号格式不正确：$project"
   fi
-  number="${BASH_REMATCH[1]}"
+  number=$((10#${BASH_REMATCH[1]}))
   [[ "$number" -eq "$expected" ]] || fail "目录编号必须连续；期望 $expected，实际 $number（$project）"
 
   test -f "$project/AGENTS.md" || fail "$project 缺少 AGENTS.md"
