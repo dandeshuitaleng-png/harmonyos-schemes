@@ -51,3 +51,22 @@
 | **总分** | **17/25** | 未达到 21/25，且有三项低于 4。 |
 
 结论：本日仍无推荐。没有创建 `22-*`，没有修改编号表，也没有生成任何应用代码。
+
+## 2026-08-30：App Store 竞品补充核验（无推荐）
+
+检索日期：2026-08-30（Asia/Shanghai）。新增范围仅作为竞品与需求证据，不能推断鸿蒙市场状态或鸿蒙能力。
+
+- [Seeing AI（美国 App Store）](https://apps.apple.com/us/app/seeing-ai/id999062298)：Microsoft 的低视力辅助工具，页面列出文本、物品、条码与照片描述能力。它使“通用相机视觉辅助”不具备本轮所需的差异化；若涉及人脸、货币或医疗/安全信息，还会扩大风险。
+- [Open Food Facts（美国 App Store）](https://apps.apple.com/us/app/open-food-facts-product-scan/id588797948)：列出条码扫描、营养/过敏原与环保信息；与 `16-fridge-pantry` 问题域重叠，并涉及食品数据准确性边界。
+- [Wheelmap（美国 App Store）](https://apps.apple.com/us/app/wheelmap/id399239476?platform=ipad)：列出公共场所无障碍细节与电梯/扶梯状态；与 `21-stepaccess` 相邻，且进一步证明这类产品依赖持续数据维护和社区审核。
+- [Day One（美国 App Store）](https://apps.apple.com/us/app/day-one-daily-journal-diary/id1044867788)：列出加密、音视频、导出与提醒能力；本地声音档案方向已有强势成熟竞品，且与既有个人记录方案相近。
+
+结论：本轮未发现既满足两周 MVP、低风险、非重叠，又能在应用市场、元服务中心和 HarmonyOS/OpenHarmony 社区留下充分差异证据的候选；仍为本日无推荐。
+
+## 2026-08-30：命名规则更新后的即时轮次
+
+本日已入选并写入编号表的候选为 `22-plantrelay`、`23-repairpassport`、`24-visitready`，恰好达到每日最多 3 个候选的上限。本轮不再创建任何项目目录，以避免绕过限额重复入库。
+
+- 三个入选候选均已包含 Apple App Store 竞品链接、地区、检索日期和可见功能，且分别使用非 GitHub 的一手/近一手来源交叉核验。
+- 名称已按最新规则改为面向用户的品牌式名称：叶伴、修物志、从容赴约；功能描述留在副标题和 `AGENTS.md`。
+- 本轮无新增推荐的原因是**日上限已满**，不是放宽或跳过质量门槛。

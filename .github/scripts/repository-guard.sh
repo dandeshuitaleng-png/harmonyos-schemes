@@ -23,7 +23,9 @@ for project in "${projects[@]}"; do
   [[ "$number" -eq "$expected" ]] || fail "目录编号必须连续；期望 $expected，实际 $number（$project）"
 
   test -f "$project/AGENTS.md" || fail "$project 缺少 AGENTS.md"
-  test -f "$project/build-profile.json5" || fail "$project 缺少 build-profile.json5"
+  if ! test -f "$project/build-profile.json5" && ! test -f "$project/RESEARCH_EVIDENCE.md"; then
+    fail "$project 既不是可构建工程，也不是含 RESEARCH_EVIDENCE.md 的研究方案"
+  fi
   grep -Fq "\`$project\`" README.md || fail "README.md 未登记 $project"
   expected=$((expected + 1))
 done
