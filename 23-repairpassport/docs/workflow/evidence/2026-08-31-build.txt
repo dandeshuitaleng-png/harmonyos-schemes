@@ -1,0 +1,62 @@
+CWD=/Users/huangnianpeng/Desktop/7/hongmengOS/all-schemes/23-repairpassport
+COMMAND=['/Applications/DevEco-Studio.app/Contents/tools/hvigor/bin/hvigorw', '--mode', 'module', '-p', 'product=default', '-p', 'module=entry@default', 'assembleHap', '--no-daemon', '--no-incremental', '--stacktrace']
+> hvigor [32mTYPE CHECK SUCCESSFUL in 348 ms [39m
+> hvigor [33mWARN: The version number of the 'entry' module does not comply with the SemVer specification.
+               This will affect the installation and publication by ohpm.
+               Make sure the value of version in the oh-package.json5 file of the module complies with the SemVer specification.[39m
+> hvigor [32mFinished :entry:default@PreBuild... after 143 ms [39m
+> hvigor [32mFinished :entry:default@CreateModuleInfo... after 1 ms [39m
+> hvigor [32mFinished :entry:default@GenerateMetadata... after 2 ms [39m
+> hvigor [32mFinished :entry:default@ConfigureCmake... after 1 ms [39m
+> hvigor [32mFinished :entry:default@MergeProfile... after 4 ms [39m
+> hvigor [32mFinished :entry:default@CreateBuildProfile... after 2 ms [39m
+> hvigor [32mFinished :entry:default@PreCheckSyscap... after 1 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgContextInfo... after 7 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 3 ms [39m
+> hvigor [32mFinished :entry:default@ProcessIntegratedHsp... after 1 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 1 ms [39m
+> hvigor [32mFinished :entry:default@MakePackInfo... after 2 ms [39m
+> hvigor [32mFinished :entry:default@SyscapTransform... after 1 ms [39m
+> hvigor [32mFinished :entry:default@ProcessProfile... after 127 ms [39m
+> hvigor [32mFinished :entry:default@ProcessRouterMap... after 2 ms [39m
+> hvigor [32mFinished :entry:default@ProcessShareConfig... after 1 ms [39m
+> hvigor [32mFinished :entry:default@ProcessStartupConfig... after 1 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 1 ms [39m
+> hvigor [32mFinished :entry:default@ProcessResource... after 3 ms [39m
+> hvigor [32mFinished :entry:default@GenerateLoaderJson... after 5 ms [39m
+> hvigor [32mFinished :entry:default@ProcessLibs... after 5 ms [39m
+> hvigor [32mFinished :entry:default@CompileResource... after 205 ms [39m
+> hvigor [32mFinished :entry:default@DoNativeStrip... after 2 ms [39m
+> hvigor [32mFinished :entry:default@BuildJS... after 2 ms [39m
+> hvigor [32mFinished :entry:default@CacheNativeLibs... after 6 ms [39m
+> hvigor [33mWARN: [33mWARN: [33m[33mArkTS:WARN File: /Users/huangnianpeng/Desktop/7/hongmengOS/all-schemes/23-repairpassport/entry/src/main/ets/data/DeviceStore.ets:4:102
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/huangnianpeng/Desktop/7/hongmengOS/all-schemes/23-repairpassport/entry/src/main/ets/data/DeviceStore.ets:4:179
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/huangnianpeng/Desktop/7/hongmengOS/all-schemes/23-repairpassport/entry/src/main/ets/data/DeviceStore.ets:4:614
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/huangnianpeng/Desktop/7/hongmengOS/all-schemes/23-repairpassport/entry/src/main/ets/data/DeviceStore.ets:4:677
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/huangnianpeng/Desktop/7/hongmengOS/all-schemes/23-repairpassport/entry/src/main/ets/data/DeviceStore.ets:4:726
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/huangnianpeng/Desktop/7/hongmengOS/all-schemes/23-repairpassport/entry/src/main/ets/pages/Index.ets:27:39
+ 'getContext' has been deprecated.
+[39m[39m
+[39m
+> hvigor [32mFinished :entry:default@CompileArkTS... after 3 s 609 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgModuleJson... after 2 ms [39m
+> hvigor [32mFinished :entry:default@ProcessCompiledResources... after 1 ms [39m
+> hvigor [32mFinished :entry:default@PackageHap... after 482 ms [39m
+> hvigor [32mFinished :entry:default@PackingCheck... after 5 ms [39m
+> hvigor [33mWARN: No signingConfig found for product default[39m
+> hvigor [32mFinished :entry:default@SignHap... after 1 ms [39m
+> hvigor [32mFinished :entry:default@CollectDebugSymbol... after 1 ms [39m
+> hvigor [32mFinished :entry:assembleHap... after 1 ms [39m
+> hvigor [32mBUILD SUCCESSFUL in 8 s 220 ms [39m
+
+BUILD_EXIT=0

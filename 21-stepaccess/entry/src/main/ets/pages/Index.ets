@@ -3,6 +3,9 @@ import { NewObservation, Observation, ObservationStore } from '../data/Observati
 const OBSTACLE_TYPES: string[] = ['路缘坡', '台阶', '临时障碍', '路面破损'];
 const ASSISTIVE_CONTEXTS: string[] = ['轮椅', '助行器', '婴儿车', '低视力出行'];
 const PASSAGE_FEELINGS: string[] = ['可以独立通过', '需要他人协助', '当前不建议通过'];
+const OBSTACLE_FILTER_TYPES: string[] = ['全部', '路缘坡', '台阶', '临时障碍', '路面破损'];
+const CONTEXT_FILTER_TYPES: string[] = ['全部', '轮椅', '助行器', '婴儿车', '低视力出行'];
+const FEELING_FILTER_TYPES: string[] = ['全部', '可以独立通过', '需要他人协助', '当前不建议通过'];
 
 @Entry
 @Component
@@ -12,6 +15,9 @@ struct Index {
   @State private assistiveContext: string = '';
   @State private passageFeeling: string = '';
   @State private observations: Observation[] = [];
+  @State private obstacleFilter: string = '全部';
+  @State private contextFilter: string = '全部';
+  @State private feelingFilter: string = '全部';
   @State private isLoading: boolean = true;
   @State private storageError: string = '';
 
@@ -25,6 +31,22 @@ struct Index {
 
   private canCreate(): boolean {
     return this.obstacleType !== '' && this.assistiveContext !== '' && this.passageFeeling !== '';
+  }
+
+  private hasActiveFilters(): boolean {
+    return this.obstacleFilter !== '全部' || this.contextFilter !== '全部' || this.feelingFilter !== '全部';
+  }
+
+  private clearFilters(): void {
+    this.obstacleFilter = '全部'; this.contextFilter = '全部'; this.feelingFilter = '全部';
+  }
+
+  private filteredObservations(): Observation[] {
+    return this.observations.filter((observation: Observation) =>
+      (this.obstacleFilter === '全部' || observation.obstacleType === this.obstacleFilter) &&
+      (this.contextFilter === '全部' || observation.assistiveContext === this.contextFilter) &&
+      (this.feelingFilter === '全部' || observation.passageFeeling === this.feelingFilter)
+    );
   }
 
   private formatDateTime(): string {
@@ -115,6 +137,23 @@ struct Index {
     .width('100%')
   }
 
+  @Builder
+  private filterGroup(title: string, choices: string[], selected: string, prefix: string, onSelect: (item: string) => void) {
+    Column({ space: 8 }) {
+      Text(title).fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
+      ForEach(choices, (item: string) => {
+        Button(selected === item ? `${item} · 已筛选` : item)
+          .width('100%')
+          .constraintSize({ minHeight: 48 })
+          .borderRadius(14)
+          .backgroundColor(selected === item ? $r('app.color.surface_selected') : $r('app.color.surface_control'))
+          .fontColor($r('app.color.text_primary'))
+          .accessibilityText(selected === item ? `当前${prefix}筛选为${item}` : `按${prefix}${item}筛选本机观察`)
+          .onClick(() => onSelect(item))
+      }, (item: string) => item)
+    }.padding(14).backgroundColor($r('app.color.surface_card')).borderRadius(18).width('100%')
+  }
+
   build() {
     Scroll() {
       Column({ space: 16 }) {
@@ -162,6 +201,15 @@ struct Index {
           .accessibilityText(this.canCreate() && !this.isLoading ? '创建一条仅保存在本机的未经审核步道观察' : '请先完成三个选择或等待本机记录读取完成')
           .onClick(() => this.createObservation())
 
+        Column({ space: 10 }) {
+          Text('筛选本机观察').fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
+          Text('筛选只改变当前列表，不会修改本机观察数据。').fontSize(14).fontColor($r('app.color.text_secondary'))
+          this.filterGroup('障碍类型', OBSTACLE_FILTER_TYPES, this.obstacleFilter, '障碍类型', (item: string) => this.obstacleFilter = item)
+          this.filterGroup('出行情境', CONTEXT_FILTER_TYPES, this.contextFilter, '出行情境', (item: string) => this.contextFilter = item)
+          this.filterGroup('本人通行感受', FEELING_FILTER_TYPES, this.feelingFilter, '通行感受', (item: string) => this.feelingFilter = item)
+          if (this.hasActiveFilters()) { Button('清除筛选').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).accessibilityText('清除全部本机观察筛选').onClick(() => this.clearFilters()) }
+        }.padding(20).backgroundColor($r('app.color.surface_card')).borderRadius(20).width('100%')
+
         if (this.storageError.length > 0) {
           Column({ space: 8 }) {
             Text(this.storageError)
@@ -192,8 +240,13 @@ struct Index {
             Text('尚无本机观察。创建后会保留到你主动删除；不会上传或用于评分。')
               .fontSize(15)
               .fontColor($r('app.color.text_secondary'))
+          } else if (this.filteredObservations().length === 0) {
+            Text('没有符合当前筛选的本机观察。清除筛选后可查看全部记录。')
+              .fontSize(15)
+              .fontColor($r('app.color.text_secondary'))
+            Button('清除筛选并查看全部').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).accessibilityText('清除筛选并查看全部本机观察').onClick(() => this.clearFilters())
           } else {
-            ForEach(this.observations, (observation: Observation) => {
+            ForEach(this.filteredObservations(), (observation: Observation) => {
               Column({ space: 6 }) {
                 Text(`${observation.obstacleType} · ${observation.assistiveContext}`)
                   .fontSize(17)

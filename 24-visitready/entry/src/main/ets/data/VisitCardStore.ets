@@ -1,12 +1,12 @@
 import { preferences } from '@kit.ArkData';
 
-export interface VisitCard { id: number; placeName: string; visitTime: string; companionName: string; checklist: string; reminderDate?: string; }
+export interface VisitCard { id: number; placeName: string; visitTime: string; addressText?: string; companionName: string; checklist: string; needs?: string; avoids?: string; leavingPlan?: string; reminderDate?: string; }
 const STORE_NAME: string = 'visitready-cards';
 const CARDS_KEY: string = 'cards';
 
 export class VisitCardStore {
   private normalize(card: VisitCard): VisitCard {
-    return { id: card.id, placeName: card.placeName, visitTime: card.visitTime, companionName: card.companionName, checklist: card.checklist, reminderDate: card.reminderDate ?? '' };
+    return { id: card.id, placeName: card.placeName, visitTime: card.visitTime, addressText: card.addressText ?? '', companionName: card.companionName, checklist: card.checklist, needs: card.needs ?? '', avoids: card.avoids ?? '', leavingPlan: card.leavingPlan ?? '', reminderDate: card.reminderDate ?? '' };
   }
   async load(context: Context): Promise<VisitCard[]> {
     const store = await preferences.getPreferences(context, STORE_NAME);

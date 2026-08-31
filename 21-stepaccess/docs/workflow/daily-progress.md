@@ -140,3 +140,44 @@
 
 - **下次首个动作：** 在收到一次性产品/隐私决定后，先恢复并实现本地观察页及最小 RDB 数据模型，再为加载、空、保存错误、删除错误和无权限手动替代补全规格与运行验证。
 - **续办对象：** 21-stepaccess；只有明确淘汰、完成或继续需要用户输入时才切换。
+
+## 2026-08-31 · 本机观察三字段筛选
+
+### 1. 范围与输入
+
+- **工程 / 候选：** `21-stepaccess`；只处理已保存 RDB 观察的本地页面筛选。
+- **当前节点：** Implement → Verify。
+- **本次 MVP 切片与用户路径：** 默认查看全部本机观察 → 按障碍类型、出行情境和本人通行感受逐项筛选 → 查看符合记录 → 清除筛选恢复全部。筛选空结果明确提示并提供“清除筛选并查看全部”。
+- **不在本次范围：** 新增字段、RDB schema 变更、位置、照片、相机/相册权限、网络、导出、真实审核、评分、路线、签名、真机、上传或审核。
+
+### 2. 实际执行与产出
+
+- **做了什么：** 增加三项默认“全部”的页面 `@State` 筛选值、精确匹配的 `filteredObservations`、筛选组件和清除动作。筛选只读取 `observations`，不调用 `ObservationStore` 的 create/remove，不修改 RDB 数据。
+- **改动文件：** `entry/src/main/ets/pages/Index.ets`、`docs/design/observation-screen.md` 和本文件。
+- **未做什么：** 未增加任何数据字段、权限、位置、照片、网络、导出或真实审核；未把个人观察标为已确认。
+- **生成的本地产物：** 未签名 HAP `entry/build/default/outputs/default/entry-default-unsigned.hap`，`75352` bytes，SHA-256 `bc0ad4b93372c7c96f26360e60e385224c7d8b6ff7e513e9d114f5a10dc5ae39`。
+
+### 3. 验收证据
+
+| 层级 | 本次状态 | 实际证据 | 结论边界 |
+| --- | --- | --- | --- |
+| Scope / Design | PASS | AGENTS 的 MVP 包含本地列表与筛选；设计新增默认全部、筛选空态与恢复动作 | 不以设计替代真机交互 |
+| 当前切片 | PASS（源码与构建） | 三筛选均默认为“全部”；匹配函数只对内存数组过滤；清除重置三项；无结果状态有明确恢复按钮 | 无真机交互证据，不能称运行验收通过 |
+| 产品 MVP 就绪 | FAIL | 本地 RDB 观察、删除和三字段筛选已实现；位置/照片的用户决定、三态展示、详情、主动导出和真机验收仍缺失 | 不进入完整视觉、签名或商店预检 |
+| Build | PASS（未签名） | `hvigorw --mode module -p product=default -p module=entry@default assembleHap --no-daemon --no-incremental --stacktrace` 输出 `TYPE CHECK SUCCESSFUL`、`CompileArkTS`、`PackageHap`、`BUILD SUCCESSFUL in 8 s 504 ms`；`unzip -t` 输出 `No errors detected` | 构建不代表 RDB 设备运行或发布 |
+| Signing / Device / Visual | BLOCKED | 构建输出 `No signingConfig found for product default`；无当天安装、截图、读屏、高对比或 150% 字号证据 | 未签名构建不能作为设备或发布通过 |
+| Backend / Privacy | PASS（本切片边界） | 导入仅含 ArkData、AbilityKit、ArkUI；位置、照片、网络、分享、通知与 Picker 受限导入扫描无命中；筛选不写入 RDB | 静态检查不替代后续位置/照片/导出隐私验收 |
+| Store | 未验证 | 未进行版本、签名、上传或审核动作 | 不得称可发布 |
+
+### 4. 阻塞与轮换依据
+
+- **当前阻塞：** 无 Debug 签名与设备，无法验证创建、筛选、删除、重启恢复、读屏、高对比和大字号；位置/照片/导出留存与删除规则仍需一次性产品/隐私决定。
+- **下一轮依据：** 21 已完成一个明确筛选切片；按轮换规则切换其他工程。回到 21 时，只有在数据与隐私边界明确后才处理详情、导出或位置/照片路径。
+- **需要用户输入：** 位置/照片/导出继续前，需要确认默认保留期、删除后恢复、导出字段、位置精度与照片处理规则。
+
+### 5. 提交归档
+
+- **本次提交：** 无；当前工程目录没有可用 Git 仓库证据，本轮未执行 Git 写操作。
+- **提交范围：** 无提交。
+- **归档状态：** 本轮改动未提交。
+- **说明：** 未执行 `git add`、`commit`、`push` 或历史改写。

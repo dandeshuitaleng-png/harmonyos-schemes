@@ -1,5 +1,19 @@
 # 每日开发进度
 
+## 2026-08-31 · 桌面入口配置复验
+
+- **范围：** 仅为既有 `EntryAbility` 增加与 01、21 号工程一致的 Home skill：`entity.system.home` 与 `action.system.home`；未改业务代码、权限、签名或数据。
+- **证据：** 正式路径 `assembleHap` 输出 `TYPE CHECK SUCCESSFUL`、`PackageHap` 与 `BUILD SUCCESSFUL in 8 s 516 ms`；重新读取 HAP 内 `module.json`，已含这两个 Home 值。
+- **结论边界：** 入口配置和未签名 Build 均 PASS；构建仍提示 `No signingConfig found for product default`，当前 `hdc list targets` 为 `[Empty]`，所以 Signing、Device、Visual、Store 仍未验证。
+- **后续：** 轮换至其他尚有安全本地事项的工程；22 的照片、提醒和真实导出须先有对应的产品/隐私规则，真机验收须有受控签名与设备。
+
+## 2026-08-31 · automation-2 轮换交接（只读）
+
+- 本轮主对象为23；22仅参与最新三项比较：15项结构齐全、10项JSON/JSON5解析通过，但主Ability缺少桌面Home skill，签名配置为空；共享HDC探测返回 `[Empty]`。
+- 状态：工程仍未完成。未改22源码/配置、未构建22、未宣称设备或导出通过。证据见 `../23-repairpassport/docs/workflow/2026-08-31-skeleton-audit.md`（相对all-schemes工程目录阅读）。
+- 下一轮：23完成本次核验切片后轮换至22；先检查最新编号和新证据，仅做尚未完成的正式构建、包完整性与源码保全核验。之后再次轮换，不停留在已确认的配置/签名阻塞。
+- 重试触发：获授权任务修复现有Home skill、签名/设备可用，或真实导出/提醒规则明确；已有代码的修改不属于本骨架自动化权限。
+
 ## 2026-08-30 · 轮换至 22 / 本机植物交接骨架
 
 ### 1. 范围与输入
@@ -81,6 +95,55 @@
 
 - **本次提交：** 无。本轮只读核验最近既有提交为 `b053cf4 · Sort scheme folders by sequence · 2026-08-30T16:50:05+08:00`，范围不包含本轮改动。
 - **归档状态：** 工程目录当前为仓库未跟踪目录；本轮改动未提交，未执行 `git add`、`commit`、`push` 或历史改写。
+
+## 2026-08-31 · 正式路径只读构建与状态核验
+
+### 1. 范围与输入
+
+- **工程 / 候选：** `22-plantrelay`；只读核验正式路径的源码/配置保全、未签名构建、HAP 完整性、签名与设备状态。
+- **当前节点：** Verify。
+- **读取内容：** `AGENTS.md`、现有每日记录、根/模块 Hvigor 配置、`module.json5` 与 `entry/src/main` 文件清单。
+- **不在本次范围：** 任何源码或配置修复、Home skill 修复、功能实现、签名、安装、真机交互、上传、审核或 Git 写操作。
+
+### 2. 实际执行与产出
+
+- **做了什么：** 对 13 个 AppScope、源码与构建配置文件构建前后计算 SHA-256 清单；运行正式 `assembleHap`；校验生成 HAP；只读查询签名配置与 HDC 设备目标。
+- **改动文件：** `docs/workflow/daily-progress.md`：追加本轮事实记录。未改动 22 的源码或配置。
+- **生成的本地产物：** 未签名 HAP `entry/build/default/outputs/default/entry-default-unsigned.hap`，`99080` bytes，SHA-256 `cc9c137842628c335405592326d0f1483863a79a0ce65d30345fe3e9c545476e`。
+
+### 3. 验收证据
+
+| 层级 | 本次状态 | 实际证据 | 结论边界 |
+| --- | --- | --- | --- |
+| Scope / Design | PASS（既有） | AGENTS 明确本地植物交接和系统能力边界；本轮不扩展产品范围 | 不以历史规格替代真机验收 |
+| 产品 MVP 就绪 | FAIL | 既有本机任务、确认/完成与摘要选择仍未覆盖照片拒绝、提醒、真实导出、两盆植物和真机路径 | 不进入发布预检 |
+| Build | PASS（未签名） | `hvigorw --mode module -p product=default -p module=entry@default assembleHap --no-daemon --no-incremental --stacktrace` 输出 `TYPE CHECK SUCCESSFUL`、`CompileArkTS`、`PackageHap`、`BUILD SUCCESSFUL in 7 s 614 ms`；`unzip -t` 输出 `No errors detected` | 构建不代表安装或发布 |
+| Source / config preservation | PASS | 构建前后对 AppScope、`entry/src/main`、build profiles 与 Hvigor files 的 13 项 SHA-256 清单无差异 | 只证明本轮构建未改写这些输入 |
+| Signing | BLOCKED | 构建输出 `No signingConfig found for product default`；配置扫描未发现签名配置（`$profile` 页面资源引用不是签名 Profile） | 未读取、创建或修改证书、私钥、密码或 Profile |
+| Device | BLOCKED | 只读 `hdc list targets` 返回 `[Empty]` | 未安装、启动或交互，不能以历史连接替代当天证据 |
+| Visual / Accessibility | BLOCKED | 无当天截图、读屏、高对比或 150% 字号运行证据 | 构建不能替代渲染验收 |
+| Backend / Privacy | 未验证 | 本轮未运行服务、权限或数据流验证 | 不推定外部能力可用 |
+| Store | 未验证 | 未执行版本、签名、上传或审核动作 | 不得称可发布 |
+
+### 4. 风险与后续
+
+- **阻塞项：** 正式签名配置和可用 HDC 设备均缺失；产品 MVP 也仍有照片拒绝、提醒与真实导出等缺口。
+- **可复现依据：** 构建警告 `No signingConfig found for product default`；HDC 输出 `[Empty]`。另有 `getContext` 已弃用和模块版本 SemVer 警告，未阻断本轮构建。
+- **是否需要用户一次性输入：** 是：若要继续正式通知/导出/照片路径，先确认对应权限、隐私与输出规则；真机验证还需受控 Debug 签名与设备。
+- **不能据此声称：** 未签名 Build PASS 不等于 Signing、Device、Visual、Store 或完整 MVP 通过。
+
+### 5. 提交归档
+
+- **本次提交：** `ce1af4d · Add team next steps dashboard · 2026-08-30T18:38:54+08:00`（只读核验的既有提交，不是本轮提交）。
+- **提交范围：** 无提交。
+- **归档状态：** 本轮只修改每日记录，未提交。
+- **说明：** 未执行 `git add`、`commit`、`push` 或历史改写。
+
+### 6. 后续事项与轮换依据
+
+- **下次首个动作：** 按轮换规则切换到另一项有安全本地切片的未完成工程；22 仅在取得导出/提醒/照片语义或签名设备条件后续办。
+- **重试条件：** 用户确认真实导出/提醒/照片规则，或受控环境提供 Debug 签名与设备。
+- **续办对象：** 22-plantrelay，状态未完成但本轮正式构建核验已完成。
 
 ## 2026-08-30 · 导出前本地字段选择与取消
 

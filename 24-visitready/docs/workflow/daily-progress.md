@@ -1,5 +1,52 @@
 # 每日开发进度
 
+## 2026-08-31 · 桌面入口配置复验
+
+- **范围：** 仅为既有 `EntryAbility` 加入标准 Home skill：`entity.system.home` 与 `action.system.home`；未接入通知、系统分享、Picker、网络、定位或签名。
+- **证据：** 正式路径 `assembleHap` 输出 `TYPE CHECK SUCCESSFUL`、`PackageHap` 与 `BUILD SUCCESSFUL in 8 s 497 ms`；生成 HAP 的 `module.json` 已含完整 Home skill。
+- **结论边界：** Home 入口配置与未签名 Build 均 PASS；`No signingConfig found for product default` 与 HDC `[Empty]` 仍使 Signing、Device、Visual、Store 未验证。也不等于通知、附件或系统分享已接入。
+- **后续：** 按轮换规则不连续扩展24；真实通知/分享/附件继续前须明确权限时机、调度/取消、时区和数据保留规则，真机验证需要受控签名设备。
+
+## 2026-08-31 · 预访字段补齐（地址与个人计划）
+
+### 1. 范围与输入
+
+- **工程 / 候选：** `24-visitready`，当前编号最高的未完成工程。
+- **本次 MVP 切片：** 在既有本机卡片中补齐可选地址文本，以及“我需要 / 我避免 / 离开时我会做什么”三项；新建、编辑、取消、读取旧卡和只读摘要均保留本机边界。
+- **不在本次范围：** 定位、路线、通知 API、系统分享、附件 Picker、网络、账号、签名、安装或上传。
+
+### 2. 实际执行与产出
+
+- **做了什么：** 扩展 `VisitCard` 的 Preferences 兼容归一化；表单、新建和编辑可处理四项新增字段；只读摘要会明确展示已填或“未填写”的新增字段。地址只是用户输入的文本，不请求位置。
+- **改动文件：** `entry/src/main/ets/data/VisitCardStore.ets`、`entry/src/main/ets/pages/Index.ets`、`docs/design/visit-card-screen.md` 与本记录。
+- **构建产物：** `entry/build/default/outputs/default/entry-default-unsigned.hap`，SHA-256 `1fba48f797d148db50bcf37f32272c3da5fbe31b330d710fa9274974f73d9ac8`；上一轮同源码 HAP 容器检查 `unzip -t` 无错误，最终文本调整后重新构建通过。
+
+### 3. 当前证据
+
+| 层级 | 状态 | 实际证据与边界 |
+| --- | --- | --- |
+| Scope / Design | PASS | `AGENTS.md` 明确地址仅文本、三个用户自定条目和本地默认；设计规格已同步表单、摘要与不请求定位边界。 |
+| 当前切片 | PASS（源码与构建） | 新字段进入新建、编辑、取消、旧数据归一化和摘要；最终源码的 Hvigor 输出 `TYPE CHECK SUCCESSFUL`、`CompileArkTS`、`PackageHap`、`BUILD SUCCESSFUL in 8 s 399 ms`。 |
+| 产品 MVP 就绪 | FAIL | 真实本地提醒/通知拒绝、系统分享、附件 Picker 取消与不授权、真机持久化和无障碍运行仍无完成证据；本地字段选择也尚未覆盖新增敏感字段。 |
+| Build | PASS（未签名） | 本轮实际 Hvigor 构建和 HAP 容器检查通过。 |
+| Signing / Device / Visual | 尚未进入预检 | MVP 未就绪；构建日志仍为 `No signingConfig found for product default`，且没有当前安装、截图、读屏或 150% 字号证据。 |
+| Backend / Privacy | PASS（本切片边界） | 仅 ArkData 本地存储；本轮未引入定位、网络、通知、Picker 或系统分享 API。静态边界不替代未来系统能力验收。 |
+| Store | 尚未进入预检 | 未改版本、未签名、未上传或提交审核。 |
+
+### 4. 阻塞、归档与下一步
+
+- **遗留阻塞：** 要接入真实提醒需先明确权限请求时机、调度/取消、时区和内容；真实分享/附件还需确定输出或保留语义。没有 Debug 签名和设备，无法产生运行、截图和无障碍证据。
+- **只读 Git 归档：** 最近既有提交为 `ce1af4d · Add team next steps dashboard · 2026-08-30T18:38:54+08:00`；本轮没有执行 `git add`、`commit`、`push` 或历史改写。
+- **切片后比较：** 24 仍有需要一次性产品决定的系统能力；23 的附件/真实导出同样需要隐私与格式决定；22 的提醒/真实导出也需要语义决定。三项均未完成，且不以轮换视为完成。下轮应在得到相应一次性规则后继续最高编号的可执行项；在此之前不重复构建或冒充视觉/设备通过。
+
+## 2026-08-31 · automation-2 轮换交接（只读）
+
+- 24已有多个本地切片且真实通知规则待一次性决定，因此本轮退出24实现、处理23的工程核验；不把24标记完成。
+- 当前只读检查：15项结构齐全、10项JSON/JSON5解析通过；主Ability缺少桌面Home skill，签名配置为空，共享HDC探测返回 `[Empty]`。未改24源码/配置、未构建24、无当天设备证据。
+- 下一步：先由获授权实现任务修复现有入口配置，再按已批准的通知/分享语义推进；本骨架自动化不覆盖既有文件。
+- 重试触发：源码/配置变化、签名设备可用，或通知权限时机、调度/取消、时区与内容规则到位。23本轮切片结束后，下轮优先比较22的安全核验事项，不连续停留24。
+- 完整证据保存在23的 `docs/workflow/2026-08-31-skeleton-audit.md`。
+
 ## 2026-08-30 · 本机预访卡骨架与首个切片
 
 ### 1. 范围与输入
@@ -217,3 +264,44 @@
 
 - **本次提交：** 无。本轮只读核验最近既有提交为 `b053cf4 · Sort scheme folders by sequence · 2026-08-30T16:50:05+08:00`，范围不包含本轮改动。
 - **归档状态：** 工程目录当前为仓库未跟踪目录；本轮改动未提交，未执行 `git add`、`commit`、`push` 或历史改写。
+
+## 2026-08-31 · 新增敏感字段的本地摘要选择
+
+### 1. 范围与输入
+
+- **工程 / 候选：** `24-visitready`；只处理已有本机摘要字段选择和已经存储的地址/个人偏好文本。
+- **当前节点：** Implement → Verify。
+- **本次用户路径与验收：** 打开已保存卡的摘要字段选择 → 默认仅含场所、时间、清单及非空同行人 → 用户可主动包含地址文本、“我需要”“我避免”“离开时我会做什么” → 查看即时本地摘要 → 取消。全部移除时显示零字段提示；选择只存在内存。
+- **不在本次范围：** 系统分享、Picker、通知、网络、定位、账号、附件、签名、设备、上传或审核。
+
+### 2. 实际执行与产出
+
+- **做了什么：** 为四个新增敏感文本字段加入独立 `@State` 选择开关；每次打开字段选择时都重置为未包含。字段有内容时才显示可选动作；即时摘要按选择显示，取消、编辑与删除仍会退出选择态。没有改动 `VisitCardStore` 或 Preferences 写入路径。
+- **改动文件：** `entry/src/main/ets/pages/Index.ets`、`docs/design/visit-card-screen.md` 和本文件。
+- **未做什么：** 未调用系统分享、Picker、通知、网络或定位 API，未把字段选择持久化，也未发送任何内容。
+- **生成的本地产物：** 未签名 HAP `entry/build/default/outputs/default/entry-default-unsigned.hap`，`114060` bytes，SHA-256 `733379f30e23b60d461d2ee6ba02de1c7fed256b9b51ad280c95546a1d29e392`。
+
+### 3. 验收证据
+
+| 层级 | 本次状态 | 实际证据 | 结论边界 |
+| --- | --- | --- | --- |
+| Scope / Design | PASS | AGENTS 要求分享前允许移除敏感条目；规格明确新增地址和三类个人偏好默认隐藏 | 不代表可以实际分享 |
+| 当前切片 | PASS（源码与构建） | 四个开关只为页面 `@State`；打开时重置为 `false`；取消、编辑、删除退出选择态；无发送动作 | 无真机交互证据，不能称运行验收通过 |
+| 产品 MVP 就绪 | FAIL | 本机卡片、编辑、摘要预览、提醒日期降级与敏感字段选择已实现；真实通知、系统分享、附件与真机验证仍缺失 | 不进入发布预检 |
+| Build | PASS（未签名） | `hvigorw --mode module -p product=default -p module=entry@default assembleHap --no-daemon --no-incremental --stacktrace` 输出 `TYPE CHECK SUCCESSFUL`、`CompileArkTS`、`PackageHap`、`BUILD SUCCESSFUL in 8 s 467 ms`；`unzip -t` 输出 `No errors detected` | 构建不代表安装或运行 |
+| Signing / Device / Visual | BLOCKED | 输出 `No signingConfig found for product default`；无当天安装、截图、读屏或 150% 字号证据 | 未签名构建不能作为设备或发布通过 |
+| Backend / Privacy | PASS（本切片边界） | 导入仅含 ArkData、AbilityKit、ArkUI；分享、Picker、通知、网络、相机与位置受限导入扫描无命中；敏感字段默认不出现在本地摘要 | 静态检查不替代未来系统分享隐私验收 |
+| Store | 未验证 | 未进行版本、签名、上传或审核动作 | 不得称可发布 |
+
+### 4. 阻塞与轮换依据
+
+- **当前阻塞：** 无 Debug 签名与设备，无法验证实际点击、取消、重启恢复、读屏、高对比和 150% 字号；真实通知与系统分享仍缺少用户确认的语义和设备验证。
+- **下一轮依据：** 24 已完成一个明确切片；按轮换规则切换其他工程。未来回到 24 时，仅在用户确认通知/分享规则后接入对应系统能力，或处理附件取消路径。
+- **需要用户输入：** 真实通知需确认权限、时间/时区、取消与拒绝体验；真实分享需确认触发与审阅后数据边界。
+
+### 5. 提交归档
+
+- **本次提交：** `ce1af4d · Add team next steps dashboard · 2026-08-30T18:38:54+08:00`（只读核验的既有提交，不是本轮提交）。
+- **提交范围：** 无提交。
+- **归档状态：** 本轮改动未提交；Git 状态另含进入本轮前已存在的 `VisitCardStore.ets` 修改，本轮未改动该文件。
+- **说明：** 未执行 `git add`、`commit`、`push` 或历史改写。

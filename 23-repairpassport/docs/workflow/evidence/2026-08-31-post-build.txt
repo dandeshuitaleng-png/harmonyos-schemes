@@ -1,0 +1,71 @@
+RUN 2026-08-31T03:04:09.429813+08:00
+SOURCE_FILES_CHECKED=16
+SOURCE_CHANGES=[]
+HAP_PATH=/Users/huangnianpeng/Desktop/7/hongmengOS/all-schemes/23-repairpassport/entry/build/default/outputs/default/entry-default-unsigned.hap
+HAP_BYTES=95877
+HAP_SHA256=fee998941edbbe62b6d5c8a99b3b7b185c0f4f0c00b3a06bab67c5b4934aa898
+COMMAND unzip -t /Users/huangnianpeng/Desktop/7/hongmengOS/all-schemes/23-repairpassport/entry/build/default/outputs/default/entry-default-unsigned.hap
+Archive:  /Users/huangnianpeng/Desktop/7/hongmengOS/all-schemes/23-repairpassport/entry/build/default/outputs/default/entry-default-unsigned.hap
+    testing: module.json              OK
+    testing: resources.index          OK
+    testing: resources/base/profile/main_pages.json   OK
+    testing: resources/base/media/app_icon.svg   OK
+    testing: ets/modules.abc          OK
+    testing: ets/sourceMaps.map       OK
+    testing: pack.info                OK
+    testing: pkgSdkInfo.json          OK
+No errors detected in compressed data of /Users/huangnianpeng/Desktop/7/hongmengOS/all-schemes/23-repairpassport/entry/build/default/outputs/default/entry-default-unsigned.hap.
+
+
+UNZIP_EXIT=0
+HAP_CONTENTS=["module.json", "resources.index", "resources/base/profile/main_pages.json", "resources/base/media/app_icon.svg", "ets/modules.abc", "ets/sourceMaps.map", "pack.info", "pkgSdkInfo.json"]
+PACKAGED_ABILITY_METADATA=[{"exported": true, "iconId": 16777218, "startWindowIconId": 16777218, "srcEntry": "./ets/EntryAbility.ets", "startWindowBackground": "$color:surface_canvas", "name": "EntryAbility", "icon": "$media:app_icon", "startWindowIcon": "$media:app_icon", "startWindowBackgroundId": 16777217}]
+LOCAL_TEMPLATE=/Applications/DevEco-Studio.app/Contents/plugins/openharmony/lib/templates/ability/Empty Ability/code template/src/stageMode/common/ets/module.json5.ftl
+LOCAL_TEMPLATE_CONTENT_BEGIN
+{
+  "module": {
+    "abilities": [
+      {
+        "name": "${abilityName}",
+        "srcEntry": "./ets/${abilityName?lower_case}/${abilityName}.${abilityFileNameExt}",
+        "description": "$string:${abilityName}_desc",
+        <#if (compatibleBaseApi?? && compatibleBaseApi gte 11)>
+          "icon": "$media:layered_image",
+        <#else>
+          "icon": "$media:icon",
+        </#if>
+        "label": "$string:${abilityName}_label",
+        "startWindowIcon" : "$media:startIcon",
+        "startWindowBackground" : "$color:start_window_background"
+        <#if visible>
+          ,
+        "exported": true
+        </#if>
+        <#if hasSkill>
+          ,
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+            ],
+            "actions": [
+              "ohos.want.action.home"
+            ]
+          }
+        ]
+        </#if>
+      }
+    ]
+  }
+}
+
+LOCAL_TEMPLATE_CONTENT_END
+COMMAND ['git', 'diff', '--exit-code', '--', '.']
+
+
+EXIT=0
+COMMAND ['git', 'status', '--short']
+?? docs/workflow/evidence/
+
+
+EXIT=0

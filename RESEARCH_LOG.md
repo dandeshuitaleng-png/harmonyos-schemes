@@ -70,3 +70,16 @@
 - 三个入选候选均已包含 Apple App Store 竞品链接、地区、检索日期和可见功能，且分别使用非 GitHub 的一手/近一手来源交叉核验。
 - 名称已按最新规则改为面向用户的品牌式名称：叶伴、修物志、从容赴约；功能描述留在副标题和 `AGENTS.md`。
 - 本轮无新增推荐的原因是**日上限已满**，不是放宽或跳过质量门槛。
+
+## 2026-08-31：每日高质量机会研究
+
+检索日期：2026-08-31（Asia/Shanghai）。本轮入选 1 个候选：`25-wovenday`（织日 / WovenDay）。其完整来源、Apple App Store 竞品、鸿蒙能力依据、市场待核验项与 22/25 评分见 [`25-wovenday/RESEARCH_EVIDENCE.md`](25-wovenday/RESEARCH_EVIDENCE.md)。
+
+### 淘汰与未入选方向
+
+| 方向 | 可复核线索 | 未入选原因 |
+|---|---|---|
+| 共享宠物照看 | [Bean](https://bean.pet/)、[Collie](https://www.collie.care/) | 多数公开功能包含用药、疫苗、兽医记录或共同监护；即使缩小范围也与成熟共享日程产品过近，且需避免动物健康责任，未达到本轮差异化门槛。 |
+| 全量数字衣橱/穿搭 | [Whering](https://apps.apple.com/us/app/whering-your-digital-closet/id1519461680)、[Stylebook](https://apps.apple.com/us/app/stylebook/id335709058) | 强势产品已覆盖衣橱、搭配、日历、统计、同步；全量录入和图像处理超出两周 MVP。 |
+
+没有为未入选方向创建项目目录；没有实现应用代码。鸿蒙应用市场、元服务中心及 HarmonyOS/OpenHarmony 的直接同类状态仍需人工复核，不能从公开索引无结果推导为不存在。

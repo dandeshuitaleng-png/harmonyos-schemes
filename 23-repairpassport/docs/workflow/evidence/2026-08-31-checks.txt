@@ -1,0 +1,76 @@
+RUN 2026-08-30T19:03:17.464Z ROOT /Users/huangnianpeng/Desktop/7/hongmengOS/all-schemes
+INVENTORY 24-visitready {"required":15,"missing":[],"workflow":true}
+INVENTORY 23-repairpassport {"required":15,"missing":[],"workflow":true}
+INVENTORY 22-plantrelay {"required":15,"missing":[],"workflow":true}
+INVENTORY 21-stepaccess {"required":15,"missing":[],"workflow":true}
+INVENTORY 20-visual-table-book {"required":15,"missing":[],"workflow":true}
+INVENTORY 19-urban-nature-observer {"required":15,"missing":[],"workflow":false}
+INVENTORY 18-standby-appointment {"required":15,"missing":[],"workflow":true}
+INVENTORY 17-neo-explorer {"required":15,"missing":[],"workflow":true}
+INVENTORY 16-fridge-pantry {"required":15,"missing":[],"workflow":true}
+INVENTORY 15-disaster-recovery-map {"required":15,"missing":["entry/src/main/ets/EntryAbility.ets","entry/src/main/resources/base/media/app_icon.svg"],"workflow":true}
+INVENTORY 14-ai-speaking-practice {"required":15,"missing":[],"workflow":true}
+INVENTORY 13-allyecho {"required":15,"missing":[],"workflow":true}
+INVENTORY 12-questproof {"required":15,"missing":[],"workflow":true}
+INVENTORY 11-gentlesteps {"required":15,"missing":[],"workflow":true}
+INVENTORY 10-farmvoice {"required":15,"missing":[],"workflow":true}
+INVENTORY 09-stillside {"required":15,"missing":[],"workflow":true}
+INVENTORY 08-aidtrace {"required":15,"missing":[],"workflow":true}
+INVENTORY 07-voicebridge {"required":15,"missing":[],"workflow":true}
+INVENTORY 06-greenlens {"required":15,"missing":[],"workflow":true}
+INVENTORY 05-freshloop {"required":15,"missing":[],"workflow":true}
+INVENTORY 04-sensecraft {"required":15,"missing":[],"workflow":true}
+INVENTORY 03-tidewatch {"required":15,"missing":[],"workflow":true}
+INVENTORY 02-quietbeacon {"required":15,"missing":[],"workflow":true}
+INVENTORY 01-beidou-neighboraid {"required":15,"missing":[],"workflow":true}
+PARSE_PASS 24-visitready AppScope/app.json5
+PARSE_PASS 24-visitready AppScope/resources/base/element/string.json
+PARSE_PASS 24-visitready build-profile.json5
+PARSE_PASS 24-visitready oh-package.json5
+PARSE_PASS 24-visitready hvigor/hvigor-config.json5
+PARSE_PASS 24-visitready entry/build-profile.json5
+PARSE_PASS 24-visitready entry/oh-package.json5
+PARSE_PASS 24-visitready entry/src/main/module.json5
+PARSE_PASS 24-visitready entry/src/main/resources/base/profile/main_pages.json
+PARSE_PASS 24-visitready entry/src/main/resources/base/element/color.json
+CONFIG 24-visitready {"stageMode":true,"moduleTarget":true,"entryExists":true,"routesExist":true,"pages":["pages/Index"],"hasHomeSkill":false,"deviceTypes":["phone","tablet"],"permissions":[],"signingConfigCount":0,"products":[{"name":"default","compileSdkVersion":"6.1.1(24)","compatibleSdkVersion":"6.1.0(23)","runtimeOS":"HarmonyOS"}]}
+CONFIG_FAIL 24-visitready No launcher home action/entity skill on main ability; compare installed DevEco Empty Ability template.
+PARSE_PASS 23-repairpassport AppScope/app.json5
+PARSE_PASS 23-repairpassport AppScope/resources/base/element/string.json
+PARSE_PASS 23-repairpassport build-profile.json5
+PARSE_PASS 23-repairpassport oh-package.json5
+PARSE_PASS 23-repairpassport hvigor/hvigor-config.json5
+PARSE_PASS 23-repairpassport entry/build-profile.json5
+PARSE_PASS 23-repairpassport entry/oh-package.json5
+PARSE_PASS 23-repairpassport entry/src/main/module.json5
+PARSE_PASS 23-repairpassport entry/src/main/resources/base/profile/main_pages.json
+PARSE_PASS 23-repairpassport entry/src/main/resources/base/element/color.json
+CONFIG 23-repairpassport {"stageMode":true,"moduleTarget":true,"entryExists":true,"routesExist":true,"pages":["pages/Index"],"hasHomeSkill":false,"deviceTypes":["phone","tablet"],"permissions":[],"signingConfigCount":0,"products":[{"name":"default","compileSdkVersion":"6.1.1(24)","compatibleSdkVersion":"6.1.0(23)","runtimeOS":"HarmonyOS"}]}
+CONFIG_FAIL 23-repairpassport No launcher home action/entity skill on main ability; compare installed DevEco Empty Ability template.
+PARSE_PASS 22-plantrelay AppScope/app.json5
+PARSE_PASS 22-plantrelay AppScope/resources/base/element/string.json
+PARSE_PASS 22-plantrelay build-profile.json5
+PARSE_PASS 22-plantrelay oh-package.json5
+PARSE_PASS 22-plantrelay hvigor/hvigor-config.json5
+PARSE_PASS 22-plantrelay entry/build-profile.json5
+PARSE_PASS 22-plantrelay entry/oh-package.json5
+PARSE_PASS 22-plantrelay entry/src/main/module.json5
+PARSE_PASS 22-plantrelay entry/src/main/resources/base/profile/main_pages.json
+PARSE_PASS 22-plantrelay entry/src/main/resources/base/element/color.json
+CONFIG 22-plantrelay {"stageMode":true,"moduleTarget":true,"entryExists":true,"routesExist":true,"pages":["pages/Index"],"hasHomeSkill":false,"deviceTypes":["phone","tablet"],"permissions":[],"signingConfigCount":0,"products":[{"name":"default","compileSdkVersion":"6.1.1(24)","compatibleSdkVersion":"6.1.0(23)","runtimeOS":"HarmonyOS"}]}
+CONFIG_FAIL 22-plantrelay No launcher home action/entity skill on main ability; compare installed DevEco Empty Ability template.
+SOURCE_MANIFEST [["AppScope/app.json5","9b303df4d0e82e1fd8654f957483e3f38cb6392f0d090a5a72e70ec570bbd587"],["AppScope/resources/base/element/string.json","aeec17183cfb1207f5fc7d1e851196433c1b7da2725e3cdfa321e09c9646569a"],["build-profile.json5","144933753b61f601dacc68e846a8cf0d791bbd8773578bbf7098416946e9bec8"],["entry/build-profile.json5","1b36f8130b000adfc591545f2639c91884efdd8c35443a202a22e395f7d636a1"],["entry/hvigorfile.ts","898dfe731c5baccda8f883b1f3e8444e036b38d1839ebf169caa0f0764aac667"],["entry/oh-package.json5","75d4d3ce46cba34dee76a2df87acced840f78f7165cd0aaee35b3f74238986fd"],["entry/src/main/ets/EntryAbility.ets","44ba7509a26f424063f343ffff313db745b115a6dd3334d8785ec0d5c59a9d1f"],["entry/src/main/ets/data/DeviceStore.ets","35f98f87f57327c97ac2792cc48d1c428a2599cb10bd85c5edd4fa8d4ad74e0a"],["entry/src/main/ets/pages/Index.ets","62171a48490ae90590cee7c9184ff1dfb96c42cdb6b154801d40e8a09aab91b0"],["entry/src/main/module.json5","187d4299f1a3937032d28572c1e305c3bf82e0fddd7d98f5fd6cabb717fd5587"],["entry/src/main/resources/base/element/color.json","586c22f12dd73cb4b129699314079a298eb103ee487b4604b6add237e8a1ef56"],["entry/src/main/resources/base/media/app_icon.svg","51d40d7d6419f11ef564a7d19d97a1174c1f31010dafd30903e8e41b6946b6e0"],["entry/src/main/resources/base/profile/main_pages.json","131fc787b0ad8511cf34ffbe327a7bdcfb1dcd0bea232ae1f70de5ed13908de7"],["hvigor/hvigor-config.json5","8b6dffbd51666270084f4b847a26670d8671b9b7ac8d8ed61e18a1b7ad8c7a62"],["hvigorfile.ts","d210bcce551132620eae18f5d78809f30c9db2a1435d0542f92eed1291965d63"],["oh-package.json5","49396d9f867ee16ca9fa82c27f3291a2bb029546e68e692e007d260be959e495"]]
+IMPORTS entry/src/main/ets/EntryAbility.ets ["import { UIAbility } from '@kit.AbilityKit';","import { window } from '@kit.ArkUI';"]
+IMPORTS entry/src/main/ets/data/DeviceStore.ets ["import { preferences } from '@kit.ArkData';"]
+IMPORTS entry/src/main/ets/pages/Index.ets ["import { DeviceCard, DeviceStore, RepairEvent } from '../data/DeviceStore';"]
+COMMAND ["git","status","--short"]
+{"status":0,"signal":null,"stdout":"?? 23-repairpassport/docs/workflow/evidence/\n","stderr":""}
+COMMAND ["git","log","-3","--format=%h %s %cI","--name-only"]
+{"status":0,"signal":null,"stdout":"ce1af4d Add team next steps dashboard 2026-08-30T18:38:54+08:00\n\nREADME.md\n4268c1b Add latest HarmonyOS scheme MVP slices 2026-08-30T18:36:29+08:00\n\n.github/scripts/repository-guard.sh\n22-plantrelay/AGENTS.md\n22-plantrelay/AppScope/app.json5\n22-plantrelay/AppScope/resources/base/element/string.json\n22-plantrelay/RESEARCH_EVIDENCE.md\n22-plantrelay/build-profile.json5\n22-plantrelay/docs/design/task-confirmation-screen.md\n22-plantrelay/docs/workflow/daily-progress.md\n22-plantrelay/entry/build-profile.json5\n22-plantrelay/entry/hvigorfile.ts\n22-plantrelay/entry/oh-package.json5\n22-plantrelay/entry/src/main/ets/EntryAbility.ets\n22-plantrelay/entry/src/main/ets/pages/Index.ets\n22-plantrelay/entry/src/main/module.json5\n22-plantrelay/entry/src/main/resources/base/element/color.json\n22-plantrelay/entry/src/main/resources/base/media/app_icon.svg\n22-plantrelay/entry/src/main/resources/base/profile/main_pages.json\n22-plantrelay/hvigor/hvigor-config.json5\n22-plantrelay/hvigorfile.ts\n22-plantrelay/oh-package.json5\n23-repairpassport/AGENTS.md\n23-repairpassport/AppScope/app.json5\n23-repairpassport/AppScope/resources/base/element/string.json\n23-repairpassport/RESEARCH_EVIDENCE.md\n23-repairpassport/build-profile.json5\n23-repairpassport/docs/design/device-card-screen.md\n23-repairpassport/docs/workflow/daily-progress.md\n23-repairpassport/entry/build-profile.json5\n23-repairpassport/entry/hvigorfile.ts\n23-repairpassport/entry/oh-package.json5\n23-repairpassport/entry/src/main/ets/EntryAbility.ets\n23-repairpassport/entry/src/main/ets/data/DeviceStore.ets\n23-repairpassport/entry/src/main/ets/pages/Index.ets\n23-repairpassport/entry/src/main/module.json5\n23-repairpassport/entry/src/main/resources/base/element/color.json\n23-repairpassport/entry/src/main/resources/base/media/app_icon.svg\n23-repairpassport/entry/src/main/resources/base/profile/main_pages.json\n23-repairpassport/hvigor/hvigor-config.json5\n23-repairpassport/hvigorfile.ts\n23-repairpassport/oh-package.json5\n24-visitready/AGENTS.md\n24-visitready/AppScope/app.json5\n24-visitready/AppScope/resources/base/element/string.json\n24-visitready/RESEARCH_EVIDENCE.md\n24-visitready/build-profile.json5\n24-visitready/docs/design/visit-card-screen.md\n24-visitready/docs/workflow/daily-progress.md\n24-visitready/entry/build-profile.json5\n24-visitready/entry/hvigorfile.ts\n24-visitready/entry/oh-package.json5\n24-visitready/entry/src/main/ets/EntryAbility.ets\n24-visitready/entry/src/main/ets/data/VisitCardStore.ets\n24-visitready/entry/src/main/ets/pages/Index.ets\n24-visitready/entry/src/main/module.json5\n24-visitready/entry/src/main/resources/base/element/color.json\n24-visitready/entry/src/main/resources/base/media/app_icon.svg\n24-visitready/entry/src/main/resources/base/profile/main_pages.json\n24-visitready/entry/src/main/resources/dark/element/color.json\n24-visitready/hvigor/hvigor-config.json5\n24-visitready/hvigorfile.ts\n24-visitready/oh-package.json5\nREADME.md\nRESEARCH_LOG.md\n31c244a Update README.md 2026-08-30T16:59:16+08:00\n\nREADME.md\n","stderr":""}
+COMMAND ["git","log","-1","--format=%H %s %cI","--","23-repairpassport"]
+{"status":0,"signal":null,"stdout":"4268c1bb0a9e9c58eff886f4d754d3558d5f4440 Add latest HarmonyOS scheme MVP slices 2026-08-30T18:36:29+08:00\n","stderr":""}
+COMMAND ["/Applications/DevEco-Studio.app/Contents/sdk/default/openharmony/toolchains/hdc","list","targets"]
+{"status":0,"signal":null,"stdout":"[Empty]\r\n","stderr":""}
+CONFIG_FAILURE_COUNT 3
+
+AUDIT_EXIT=2

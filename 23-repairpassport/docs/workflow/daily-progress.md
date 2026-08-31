@@ -1,5 +1,21 @@
 # 每日开发进度
 
+## 2026-08-31 · 桌面入口配置复验
+
+- **范围：** 仅为既有 `EntryAbility` 加入标准 Home skill：`entity.system.home` 与 `action.system.home`；未接入附件、导出、网络、签名或设备操作。
+- **证据：** 正式路径 `assembleHap` 输出 `TYPE CHECK SUCCESSFUL`、`PackageHap` 与 `BUILD SUCCESSFUL in 8 s 435 ms`；生成 HAP 的 `module.json` 已含完整 Home skill。
+- **结论边界：** 先前的 Home 入口配置缺陷已修复，未签名 Build PASS；仍见 `No signingConfig found for product default`，且当日 HDC 为 `[Empty]`。不以此声称安装、桌面启动、附件流程、视觉或上架通过。
+- **后续：** 轮换至其他可执行工程；真实附件/失效 URI/导出仍需明确文件保留、输出格式与字段规则，真机验证需要受控签名设备。
+
+## 2026-08-31 · automation-2 工程骨架只读复验
+
+- 本轮切片：正式路径结构、配置、构建和包检查；既有源码/配置16项哈希无变化。详见 `2026-08-31-skeleton-audit.md` 与 evidence 原始输出。
+- 结果：15项结构齐全、10项JSON/JSON5可解析；构建 `BUILD SUCCESSFUL in 8 s 220 ms`，未签名HAP 95877 bytes；但主Ability缺少桌面Home skill，配置核验FAIL，不标记工程完成。
+- 外部阻塞：签名配置为空；本次HDC返回 `[Empty]`。无安装、桌面启动、视觉、读屏或持久化验收。
+- 修复边界：修Home skill须修改已有module配置，当前任务仅允许只读核验，因此保留待修，不覆盖代码。真实附件/导出语义仍待决定。
+- Git纠正：现已存在仓库，工程源文件在既有 `4268c1b` 中；本轮未提交、未进行任何Git写入。
+- 轮换：23本轮核验切片已完成，下轮选22的尚未完成正式构建核验；23仅在配置、签名设备或产品语义变化后重试，避免重复同一阻塞。
+
 ## 2026-08-30 · 轮换至 23 / 本机设备卡骨架
 
 ### 1. 范围与输入
