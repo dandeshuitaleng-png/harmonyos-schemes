@@ -28,6 +28,7 @@ struct Index {
   @State private privacyChoice: string = '';
   @State private privacyReady: boolean = false;
   @State private showPolicy: boolean = false;
+  @State private confirmClear: boolean = false;
 
   aboutToAppear(): void {
     this.bootstrap();
@@ -48,6 +49,10 @@ struct Index {
     }
     if (this.showPolicy && this.privacyChoice.length > 0) {
       this.showPolicy = false;
+      return true;
+    }
+    if (this.confirmClear) {
+      this.confirmClear = false;
       return true;
     }
     return false;
@@ -108,7 +113,7 @@ struct Index {
     Scroll() {
       Column({ space: 16 }) {
         Text('隐私说明')
-          .fontSize(30)
+          .fontSize(26)
           .fontWeight(FontWeight.Bold)
           .fontColor($r('app.color.ink'))
         Text('地球 Online · 观测站 · com.naturalcollect.app')
@@ -195,16 +200,34 @@ struct Index {
         this.header()
 
         Column({ space: 8 }) {
-          Text('地球 Online')
-            .fontSize(34)
-            .fontWeight(FontWeight.Bold)
-            .fontColor($r('app.color.ink'))
-          Text('观测站')
-            .fontSize(15)
-            .fontWeight(FontWeight.Medium)
-            .fontColor($r('app.color.accent'))
+          Row({ space: 12 }) {
+            Column({ space: 4 }) {
+              Text('地球 Online')
+                .fontSize(26)
+                .fontWeight(FontWeight.Bold)
+                .fontColor($r('app.color.ink'))
+                .lineHeight(34)
+              Text('观测站')
+                .fontSize(15)
+                .fontWeight(FontWeight.Medium)
+                .fontColor($r('app.color.accent'))
+            }
+            .layoutWeight(1)
+            .alignItems(HorizontalAlign.Start)
+            Text('非预报')
+              .fontSize(14)
+              .fontWeight(FontWeight.Medium)
+              .fontColor($r('app.color.ink'))
+              .padding({ left: 10, right: 10, top: 8, bottom: 8 })
+              .backgroundColor($r('app.color.accent_soft'))
+              .borderRadius(8)
+              .accessibilityText('本页不是天气预报或灾害预警')
+          }
+          .width('100%')
+          .alignItems(VerticalAlign.Top)
           Text('用示例照片留下一条本机目击线索。')
             .fontSize(15)
+            .lineHeight(22)
             .fontColor($r('app.color.ink_muted'))
         }
         .width('100%')
@@ -220,7 +243,7 @@ struct Index {
           Scroll() {
             Row({ space: 8 }) {
               ForEach(phenomenonKinds, (kind: string) => {
-                Button(kind)
+                Button(this.selectedKind === kind ? `${kind} · 已选择` : kind)
                   .fontSize(14)
                   .fontWeight(this.selectedKind === kind ? FontWeight.Medium : FontWeight.Regular)
                   .fontColor(this.selectedKind === kind ? $r('app.color.ink') : $r('app.color.ink_muted'))
@@ -230,8 +253,9 @@ struct Index {
                     color: this.selectedKind === kind ? $r('app.color.accent') : $r('app.color.line')
                   })
                   .borderRadius(18)
-                  .constraintSize({ minHeight: 38 })
+                  .constraintSize({ minHeight: 48 })
                   .padding({ left: 16, right: 16 })
+                  .accessibilityText(this.selectedKind === kind ? `已选择${kind}` : `选择${kind}`)
                   .onClick((): void => {
                     this.selectedKind = kind;
                   })
@@ -538,6 +562,7 @@ struct Index {
     .width(58)
     .constraintSize({ minHeight: 54 })
     .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
     .accessibilityText(label === '观测' ? '打开观测页' : '打开科普页')
     .onClick((): void => {
       this.activePage = label;
@@ -836,7 +861,7 @@ struct Index {
               .fontSize(15)
               .fontColor($r('app.color.accent'))
               .backgroundColor(Color.Transparent)
-              .constraintSize({ minHeight: 44 })
+              .constraintSize({ minHeight: 48 })
               .onClick((): void => {
                 this.profileOpen = false;
                 this.showPolicy = true;
@@ -850,13 +875,36 @@ struct Index {
             ForEach(this.records, (record: ObservationRecord) => {
               this.profileRecord(record)
             }, (record: ObservationRecord) => record.id)
-            Button('清除全部本机目击线索')
-              .fontSize(15)
-              .fontColor($r('app.color.accent'))
-              .backgroundColor(Color.Transparent)
-              .constraintSize({ minHeight: 44 })
-              .accessibilityText('清除全部保存在本机的目击线索')
-              .onClick(() => this.clearRecords())
+            if (this.confirmClear) {
+              Text('清除后无法从本应用恢复这些本机目击线索。没有向外发送任何数据。')
+                .fontSize(14)
+                .lineHeight(22)
+                .fontColor($r('app.color.text_danger'))
+              Button('确认清除全部本机目击线索')
+                .fontSize(15)
+                .fontWeight(FontWeight.Medium)
+                .width('100%')
+                .constraintSize({ minHeight: 48 })
+                .fontColor($r('app.color.text_danger'))
+                .backgroundColor($r('app.color.notice_surface'))
+                .borderRadius(12)
+                .accessibilityText('确认清除全部本机目击线索，此操作不能撤销')
+                .onClick(() => this.clearRecords())
+              Button('取消清除')
+                .fontSize(15)
+                .fontColor($r('app.color.accent'))
+                .backgroundColor(Color.Transparent)
+                .constraintSize({ minHeight: 48 })
+                .onClick(() => this.confirmClear = false)
+            } else {
+              Button('清除全部本机目击线索')
+                .fontSize(15)
+                .fontColor($r('app.color.accent'))
+                .backgroundColor(Color.Transparent)
+                .constraintSize({ minHeight: 48 })
+                .accessibilityText('准备清除全部本机目击线索，下一步需要确认')
+                .onClick(() => this.clearRecords())
+            }
           } else {
             Text('还没有本机目击线索。可从示例照片开始记录。')
               .fontSize(14)
@@ -878,6 +926,7 @@ struct Index {
                 .fontSize(15)
                 .fontColor($r('app.color.accent'))
                 .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
                 .onClick(() => this.bootstrap())
             }
             .padding(16)
@@ -1136,9 +1185,14 @@ struct Index {
     if (this.isLoading || this.privacyChoice !== PRIVACY_ACCEPTED) {
       return;
     }
+    if (!this.confirmClear) {
+      this.confirmClear = true;
+      return;
+    }
     try {
       await this.observationStore.clear(this.hostContext());
       this.records = [];
+      this.confirmClear = false;
       this.storageError = '';
     } catch {
       this.storageError = '无法清除本机目击线索。请重试；没有上传任何内容。';

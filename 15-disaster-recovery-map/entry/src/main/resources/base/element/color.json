@@ -1,23 +1,88 @@
 {
   "color": [
-    { "name": "app_start_window_background", "value": "#07101A" },
-    { "name": "page_background", "value": "#07101A" },
-    { "name": "nav_background", "value": "#0A141F" },
-    { "name": "surface", "value": "#0E1B28" },
-    { "name": "surface_elevated", "value": "#132333" },
-    { "name": "ink", "value": "#EAF2F8" },
-    { "name": "ink_muted", "value": "#9FAFBE" },
-    { "name": "ink_subtle", "value": "#748595" },
-    { "name": "ink_on_ice", "value": "#07101A" },
-    { "name": "accent", "value": "#72B7E8" },
-    { "name": "accent_soft", "value": "#173852" },
-    { "name": "ice", "value": "#D5EAF8" },
-    { "name": "line", "value": "#263B4D" },
-    { "name": "notice_surface", "value": "#2A2214" },
-    { "name": "notice_ink", "value": "#E8C98A" },
-    { "name": "photo_overlay", "value": "#80061120" },
-    { "name": "photo_title", "value": "#F2F7FC" },
-    { "name": "photo_caption", "value": "#D8E5F1" },
-    { "name": "overlay_dim", "value": "#A0050B12" }
+    {
+      "name": "app_start_window_background",
+      "value": "#07101A"
+    },
+    {
+      "name": "page_background",
+      "value": "#07101A"
+    },
+    {
+      "name": "nav_background",
+      "value": "#0A141F"
+    },
+    {
+      "name": "surface",
+      "value": "#0E1B28"
+    },
+    {
+      "name": "surface_elevated",
+      "value": "#132333"
+    },
+    {
+      "name": "ink",
+      "value": "#EAF2F8"
+    },
+    {
+      "name": "ink_muted",
+      "value": "#9FAFBE"
+    },
+    {
+      "name": "ink_subtle",
+      "value": "#748595"
+    },
+    {
+      "name": "ink_on_ice",
+      "value": "#07101A"
+    },
+    {
+      "name": "accent",
+      "value": "#72B7E8"
+    },
+    {
+      "name": "accent_soft",
+      "value": "#173852"
+    },
+    {
+      "name": "ice",
+      "value": "#D5EAF8"
+    },
+    {
+      "name": "line",
+      "value": "#263B4D"
+    },
+    {
+      "name": "notice_surface",
+      "value": "#2A2214"
+    },
+    {
+      "name": "notice_ink",
+      "value": "#E8C98A"
+    },
+    {
+      "name": "photo_overlay",
+      "value": "#80061120"
+    },
+    {
+      "name": "photo_title",
+      "value": "#F2F7FC"
+    },
+    {
+      "name": "photo_caption",
+      "value": "#D8E5F1"
+    },
+    {
+      "name": "overlay_dim",
+      "value": "#A0050B12"
+    },
+    {
+      "name": "border_subtle",
+      "value": "#C5D0D6"
+    },
+    {
+      "name": "text_danger",
+      "value": "#8B1E1E"
+    }
   ]
 }

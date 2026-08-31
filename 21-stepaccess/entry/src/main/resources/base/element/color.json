@@ -1,16 +1,60 @@
 {
   "color": [
-    { "name": "surface_canvas", "value": "#F5F8F4" },
-    { "name": "surface_card", "value": "#FFFFFFFF" },
-    { "name": "surface_control", "value": "#EEF2EC" },
-    { "name": "surface_selected", "value": "#DDEBDD" },
-    { "name": "surface_warning", "value": "#FFF3D6" },
-    { "name": "surface_success", "value": "#E5F3E8" },
-    { "name": "text_primary", "value": "#18231C" },
-    { "name": "text_secondary", "value": "#526058" },
-    { "name": "text_warning", "value": "#7B4B00" },
-    { "name": "text_success", "value": "#25633C" },
-    { "name": "action_primary", "value": "#286B45" },
-    { "name": "text_on_primary", "value": "#FFFFFFFF" }
+    {
+      "name": "surface_canvas",
+      "value": "#F5F8F4"
+    },
+    {
+      "name": "surface_card",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "surface_control",
+      "value": "#EEF2EC"
+    },
+    {
+      "name": "surface_selected",
+      "value": "#DDEBDD"
+    },
+    {
+      "name": "surface_warning",
+      "value": "#FFF3D6"
+    },
+    {
+      "name": "surface_success",
+      "value": "#E5F3E8"
+    },
+    {
+      "name": "text_primary",
+      "value": "#18231C"
+    },
+    {
+      "name": "text_secondary",
+      "value": "#526058"
+    },
+    {
+      "name": "text_warning",
+      "value": "#7B4B00"
+    },
+    {
+      "name": "text_success",
+      "value": "#25633C"
+    },
+    {
+      "name": "action_primary",
+      "value": "#286B45"
+    },
+    {
+      "name": "text_on_primary",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "border_subtle",
+      "value": "#C5D0D6"
+    },
+    {
+      "name": "text_danger",
+      "value": "#8B1E1E"
+    }
   ]
 }

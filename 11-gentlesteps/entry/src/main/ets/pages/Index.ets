@@ -23,6 +23,7 @@ struct Index {
   @State private privacyChoice: string = '';
   @State private privacyReady: boolean = false;
   @State private showPolicy: boolean = false;
+  @State private confirmClear: boolean = false;
 
   aboutToAppear(): void {
     this.bootstrap();
@@ -31,6 +32,10 @@ struct Index {
   onBackPress(): boolean {
     if (this.showPolicy && this.privacyChoice.length > 0) {
       this.showPolicy = false;
+      return true;
+    }
+    if (this.confirmClear) {
+      this.confirmClear = false;
       return true;
     }
     return false;
@@ -193,9 +198,14 @@ struct Index {
     if (this.privacyChoice !== PRIVACY_ACCEPTED) {
       return;
     }
+    if (!this.confirmClear) {
+      this.confirmClear = true;
+      return;
+    }
     try {
       await this.habitStore.clear(this.hostContext());
       this.state = this.emptyState(this.today());
+      this.confirmClear = false;
       this.storageError = '';
     } catch {
       this.storageError = '无法清除本机练习状态。请重试；没有上传任何内容。';
@@ -206,7 +216,7 @@ struct Index {
   private policyView() {
     Column({ space: 16 }) {
       Text('隐私说明')
-        .fontSize(30)
+        .fontSize(26)
         .fontWeight(FontWeight.Bold)
         .fontColor($r('app.color.text_primary'))
       Text('微光习惯 · com.harmonyradar.gentlesteps')
@@ -262,6 +272,7 @@ struct Index {
           .fontSize(16)
           .fontColor($r('app.color.action_primary'))
           .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
           .accessibilityText('返回微习惯练习页')
           .onClick(() => this.showPolicy = false)
       }
@@ -284,13 +295,31 @@ struct Index {
   @Builder
   private mainView() {
     Column({ space: 16 }) {
-      Text('微光习惯')
-        .fontSize(30)
-        .fontWeight(FontWeight.Bold)
-        .fontColor($r('app.color.text_primary'))
-      Text('离线、非竞争的微习惯练习')
-        .fontSize(17)
-        .fontColor($r('app.color.text_secondary'))
+      Row({ space: 12 }) {
+        Column({ space: 4 }) {
+          Text('微光习惯')
+            .fontSize(26)
+            .fontWeight(FontWeight.Bold)
+            .fontColor($r('app.color.text_primary'))
+            .lineHeight(34)
+          Text('离线、非竞争的微习惯练习')
+            .fontSize(17)
+            .fontColor($r('app.color.text_secondary'))
+            .lineHeight(24)
+        }
+        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Start)
+        Text('非临床')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r('app.color.text_primary'))
+          .padding({ left: 10, right: 10, top: 8, bottom: 8 })
+          .backgroundColor($r('app.color.surface_notice'))
+          .borderRadius(8)
+          .accessibilityText('这不是心理测评或诊疗')
+      }
+      .width('100%')
+      .alignItems(VerticalAlign.Top)
       Column({ space: 6 }) {
         Text('不记录连续天数，不因跳过而惩罚，也不评判健康状态。')
           .fontSize(16)
@@ -318,6 +347,7 @@ struct Index {
             .fontSize(15)
             .fontColor($r('app.color.action_primary'))
             .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
             .accessibilityText('打开隐私说明')
             .onClick(() => this.showPolicy = true)
         }
@@ -331,7 +361,7 @@ struct Index {
               Text(habit.detail)
                 .fontSize(14)
                 .fontColor($r('app.color.text_secondary'))
-                .maxLines(2)
+
               Text(this.has(this.state.selectedIds, habit.id) ? '已选择，可再次点击取消' : '点击选择')
                 .fontSize(13)
                 .fontColor($r('app.color.text_choice'))
@@ -340,9 +370,14 @@ struct Index {
             .width('100%')
           }
           .width('100%')
+          .constraintSize({ minHeight: 48 })
           .padding(15)
           .borderRadius(15)
           .backgroundColor(this.has(this.state.selectedIds, habit.id) ? $r('app.color.surface_choice') : $r('app.color.surface_card'))
+          .border({
+            width: this.has(this.state.selectedIds, habit.id) ? 0 : 1,
+            color: $r('app.color.border_subtle')
+          })
           .enabled(!this.isLoading && this.privacyChoice === PRIVACY_ACCEPTED)
           .accessibilityText(`${habit.title}，${this.has(this.state.selectedIds, habit.id) ? '已选择' : '未选择'}`)
           .onClick(() => this.toggle(habit.id))
@@ -373,6 +408,7 @@ struct Index {
                   .fontSize(15)
                   .fontColor($r('app.color.action_primary'))
                   .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
                   .accessibilityText(`撤销完成 ${this.habitTitle(id)}`)
                   .onClick(() => this.reset(id))
               } else if (this.has(this.state.skippedIds, id)) {
@@ -383,6 +419,7 @@ struct Index {
                   .fontSize(15)
                   .fontColor($r('app.color.action_primary'))
                   .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
                   .accessibilityText(`撤销跳过 ${this.habitTitle(id)}`)
                   .onClick(() => this.reset(id))
               } else {
@@ -398,6 +435,7 @@ struct Index {
                     .fontSize(15)
                     .fontColor($r('app.color.action_primary'))
                     .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
                     .accessibilityText(`今天跳过 ${this.habitTitle(id)}`)
                     .onClick(() => this.mark(id, false))
                 }
@@ -416,12 +454,36 @@ struct Index {
       }
 
       if (this.privacyChoice === PRIVACY_ACCEPTED) {
-        Button('清除全部本机练习状态')
-          .fontSize(15)
-          .fontColor($r('app.color.action_primary'))
-          .backgroundColor(Color.Transparent)
-          .accessibilityText('清除保存在本机的选择、完成和跳过记录')
-          .onClick(() => this.clearState())
+        if (this.confirmClear) {
+          Text('清除后无法从本应用恢复当天的选择、完成和跳过记录。没有向外发送任何数据。')
+            .fontSize(14)
+            .lineHeight(22)
+            .fontColor($r('app.color.text_danger'))
+          Button('确认清除全部本机练习状态')
+            .fontSize(16)
+            .fontWeight(FontWeight.Medium)
+            .width('100%')
+            .constraintSize({ minHeight: 48 })
+            .backgroundColor($r('app.color.surface_notice'))
+            .fontColor($r('app.color.text_danger'))
+            .borderRadius(12)
+            .accessibilityText('确认清除本机练习状态，此操作不能撤销')
+            .onClick(() => this.clearState())
+          Button('取消清除')
+            .fontSize(16)
+            .fontColor($r('app.color.action_primary'))
+            .backgroundColor(Color.Transparent)
+            .constraintSize({ minHeight: 48 })
+            .onClick(() => this.confirmClear = false)
+        } else {
+          Button('清除全部本机练习状态')
+            .fontSize(15)
+            .fontColor($r('app.color.action_primary'))
+            .backgroundColor(Color.Transparent)
+            .constraintSize({ minHeight: 48 })
+            .accessibilityText('准备清除本机练习状态，下一步需要确认')
+            .onClick(() => this.clearState())
+        }
       }
 
       if (this.storageError.length > 0) {
@@ -433,6 +495,7 @@ struct Index {
             .fontSize(15)
             .fontColor($r('app.color.action_primary'))
             .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
             .accessibilityText('重新读取本机隐私选择和练习状态')
             .onClick(() => this.bootstrap())
         }
@@ -454,6 +517,7 @@ struct Index {
           .fontSize(15)
           .fontColor($r('app.color.action_primary'))
           .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
           .accessibilityText('查看当前版本隐私说明')
           .onClick(() => this.showPolicy = true)
       }

@@ -1,5 +1,18 @@
 # 每日开发进度
 
+## 2026-08-31 · 05 状态复核（按序推进）
+
+- 已复核本地安全筛选切片：仅对三类示例品类显示硬性拒绝或“人工审核准备条件”；通过筛选不等于食品安全、商家资质或可领取，且不保存、不上架、不预约。
+- 构建证据：`assembleHap --no-daemon --no-incremental --stacktrace` 通过（`BUILD SUCCESSFUL in 7 s 670 ms`）；产物 `entry-default-unsigned.hap` 经 `unzip -t` 校验通过，SHA-256 为 `cd23697f488581d5ab7dcd11c20d0aad58674918de9c8404a1ee30b6342e376a`（60,719 bytes）。
+- 续办门禁：真实 MVP 需先定义食品风险、过敏原/批次/时间窗、商户与管理员责任，建设发布/预约/现场核销/投诉审计闭环；位置精度与提醒也需独立权限和真机验证。`No signingConfig found for product default`，故安装、读屏和流程视觉验收仍为 BLOCKED。
+- 按当前“卡住一个方案就紧接下一个”的规则：保留以上续办条件，转入 `06-greenlens`。
+
+## 2026-08-31 · 05 UI/UX 工作流（本地筛选）
+
+- **方案：** `05-freshloop`。不发布食物、不预约、不承诺安全。实现：非上架徽章、已选择文字、48vp。
+- **Build：** PASS 未签名 `BUILD SUCCESSFUL in 9 s 186 ms`。 HAP `60719` bytes，SHA-256 `8f31d74c473b4da26c667dbe0224549244e7ee6e872964ba37c6bb392b6d1441`；unzip PASS。Visual BLOCKED。
+- **下次：** 立即 06 青眼巡查
+
 ## 2026-08-29 · 食光循环
 
 - 当前节点：Node 4 / Verify。

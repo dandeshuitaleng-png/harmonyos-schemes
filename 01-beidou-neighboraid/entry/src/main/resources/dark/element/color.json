@@ -6,11 +6,13 @@
     { "name": "surface_status", "value": "#18313A" },
     { "name": "surface_warning", "value": "#332910" },
     { "name": "surface_success", "value": "#143325" },
+    { "name": "border_subtle", "value": "#3A5560" },
     { "name": "text_primary", "value": "#EAF2F7" },
     { "name": "text_secondary", "value": "#B4C5CF" },
-    { "name": "text_muted", "value": "#91A5B0" },
+    { "name": "text_muted", "value": "#A7B8C2" },
     { "name": "text_warning", "value": "#FFD37A" },
     { "name": "text_success", "value": "#86D7AA" },
+    { "name": "text_danger", "value": "#FFB4A8" },
     { "name": "action_primary", "value": "#55C8E8" },
     { "name": "text_on_primary", "value": "#06212B" }
   ]

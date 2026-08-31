@@ -1,1 +1,52 @@
-{ "color": [{ "name":"canvas","value":"#F4FAF2"},{"name":"card","value":"#FFFFFFFF"},{"name":"notice","value":"#FFF3DF"},{"name":"active","value":"#E5F3E1"},{"name":"text_primary","value":"#173722"},{"name":"text_secondary","value":"#5B7561"},{"name":"text_notice","value":"#835216"},{"name":"text_success","value":"#276D3A"},{"name":"action","value":"#347C43"},{"name":"on_action","value":"#FFFFFFFF"}] }
+{
+  "color": [
+    {
+      "name": "canvas",
+      "value": "#F4FAF2"
+    },
+    {
+      "name": "card",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "notice",
+      "value": "#FFF3DF"
+    },
+    {
+      "name": "active",
+      "value": "#E5F3E1"
+    },
+    {
+      "name": "text_primary",
+      "value": "#173722"
+    },
+    {
+      "name": "text_secondary",
+      "value": "#5B7561"
+    },
+    {
+      "name": "text_notice",
+      "value": "#835216"
+    },
+    {
+      "name": "text_success",
+      "value": "#276D3A"
+    },
+    {
+      "name": "action",
+      "value": "#347C43"
+    },
+    {
+      "name": "on_action",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "border_subtle",
+      "value": "#C5D0D6"
+    },
+    {
+      "name": "text_danger",
+      "value": "#8B1E1E"
+    }
+  ]
+}

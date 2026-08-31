@@ -1,16 +1,18 @@
 {
   "color": [
     { "name": "start_window_background", "value": "#123047" },
-    { "name": "surface_canvas", "value": "#F5F8FA" },
+    { "name": "surface_canvas", "value": "#F3F6F8" },
     { "name": "surface_card", "value": "#FFFFFF" },
-    { "name": "surface_status", "value": "#EAF2F7" },
+    { "name": "surface_status", "value": "#E7EEF2" },
     { "name": "surface_warning", "value": "#FFF3D6" },
     { "name": "surface_success", "value": "#E6F4EA" },
+    { "name": "border_subtle", "value": "#C5D0D6" },
     { "name": "text_primary", "value": "#11212B" },
-    { "name": "text_secondary", "value": "#4B5C66" },
-    { "name": "text_muted", "value": "#697982" },
-    { "name": "text_warning", "value": "#8A5200" },
+    { "name": "text_secondary", "value": "#3D4E57" },
+    { "name": "text_muted", "value": "#4E5F68" },
+    { "name": "text_warning", "value": "#7A4700" },
     { "name": "text_success", "value": "#1B6C3F" },
+    { "name": "text_danger", "value": "#8B1E1E" },
     { "name": "action_primary", "value": "#005E7A" },
     { "name": "text_on_primary", "value": "#FFFFFF" }
   ]

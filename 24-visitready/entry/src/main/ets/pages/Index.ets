@@ -27,8 +27,16 @@ struct Index {
   @State private includeNeeds: boolean = false;
   @State private includeAvoids: boolean = false;
   @State private includeLeavingPlan: boolean = false;
+  @State private confirmDeleteId: number = 0;
 
   aboutToAppear(): void { this.loadCards(); }
+  onBackPress(): boolean {
+    if (this.confirmDeleteId !== 0) {
+      this.confirmDeleteId = 0;
+      return true;
+    }
+    return false;
+  }
   private context(): Context { return getContext(this); }
   private canSave(): boolean { return this.placeName.trim().length > 0 && this.visitTime.trim().length > 0 && this.checklist.trim().length > 0; }
   private async loadCards(): Promise<void> {
@@ -48,8 +56,12 @@ struct Index {
     finally { this.isLoading = false; }
   }
   private async deleteCard(id: number): Promise<void> {
+    if (this.confirmDeleteId !== id) {
+      this.confirmDeleteId = id;
+      return;
+    }
     this.isLoading = true; this.errorText = '';
-    try { const updated = this.cards.filter((card: VisitCard) => card.id !== id); await this.cardStore.save(this.context(), updated); this.cards = updated; if (this.editingCardId === id) { this.cancelEdit(); } if (this.previewCardId === id) { this.previewCardId = 0; } if (this.sharingCardId === id) { this.cancelShareSelection(); } }
+    try { const updated = this.cards.filter((card: VisitCard) => card.id !== id); await this.cardStore.save(this.context(), updated); this.cards = updated; this.confirmDeleteId = 0; if (this.editingCardId === id) { this.cancelEdit(); } if (this.previewCardId === id) { this.previewCardId = 0; } if (this.sharingCardId === id) { this.cancelShareSelection(); } }
     catch { this.errorText = '无法删除本机预访卡。请重试；本应用没有上传任何数据。'; }
     finally { this.isLoading = false; }
   }
@@ -82,24 +94,42 @@ struct Index {
       Column({ space: 8 }) {
         Text('选择本地摘要字段').fontSize(15).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
         Text('这里只准备本地摘要；系统分享尚未接入，不会发送数据。').fontSize(13).fontColor($r('app.color.text_warning'))
-        Button(`场所昵称 · ${this.includePlaceName ? '已包含' : '已移除'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.includePlaceName = !this.includePlaceName)
-        Button(`访问时间 · ${this.includeVisitTime ? '已包含' : '已移除'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.includeVisitTime = !this.includeVisitTime)
-        if ((card.addressText ?? '').length > 0) { Button(`地址文本 · ${this.includeAddressText ? '已包含' : '默认隐藏'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.includeAddressText = !this.includeAddressText) }
-        if (card.companionName.length > 0) { Button(`同行人昵称 · ${this.includeCompanionName ? '已包含' : '已移除'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.includeCompanionName = !this.includeCompanionName) }
-        Button(`准备清单 · ${this.includeChecklist ? '已包含' : '已移除'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.includeChecklist = !this.includeChecklist)
-        if ((card.needs ?? '').length > 0) { Button(`我需要 · ${this.includeNeeds ? '已包含' : '默认隐藏'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.includeNeeds = !this.includeNeeds) }
-        if ((card.avoids ?? '').length > 0) { Button(`我避免 · ${this.includeAvoids ? '已包含' : '默认隐藏'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.includeAvoids = !this.includeAvoids) }
-        if ((card.leavingPlan ?? '').length > 0) { Button(`离开计划 · ${this.includeLeavingPlan ? '已包含' : '默认隐藏'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.includeLeavingPlan = !this.includeLeavingPlan) }
+        Button(`场所昵称 · ${this.includePlaceName ? '已包含' : '已移除'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.includePlaceName = !this.includePlaceName)
+        Button(`访问时间 · ${this.includeVisitTime ? '已包含' : '已移除'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.includeVisitTime = !this.includeVisitTime)
+        if ((card.addressText ?? '').length > 0) { Button(`地址文本 · ${this.includeAddressText ? '已包含' : '默认隐藏'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.includeAddressText = !this.includeAddressText) }
+        if (card.companionName.length > 0) { Button(`同行人昵称 · ${this.includeCompanionName ? '已包含' : '已移除'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.includeCompanionName = !this.includeCompanionName) }
+        Button(`准备清单 · ${this.includeChecklist ? '已包含' : '已移除'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.includeChecklist = !this.includeChecklist)
+        if ((card.needs ?? '').length > 0) { Button(`我需要 · ${this.includeNeeds ? '已包含' : '默认隐藏'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.includeNeeds = !this.includeNeeds) }
+        if ((card.avoids ?? '').length > 0) { Button(`我避免 · ${this.includeAvoids ? '已包含' : '默认隐藏'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.includeAvoids = !this.includeAvoids) }
+        if ((card.leavingPlan ?? '').length > 0) { Button(`离开计划 · ${this.includeLeavingPlan ? '已包含' : '默认隐藏'}`).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.includeLeavingPlan = !this.includeLeavingPlan) }
         if (!this.includePlaceName && !this.includeVisitTime && !this.includeAddressText && !this.includeCompanionName && !this.includeChecklist && !this.includeNeeds && !this.includeAvoids && !this.includeLeavingPlan) { Text('请保留至少一个字段，才能形成摘要。').fontSize(13).fontColor($r('app.color.text_warning')) }
         else { Text(`${this.includePlaceName ? `场所昵称：${card.placeName}\n` : ''}${this.includeVisitTime ? `访问时间：${card.visitTime}\n` : ''}${this.includeAddressText && (card.addressText ?? '').length > 0 ? `地址文本：${card.addressText}\n` : ''}${this.includeCompanionName && card.companionName.length > 0 ? `同行人：${card.companionName}\n` : ''}${this.includeChecklist ? `准备清单：${card.checklist}\n` : ''}${this.includeNeeds && (card.needs ?? '').length > 0 ? `我需要：${card.needs}\n` : ''}${this.includeAvoids && (card.avoids ?? '').length > 0 ? `我避免：${card.avoids}\n` : ''}${this.includeLeavingPlan && (card.leavingPlan ?? '').length > 0 ? `离开时我会做什么：${card.leavingPlan}` : ''}`.trim()).fontSize(14).fontColor($r('app.color.text_secondary')) }
-        Button('取消并返回只读摘要').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).accessibilityText('取消本地摘要字段选择，不发送任何数据').onClick(() => this.cancelShareSelection())
+        Button('取消并返回只读摘要').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).accessibilityText('取消本地摘要字段选择，不发送任何数据').onClick(() => this.cancelShareSelection())
       }.padding(12).backgroundColor($r('app.color.surface_card')).borderRadius(12).width('100%')
     }
   }
   build() {
     Scroll() { Column({ space: 16 }) {
-      Text('从容赴约').fontSize(30).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
-      Text('离线准备一张只属于自己的访问卡').fontSize(17).fontColor($r('app.color.text_secondary'))
+      Row({ space: 12 }) {
+        Column({ space: 4 }) {
+          Text('从容赴约').fontSize(26).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary')).lineHeight(34)
+          Text('离线准备一张只属于自己的访问卡').fontSize(17).fontColor($r('app.color.text_secondary')).lineHeight(24)
+        }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+        Text('非医疗')
+          .fontSize(14).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
+          .padding({ left: 10, right: 10, top: 8, bottom: 8 })
+          .backgroundColor($r('app.color.surface_warning')).borderRadius(8)
+          .accessibilityText('不是认证或医疗服务')
+      }.width('100%').alignItems(VerticalAlign.Top)
       Column({ space: 6 }) {
         Text('私密准备 · 非认证或医疗服务').fontSize(17).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_warning'))
         Text('地址仅作本地文本保存，不请求定位。可保存本地提醒日期，但不会创建系统提醒；附件和系统分享尚未接入。').fontSize(14).fontColor($r('app.color.text_secondary'))
@@ -117,14 +147,22 @@ struct Index {
         TextInput({ placeholder: '本地提醒日期（可选，例如 周六 12:00）', text: this.reminderDate }).onChange((value: string) => this.reminderDate = value)
         if (!this.canSave()) { Text('填写场所昵称、访问时间和准备清单后即可保存。').fontSize(14).fontColor($r('app.color.text_secondary')) }
         Button(this.editingCardId === 0 ? '保存本机预访卡' : '保存修改').width('100%').constraintSize({ minHeight: 52 }).backgroundColor($r('app.color.action_primary')).fontColor($r('app.color.text_on_primary')).borderRadius(14).enabled(this.canSave() && !this.isLoading).accessibilityText(this.editingCardId === 0 ? '保存仅在本机保留的预访卡' : '保存对本机预访卡的修改').onClick(() => this.saveCard())
-        if (this.editingCardId !== 0) { Button('取消编辑').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).accessibilityText('取消编辑并恢复新建预访卡表单').onClick(() => this.cancelEdit()) }
+        if (this.editingCardId !== 0) { Button('取消编辑').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).accessibilityText('取消编辑并恢复新建预访卡表单').onClick(() => this.cancelEdit()) }
       }.padding(20).backgroundColor($r('app.color.surface_card')).borderRadius(20).width('100%')
-      if (this.errorText.length > 0) { Column({ space: 8 }) { Text(this.errorText).fontSize(14).fontColor($r('app.color.text_warning')); Button('重试读取本机预访卡').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.loadCards()) }.padding(16).backgroundColor($r('app.color.surface_warning')).borderRadius(16).width('100%') }
+      if (this.errorText.length > 0) { Column({ space: 8 }) { Text(this.errorText).fontSize(14).fontColor($r('app.color.text_warning')); Button('重试读取本机预访卡').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.loadCards()) }.padding(16).backgroundColor($r('app.color.surface_warning')).borderRadius(16).width('100%') }
       Column({ space: 10 }) {
         Text('我的预访卡').fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
         if (this.isLoading) { Text('正在读取本机预访卡…').fontSize(15).fontColor($r('app.color.text_secondary')) }
         else if (this.cards.length === 0) { Text('尚无预访卡。通知关闭或附件取消时，本机保存仍可继续使用。').fontSize(15).fontColor($r('app.color.text_secondary')) }
-        else { ForEach(this.cards, (card: VisitCard) => { Column({ space: 5 }) { Text(card.placeName).fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary')); Text(`${card.visitTime}${card.companionName.length > 0 ? ` · 同行：${card.companionName}` : ''}`).fontSize(14).fontColor($r('app.color.text_secondary')); Text(`准备：${card.checklist}`).fontSize(14).fontColor($r('app.color.text_secondary')); Text('仅本机保存 · 未发送或分享').fontSize(13).fontColor($r('app.color.text_success')); this.reminderStatus(card); Button(this.previewCardId === card.id ? '收起只读摘要' : '查看只读摘要').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).accessibilityText(`查看${card.placeName}的只读摘要`).onClick(() => this.previewCardId = this.previewCardId === card.id ? 0 : card.id); if (this.previewCardId === card.id) { Column({ space: 4 }) { Text('分享前只读摘要').fontSize(15).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary')); Text(`场所昵称：${card.placeName}\n访问时间：${card.visitTime}\n地址文本：${(card.addressText ?? '').length > 0 ? card.addressText : '未填写'}\n同行人：${card.companionName.length > 0 ? card.companionName : '未填写'}\n准备清单：${card.checklist}\n我需要：${(card.needs ?? '').length > 0 ? card.needs : '未填写'}\n我避免：${(card.avoids ?? '').length > 0 ? card.avoids : '未填写'}\n离开时我会做什么：${(card.leavingPlan ?? '').length > 0 ? card.leavingPlan : '未填写'}`).fontSize(14).fontColor($r('app.color.text_secondary')); Text('系统分享尚未接入；本摘要没有发送给任何人。').fontSize(13).fontColor($r('app.color.text_warning')) }.padding(12).backgroundColor($r('app.color.surface_card')).borderRadius(12).width('100%') } Button(this.sharingCardId === card.id ? '取消摘要字段选择' : '选择分享前字段').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).accessibilityText(`为${card.placeName}选择本地摘要字段，不会发送数据`).onClick(() => this.sharingCardId === card.id ? this.cancelShareSelection() : this.beginShareSelection(card)); this.shareFieldPanel(card); Button('编辑这张预访卡').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).accessibilityText(`编辑${card.placeName}的本机预访卡`).onClick(() => this.beginEdit(card)); Button('删除这张预访卡').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).accessibilityText(`删除${card.placeName}的本机预访卡`).onClick(() => this.deleteCard(card.id)) }.padding(16).backgroundColor($r('app.color.surface_success')).borderRadius(16).width('100%') }, (card: VisitCard) => card.id.toString()) }
+        else { ForEach(this.cards, (card: VisitCard) => { Column({ space: 5 }) { Text(card.placeName).fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary')); Text(`${card.visitTime}${card.companionName.length > 0 ? ` · 同行：${card.companionName}` : ''}`).fontSize(14).fontColor($r('app.color.text_secondary')); Text(`准备：${card.checklist}`).fontSize(14).fontColor($r('app.color.text_secondary')); Text('仅本机保存 · 未发送或分享').fontSize(13).fontColor($r('app.color.text_success')); this.reminderStatus(card); Button(this.previewCardId === card.id ? '收起只读摘要' : '查看只读摘要').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).accessibilityText(`查看${card.placeName}的只读摘要`).onClick(() => this.previewCardId = this.previewCardId === card.id ? 0 : card.id); if (this.previewCardId === card.id) { Column({ space: 4 }) { Text('分享前只读摘要').fontSize(15).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary')); Text(`场所昵称：${card.placeName}\n访问时间：${card.visitTime}\n地址文本：${(card.addressText ?? '').length > 0 ? card.addressText : '未填写'}\n同行人：${card.companionName.length > 0 ? card.companionName : '未填写'}\n准备清单：${card.checklist}\n我需要：${(card.needs ?? '').length > 0 ? card.needs : '未填写'}\n我避免：${(card.avoids ?? '').length > 0 ? card.avoids : '未填写'}\n离开时我会做什么：${(card.leavingPlan ?? '').length > 0 ? card.leavingPlan : '未填写'}`).fontSize(14).fontColor($r('app.color.text_secondary')); Text('系统分享尚未接入；本摘要没有发送给任何人。').fontSize(13).fontColor($r('app.color.text_warning')) }.padding(12).backgroundColor($r('app.color.surface_card')).borderRadius(12).width('100%') } Button(this.sharingCardId === card.id ? '取消摘要字段选择' : '选择分享前字段').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).accessibilityText(`为${card.placeName}选择本地摘要字段，不会发送数据`).onClick(() => this.sharingCardId === card.id ? this.cancelShareSelection() : this.beginShareSelection(card)); this.shareFieldPanel(card); Button('编辑这张预访卡').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).accessibilityText(`编辑${card.placeName}的本机预访卡`).onClick(() => this.beginEdit(card)); if (this.confirmDeleteId === card.id) { Text('删除后无法从本应用恢复这张预访卡。没有向外发送任何数据。').fontSize(14).fontColor($r('app.color.text_danger')); Button('确认删除这张预访卡').fontColor($r('app.color.text_danger')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).accessibilityText(`确认删除${card.placeName}的本机预访卡，此操作不能撤销`).onClick(() => this.deleteCard(card.id)); Button('取消删除').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.confirmDeleteId = 0) } else { Button('删除这张预访卡').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).accessibilityText(`准备删除${card.placeName}的本机预访卡，下一步需要确认`).onClick(() => this.deleteCard(card.id)) } }.padding(16).backgroundColor($r('app.color.surface_success')).borderRadius(16).width('100%') }, (card: VisitCard) => card.id.toString()) }
       }.padding(20).backgroundColor($r('app.color.surface_card')).borderRadius(20).width('100%')
     }.padding({ left: 20, right: 20, top: 28, bottom: 36 }).alignItems(HorizontalAlign.Start).width('100%') }.width('100%').height('100%').backgroundColor($r('app.color.surface_canvas'))
   }

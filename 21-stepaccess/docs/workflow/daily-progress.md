@@ -1,3 +1,18 @@
+# 每日开发进度
+
+## 2026-08-31 · 21 状态复核（按序推进）
+
+- 已复核本机步道观察：手动选择障碍、出行情境和本人通行感受后写入本地 RDB；可按三字段筛选并二次确认删除。所有记录固定为“仅自己可见、未经审核”，页面不把个人体验表述为导航、无障碍认证、路线安全或对所有人可通行。
+- 构建证据：`assembleHap --no-daemon --no-incremental --stacktrace` 通过（`BUILD SUCCESSFUL in 7 s 827 ms`）；产物 `entry-default-unsigned.hap` 经 `unzip -t` 校验通过，SHA-256 为 `31f97fe89f0167948752612fd99c75c92602bcbb336f52e82309eea841a51b37`（83,122 bytes）。
+- 续办门禁：完整 MVP 的可选模糊位置/照片、三态样本与详情、用户主动导出字段/取消路径、无权限手动替代和服务卡片均需先确定留存、删除、脱敏和权限规则；RDB 运行、重启恢复、读屏和 150% 字号需真机验证。`No signingConfig found for product default`，故安装和视觉验收仍为 BLOCKED。
+- 按当前“卡住一个方案就紧接下一个”的规则：保留以上续办条件，转入 `22-plantrelay`。
+
+## 2026-08-31 · 21 UI/UX 工作流（通行感受）
+
+- **方案：** `21-stepaccess`。不是导航。实现：非导航徽章、删除确认。
+- **Build：** PASS 未签名 `BUILD SUCCESSFUL in 8 s 388 ms`。 HAP `83122` bytes，SHA-256 `92cc485e935cb2cb7589837422f0402a881c01a0eafedb682d6d646e49f0d0b1`；unzip PASS。Visual BLOCKED。
+- **下次：** 立即 22 叶伴
+
 # 每日工程骨架进度
 
 ## 2026-08-30 · 21-stepaccess

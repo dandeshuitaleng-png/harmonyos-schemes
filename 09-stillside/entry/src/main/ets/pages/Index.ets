@@ -19,6 +19,7 @@ struct Index {
   @State private privacyChoice: string = '';
   @State private privacyReady: boolean = false;
   @State private showPolicy: boolean = false;
+  @State private confirmClear: boolean = false;
 
   aboutToAppear(): void {
     this.bootstrap();
@@ -31,6 +32,10 @@ struct Index {
   onBackPress(): boolean {
     if (this.showPolicy && this.privacyChoice.length > 0) {
       this.showPolicy = false;
+      return true;
+    }
+    if (this.confirmClear) {
+      this.confirmClear = false;
       return true;
     }
     return false;
@@ -181,9 +186,14 @@ struct Index {
     if (this.privacyChoice !== PRIVACY_ACCEPTED) {
       return;
     }
+    if (!this.confirmClear) {
+      this.confirmClear = true;
+      return;
+    }
     try {
       await this.practiceStore.clearCount(this.hostContext());
       this.savedCount = 0;
+      this.confirmClear = false;
       this.storageError = '';
     } catch {
       this.storageError = '无法清除本机练习次数。请重试；没有上传任何内容。';
@@ -207,7 +217,7 @@ struct Index {
   private policyView() {
     Column({ space: 16 }) {
       Text('隐私说明')
-        .fontSize(30)
+        .fontSize(26)
         .fontWeight(FontWeight.Bold)
         .fontColor($r('app.color.text_primary'))
       Text('静伴空间 · com.harmonyradar.stillside')
@@ -263,6 +273,7 @@ struct Index {
           .fontSize(16)
           .fontColor($r('app.color.action_primary'))
           .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
           .accessibilityText('返回安静练习页')
           .onClick(() => this.showPolicy = false)
       }
@@ -285,13 +296,31 @@ struct Index {
   @Builder
   private mainView() {
     Column({ space: 16 }) {
-      Text('静伴空间')
-        .fontSize(30)
-        .fontWeight(FontWeight.Bold)
-        .fontColor($r('app.color.text_primary'))
-      Text('离线、非医疗的安静练习')
-        .fontSize(17)
-        .fontColor($r('app.color.text_secondary'))
+      Row({ space: 12 }) {
+        Column({ space: 4 }) {
+          Text('静伴空间')
+            .fontSize(26)
+            .fontWeight(FontWeight.Bold)
+            .fontColor($r('app.color.text_primary'))
+            .lineHeight(34)
+          Text('离线、非医疗的安静练习')
+            .fontSize(17)
+            .fontColor($r('app.color.text_secondary'))
+            .lineHeight(24)
+        }
+        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Start)
+        Text('非治疗')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r('app.color.text_primary'))
+          .padding({ left: 10, right: 10, top: 8, bottom: 8 })
+          .backgroundColor($r('app.color.surface_notice'))
+          .borderRadius(8)
+          .accessibilityText('这不是心理治疗或危机干预')
+      }
+      .width('100%')
+      .alignItems(VerticalAlign.Top)
 
       Column({ space: 6 }) {
         Text('这不是心理治疗、危机干预或情绪评估。')
@@ -323,16 +352,21 @@ struct Index {
           .fontWeight(FontWeight.Bold)
           .fontColor($r('app.color.text_primary'))
         ForEach(DURATIONS, (minutes: number) => {
-          Button(`${minutes} 分钟`)
+          Button(this.selectedMinutes === minutes ? `${minutes} 分钟 · 已选择` : `${minutes} 分钟`)
             .fontSize(17)
             .fontWeight(FontWeight.Medium)
             .fontColor($r('app.color.text_primary'))
             .width('100%')
+            .constraintSize({ minHeight: 48 })
             .padding(15)
             .borderRadius(15)
             .backgroundColor(this.selectedMinutes === minutes ? $r('app.color.surface_active') : $r('app.color.surface_card'))
+            .border({
+              width: this.selectedMinutes === minutes ? 0 : 1,
+              color: $r('app.color.border_subtle')
+            })
             .enabled(!this.isRunning && !this.isPaused)
-            .accessibilityText(`选择 ${minutes} 分钟安静练习`)
+            .accessibilityText(this.selectedMinutes === minutes ? `已选择 ${minutes} 分钟` : `选择 ${minutes} 分钟安静练习`)
             .onClick(() => this.chooseMinutes(minutes))
         }, (minutes: number) => minutes.toString())
       }
@@ -389,6 +423,7 @@ struct Index {
           .fontSize(15)
           .fontColor($r('app.color.action_primary'))
           .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
           .accessibilityText('结束本次练习且不保存未完成记录')
           .onClick(() => this.endSession())
       }
@@ -410,12 +445,36 @@ struct Index {
             .fontSize(14)
             .fontColor($r('app.color.text_secondary'))
           if (this.savedCount > 0) {
-            Button('清除本机练习次数')
-              .fontSize(15)
-              .fontColor($r('app.color.action_primary'))
-              .backgroundColor(Color.Transparent)
-              .accessibilityText('清除全部保存在本机的练习次数')
-              .onClick(() => this.clearSavedCount())
+            if (this.confirmClear) {
+              Text('清除后无法从本应用恢复这些次数。没有向外发送任何数据。')
+                .fontSize(14)
+                .lineHeight(22)
+                .fontColor($r('app.color.text_danger'))
+              Button('确认清除本机练习次数')
+                .fontSize(16)
+                .fontWeight(FontWeight.Medium)
+                .width('100%')
+                .constraintSize({ minHeight: 48 })
+                .backgroundColor($r('app.color.surface_notice'))
+                .fontColor($r('app.color.text_danger'))
+                .borderRadius(12)
+                .accessibilityText('确认清除全部本机练习次数，此操作不能撤销')
+                .onClick(() => this.clearSavedCount())
+              Button('取消清除')
+                .fontSize(16)
+                .fontColor($r('app.color.action_primary'))
+                .backgroundColor(Color.Transparent)
+                .constraintSize({ minHeight: 48 })
+                .onClick(() => this.confirmClear = false)
+            } else {
+              Button('清除本机练习次数')
+                .fontSize(15)
+                .fontColor($r('app.color.action_primary'))
+                .backgroundColor(Color.Transparent)
+                .constraintSize({ minHeight: 48 })
+                .accessibilityText('准备清除全部本机练习次数，下一步需要确认')
+                .onClick(() => this.clearSavedCount())
+            }
           }
         } else {
           Text('你选择不保存本机次数。计时仍可离线使用；如需保存次数，请先阅读并同意隐私说明。')
@@ -425,6 +484,7 @@ struct Index {
             .fontSize(15)
             .fontColor($r('app.color.action_primary'))
             .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
             .accessibilityText('打开隐私说明')
             .onClick(() => this.showPolicy = true)
         }
@@ -443,6 +503,7 @@ struct Index {
             .fontSize(15)
             .fontColor($r('app.color.action_primary'))
             .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
             .accessibilityText('重新读取本机隐私选择和练习次数')
             .onClick(() => this.bootstrap())
         }
@@ -464,6 +525,7 @@ struct Index {
           .fontSize(15)
           .fontColor($r('app.color.action_primary'))
           .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
           .accessibilityText('查看当前版本隐私说明')
           .onClick(() => this.showPolicy = true)
       }

@@ -1,5 +1,18 @@
 # 每日开发进度
 
+## 2026-08-31 · 06 状态复核（按序推进）
+
+- 已复核本地观察范围确认切片：不采集或上传照片、位置和传感器读数；不做 AI 事实判定、自动执法、公开看板或精确地点披露。
+- 构建证据：`assembleHap --no-daemon --no-incremental --stacktrace` 通过（`BUILD SUCCESSFUL in 7 s 661 ms`）；产物 `entry-default-unsigned.hap` 经 `unzip -t` 校验通过，SHA-256 为 `65276b9fcd3efb5561a3454b95741765088e01d8c27fd0b8dfa14af274984587`（58,424 bytes）。
+- 续办门禁：真实采集/公开闭环要先确定任务协议、位置模糊规则、未成年人/受保护物种处理、素材保留期、传感器校准与人工复核；相机/定位/服务卡片权限和真机验证也尚未完成。`No signingConfig found for product default`，因此安装、读屏和视觉验收仍为 BLOCKED。
+- 按当前“卡住一个方案就紧接下一个”的规则：保留以上续办条件，下一项为 `07-voicebridge`。
+
+## 2026-08-31 · 06 UI/UX 工作流（观察范围）
+
+- **方案：** `06-greenlens`。不接相机/定位。实现：非执法徽章、已选择文字、全文换行、48vp。
+- **Build：** PASS 未签名 `BUILD SUCCESSFUL in 8 s 169 ms`。 HAP `58424` bytes，SHA-256 `98c6f88bcfb73e40f9ee92d24ab493df98e9b23ba4725e109024b38e9081b6ff`；unzip PASS。Visual BLOCKED。
+- **下次：** 立即 07 语桥求职
+
 ## 2026-08-29 · 青眼巡查
 
 - 当前节点：Node 4 / Verify。

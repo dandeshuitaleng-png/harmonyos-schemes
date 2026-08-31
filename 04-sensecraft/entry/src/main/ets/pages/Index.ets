@@ -74,7 +74,7 @@ struct Index {
   @Builder
   policyView() {
     Column({ space: 16 }) {
-      Text('隐私说明').fontSize(30).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
+      Text('隐私说明').fontSize(26).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
       Text('盲行工坊 · com.harmonyradar.sensecraft').fontSize(16).fontColor($r('app.color.text_secondary'))
       Column({ space: 6 }) {
         Text('当前版本没有相机、OCR、AI 或云端服务，也不会保存任何素材。').fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_notice'))
@@ -86,7 +86,8 @@ struct Index {
         .accessibilityText('确认已阅读隐私说明并继续').onClick(() => this.acceptPrivacy())
       Text('如暂不使用，请停留在本页。不会开始任何采集。').fontSize(14).fontColor($r('app.color.text_secondary'))
       if (this.privacyChoice === PRIVACY_ACCEPTED) {
-        Button('返回').fontSize(16).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.showPolicy = false)
+        Button('返回').fontSize(16).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.showPolicy = false)
       }
       if (this.actionError.length > 0) {
         Text(this.actionError).fontSize(14).fontColor($r('app.color.text_notice')).padding(14).backgroundColor($r('app.color.surface_notice')).borderRadius(14).width('100%')
@@ -97,8 +98,17 @@ struct Index {
   @Builder
   mainView() {
     Column({ space: 16 }) {
-      Text('盲行工坊').fontSize(30).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
-      Text('受控的低视力辅助工具模板').fontSize(17).fontColor($r('app.color.text_secondary'))
+      Row({ space: 12 }) {
+        Column({ space: 4 }) {
+          Text('盲行工坊').fontSize(26).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary')).lineHeight(34)
+          Text('受控的低视力辅助工具模板').fontSize(17).fontColor($r('app.color.text_secondary')).lineHeight(24)
+        }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+        Text('非识别')
+          .fontSize(14).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
+          .padding({ left: 10, right: 10, top: 8, bottom: 8 })
+          .backgroundColor($r('app.color.surface_notice')).borderRadius(8)
+          .accessibilityText('当前不调用相机或识别服务')
+      }.width('100%').alignItems(VerticalAlign.Top)
       Column({ space: 6 }) {
         Text('无法确认时，不会猜测或生成建议').fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_notice'))
         Text('本版本没有相机、OCR、AI、云端服务或人脸识别；不会保存任何素材。').fontSize(14).fontColor($r('app.color.text_notice'))
@@ -108,11 +118,17 @@ struct Index {
         ForEach(TOOLS, (tool: ToolTemplate) => {
           Button() {
             Column({ space: 5 }) {
-              Text(tool.title).fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
-              Text(tool.detail).fontSize(14).fontColor($r('app.color.text_secondary')).maxLines(2)
+              Text(this.selectedId === tool.id ? `${tool.title} · 已选择` : tool.title)
+                .fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary')).lineHeight(24)
+              Text(tool.detail).fontSize(14).fontColor($r('app.color.text_secondary')).lineHeight(22)
             }.alignItems(HorizontalAlign.Start).width('100%')
-          }.width('100%').padding(15).borderRadius(15)
+          }.width('100%').constraintSize({ minHeight: 48 }).padding(15).borderRadius(15)
            .backgroundColor(this.selectedId === tool.id ? $r('app.color.surface_choice') : $r('app.color.surface_card'))
+           .border({
+             width: this.selectedId === tool.id ? 0 : 1,
+             color: $r('app.color.border_subtle')
+           })
+           .accessibilityText(this.selectedId === tool.id ? `已选择${tool.title}` : `选择${tool.title}`)
            .onClick(() => { this.selectedId = tool.id; this.sessionMessage = `已选择：${tool.title}。尚未调用相机或识别服务。`; })
         }, (tool: ToolTemplate) => tool.id)
       }.padding(20).backgroundColor($r('app.color.surface_card')).borderRadius(20).width('100%')
@@ -126,11 +142,13 @@ struct Index {
       }.padding(20).backgroundColor($r('app.color.surface_choice')).borderRadius(20).width('100%')
       Text('药盒工具不会提供医疗建议；在紧急或用药不确定时，请咨询医生、药师或当地急救服务。').fontSize(14).fontColor($r('app.color.text_secondary'))
       Button('打开系统电话').fontSize(16).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
         .accessibilityText('打开系统电话拨号界面').onClick(() => this.openSystemDialer())
       if (this.actionError.length > 0) {
         Text(this.actionError).fontSize(14).fontColor($r('app.color.text_notice')).padding(14).backgroundColor($r('app.color.surface_notice')).borderRadius(14).width('100%')
       }
-      Button('查看隐私说明').fontSize(15).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.showPolicy = true)
+      Button('查看隐私说明').fontSize(15).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.showPolicy = true)
     }.padding({ left: 20, right: 20, top: 28, bottom: 36 }).alignItems(HorizontalAlign.Start).width('100%').constraintSize({ maxWidth: 640 })
   }
 

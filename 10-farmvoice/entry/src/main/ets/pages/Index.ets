@@ -20,6 +20,7 @@ struct Index {
   @State private privacyChoice: string = '';
   @State private privacyReady: boolean = false;
   @State private showPolicy: boolean = false;
+  @State private confirmClear: boolean = false;
   @State private actionError: string = '';
 
   aboutToAppear(): void {
@@ -29,6 +30,10 @@ struct Index {
   onBackPress(): boolean {
     if (this.showPolicy && this.privacyChoice === PRIVACY_ACCEPTED) {
       this.showPolicy = false;
+      return true;
+    }
+    if (this.confirmClear) {
+      this.confirmClear = false;
       return true;
     }
     return false;
@@ -105,15 +110,20 @@ struct Index {
   }
 
   private clearSession(): void {
+    if (!this.confirmClear) {
+      this.confirmClear = true;
+      return;
+    }
     this.notes = [];
     this.showSummary = false;
+    this.confirmClear = false;
   }
 
   @Builder
   private policyView() {
     Column({ space: 16 }) {
       Text('隐私说明')
-        .fontSize(30)
+        .fontSize(26)
         .fontWeight(FontWeight.Bold)
         .fontColor($r('app.color.text_primary'))
       Text('农事口述簿 · com.harmonyradar.farmvoice')
@@ -165,6 +175,7 @@ struct Index {
           .fontSize(16)
           .fontColor($r('app.color.action'))
           .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
           .accessibilityText('返回农事记录页')
           .onClick(() => this.showPolicy = false)
       }
@@ -177,6 +188,7 @@ struct Index {
             .fontSize(15)
             .fontColor($r('app.color.action'))
             .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
             .accessibilityText('重新读取已阅读标记')
             .onClick(() => this.loadPrivacy())
         }
@@ -195,13 +207,31 @@ struct Index {
   @Builder
   private mainView() {
     Column({ space: 16 }) {
-      Text('农事口述簿')
-        .fontSize(30)
-        .fontWeight(FontWeight.Bold)
-        .fontColor($r('app.color.text_primary'))
-      Text('无网手动记录切片 · 不录音、不上传')
-        .fontSize(16)
-        .fontColor($r('app.color.text_secondary'))
+      Row({ space: 12 }) {
+        Column({ space: 4 }) {
+          Text('农事口述簿')
+            .fontSize(26)
+            .fontWeight(FontWeight.Bold)
+            .fontColor($r('app.color.text_primary'))
+            .lineHeight(34)
+          Text('无网手动记录切片 · 不录音、不上传')
+            .fontSize(16)
+            .fontColor($r('app.color.text_secondary'))
+            .lineHeight(24)
+        }
+        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Start)
+        Text('非建议')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r('app.color.text_primary'))
+          .padding({ left: 10, right: 10, top: 8, bottom: 8 })
+          .backgroundColor($r('app.color.notice'))
+          .borderRadius(8)
+          .accessibilityText('记录不会变成种植或施药建议')
+      }
+      .width('100%')
+      .alignItems(VerticalAlign.Top)
 
       Column({ space: 6 }) {
         Text('记录不会变成种植、施药或贷款建议。')
@@ -223,15 +253,20 @@ struct Index {
           .fontWeight(FontWeight.Bold)
           .fontColor($r('app.color.text_primary'))
         ForEach(KINDS, (item: string) => {
-          Button(item)
+          Button(this.kind === item ? `${item} · 已选择` : item)
             .fontSize(17)
             .fontWeight(FontWeight.Medium)
             .fontColor($r('app.color.text_primary'))
             .width('100%')
+            .constraintSize({ minHeight: 48 })
             .padding(15)
             .borderRadius(15)
             .backgroundColor(this.kind === item ? $r('app.color.active') : $r('app.color.card'))
-            .accessibilityText(`选择作业类型 ${item}`)
+            .border({
+              width: this.kind === item ? 0 : 1,
+              color: $r('app.color.border_subtle')
+            })
+            .accessibilityText(this.kind === item ? `已选择作业类型 ${item}` : `选择作业类型 ${item}`)
             .onClick(() => this.kind = item)
         }, (item: string) => item)
       }
@@ -263,6 +298,7 @@ struct Index {
           .fontSize(16)
           .fontColor($r('app.color.action'))
           .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
           .accessibilityText(this.filterToday ? '取消仅今天筛选' : '只显示今天的会话记录')
           .onClick(() => {
             this.filterToday = !this.filterToday;
@@ -329,12 +365,36 @@ struct Index {
       }
 
       if (this.notes.length > 0) {
-        Button('清除本次会话记录')
-          .fontSize(15)
-          .fontColor($r('app.color.action'))
-          .backgroundColor(Color.Transparent)
-          .accessibilityText('清除本页当前会话中的全部农事记录')
-          .onClick(() => this.clearSession())
+        if (this.confirmClear) {
+          Text('清除后无法从本页恢复这些会话记录。没有写入本机存储，也没有上传。')
+            .fontSize(14)
+            .lineHeight(22)
+            .fontColor($r('app.color.text_danger'))
+          Button('确认清除本次会话记录')
+            .fontSize(16)
+            .fontWeight(FontWeight.Medium)
+            .width('100%')
+            .constraintSize({ minHeight: 48 })
+            .backgroundColor($r('app.color.notice'))
+            .fontColor($r('app.color.text_danger'))
+            .borderRadius(12)
+            .accessibilityText('确认清除本次会话全部农事记录，此操作不能撤销')
+            .onClick(() => this.clearSession())
+          Button('取消清除')
+            .fontSize(16)
+            .fontColor($r('app.color.action'))
+            .backgroundColor(Color.Transparent)
+            .constraintSize({ minHeight: 48 })
+            .onClick(() => this.confirmClear = false)
+        } else {
+          Button('清除本次会话记录')
+            .fontSize(15)
+            .fontColor($r('app.color.action'))
+            .backgroundColor(Color.Transparent)
+            .constraintSize({ minHeight: 48 })
+            .accessibilityText('准备清除本次会话农事记录，下一步需要确认')
+            .onClick(() => this.clearSession())
+        }
       }
 
       if (this.actionError.length > 0) {
@@ -359,6 +419,7 @@ struct Index {
           .fontSize(15)
           .fontColor($r('app.color.action'))
           .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
           .accessibilityText('查看当前版本隐私说明')
           .onClick(() => this.showPolicy = true)
       }

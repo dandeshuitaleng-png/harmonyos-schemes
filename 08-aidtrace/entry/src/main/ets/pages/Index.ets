@@ -57,7 +57,7 @@ struct Index {
   @Builder
   policyView() {
     Column({ space: 16 }) {
-      Text('隐私说明').fontSize(30).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
+      Text('隐私说明').fontSize(26).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
       Text('善款明细 · com.harmonyradar.aidtrace').fontSize(16).fontColor($r('app.color.text_secondary'))
       Column({ space: 6 }) {
         Text('本页不记录捐赠者、受助者、联系方式或款项金额，也没有导出或公开账本。').fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_notice'))
@@ -69,7 +69,8 @@ struct Index {
         .onClick(() => this.acceptPrivacy())
       Text('如暂不使用，请停留在本页。').fontSize(14).fontColor($r('app.color.text_secondary'))
       if (this.privacyChoice === PRIVACY_ACCEPTED) {
-        Button('返回').fontSize(16).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.showPolicy = false)
+        Button('返回').fontSize(16).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.showPolicy = false)
       }
       if (this.actionError.length > 0) {
         Text(this.actionError).fontSize(14).fontColor($r('app.color.text_notice')).padding(14).backgroundColor($r('app.color.surface_notice')).borderRadius(14).width('100%')
@@ -80,8 +81,17 @@ struct Index {
   @Builder
   mainView() {
     Column({ space: 16 }) {
-      Text('善款明细').fontSize(30).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
-      Text('隐私优先的物资批次会话草稿').fontSize(17).fontColor($r('app.color.text_secondary'))
+      Row({ space: 12 }) {
+        Column({ space: 4 }) {
+          Text('善款明细').fontSize(26).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary')).lineHeight(34)
+          Text('隐私优先的物资批次会话草稿').fontSize(17).fontColor($r('app.color.text_secondary')).lineHeight(24)
+        }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+        Text('非募资')
+          .fontSize(14).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
+          .padding({ left: 10, right: 10, top: 8, bottom: 8 })
+          .backgroundColor($r('app.color.surface_notice')).borderRadius(8)
+          .accessibilityText('本页不募资、不记录捐赠者或金额')
+      }.width('100%').alignItems(VerticalAlign.Top)
       Column({ space: 6 }) {
         Text('本页不记录捐赠者、受助者或联系方式').fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_notice'))
         Text('不记录款项金额，也没有附件、签名、公开页面、导出或异常判定；所有异常必须以后续人工复核处理。').fontSize(14).fontColor($r('app.color.text_notice'))
@@ -89,8 +99,15 @@ struct Index {
       Column({ space: 10 }) {
         Text('选择物资批次类别').fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
         ForEach(TYPES, (type: BatchType) => {
-          Button(type.title).fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary')).width('100%').padding(15).borderRadius(15)
+          Button(this.selectedId === type.id ? `${type.title} · 已选择` : type.title)
+            .fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
+            .width('100%').constraintSize({ minHeight: 48 }).padding(15).borderRadius(15)
             .backgroundColor(this.selectedId === type.id ? $r('app.color.surface_notice') : $r('app.color.surface_card'))
+            .border({
+              width: this.selectedId === type.id ? 0 : 1,
+              color: $r('app.color.border_subtle')
+            })
+            .accessibilityText(this.selectedId === type.id ? `已选择${type.title}` : `选择${type.title}`)
             .onClick(() => this.selectedId = type.id)
         }, (type: BatchType) => type.id)
       }.padding(20).backgroundColor($r('app.color.surface_card')).borderRadius(20).width('100%')
@@ -108,7 +125,8 @@ struct Index {
         }
         Text('离开本页后草稿不会保留。未来若接入保存，仍只能由工作人员补全数量和处理阶段，并进入人工复核；不能公开或导出。').fontSize(14).fontColor($r('app.color.text_secondary'))
       }.padding(20).backgroundColor($r('app.color.surface_draft')).borderRadius(20).width('100%')
-      Button('查看隐私说明').fontSize(15).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.showPolicy = true)
+      Button('查看隐私说明').fontSize(15).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.showPolicy = true)
     }.padding({ left: 20, right: 20, top: 28, bottom: 36 }).alignItems(HorizontalAlign.Start).width('100%').constraintSize({ maxWidth: 640 })
   }
 

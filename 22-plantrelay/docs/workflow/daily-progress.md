@@ -1,5 +1,18 @@
 # 每日开发进度
 
+## 2026-08-31 · 22 状态复核（按序推进）
+
+- 已复核本地植物交接板：创建用户自定任务与照护人昵称后，可确认接手、填写完成时间/备注，并在本地预览可选择字段的摘要；不识别、不诊断、不提供照护建议，且未实现照片、提醒、真实导出、同步或社群。
+- 构建证据：`assembleHap --no-daemon --no-incremental --stacktrace` 通过（`BUILD SUCCESSFUL in 7 s 603 ms`）；产物 `entry-default-unsigned.hap` 经 `unzip -t` 校验通过，SHA-256 为 `4605879b448a9f6292d95266601943ee4435c3d5f2922c4010a204eff85d4fc4`（104,448 bytes）。
+- 续办门禁：完整 MVP 的两盆植物真机路径、可选照片拒绝后的替代、用户开启的提醒、真实导出格式/保存位置/覆盖规则及字段隐私仍需单独确认；读屏、150% 字号、高对比和重启恢复也需真机验证。`No signingConfig found for product default`，故安装与视觉验收仍为 BLOCKED。
+- 按当前“卡住一个方案就紧接下一个”的规则：保留以上续办条件，转入 `23-repairpassport`。
+
+## 2026-08-31 · 22 UI/UX 工作流（交接板）
+
+- **方案：** `22-plantrelay`。不诊断。实现：非诊断徽章、语义色。
+- **Build：** PASS 未签名 `BUILD SUCCESSFUL in 8 s 137 ms`。 HAP `104448` bytes，SHA-256 `c51449c916e90cc2807d27979ce256db9b1f7cb2a454027d65dfb37f0f527086`；unzip PASS。Visual BLOCKED。
+- **下次：** 立即 23 修物志
+
 ## 2026-08-31 · 桌面入口配置复验
 
 - **范围：** 仅为既有 `EntryAbility` 增加与 01、21 号工程一致的 Home skill：`entity.system.home` 与 `action.system.home`；未改业务代码、权限、签名或数据。

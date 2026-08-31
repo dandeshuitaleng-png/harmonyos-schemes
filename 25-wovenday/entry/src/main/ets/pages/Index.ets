@@ -18,8 +18,16 @@ struct Index {
   @State private failedEventGarmentId: number = 0;
   @State private isLoading: boolean = true;
   @State private errorText: string = '';
+  @State private confirmDeleteId: number = 0;
 
   aboutToAppear(): void { this.loadGarments(); }
+  onBackPress(): boolean {
+    if (this.confirmDeleteId !== 0) {
+      this.confirmDeleteId = 0;
+      return true;
+    }
+    return false;
+  }
   private context(): Context { return getContext(this); }
   private canSave(): boolean { return this.name.trim().length > 0 && this.category.trim().length > 0 && this.statusText.trim().length > 0 && this.careAgreement.trim().length > 0; }
   private canSaveEvent(): boolean { return this.eventGarmentId !== 0 && this.eventType.trim().length > 0 && this.eventDate.trim().length > 0; }
@@ -45,8 +53,12 @@ struct Index {
     finally { this.isLoading = false; }
   }
   private async deleteGarment(id: number): Promise<void> {
+    if (this.confirmDeleteId !== id) {
+      this.confirmDeleteId = id;
+      return;
+    }
     this.isLoading = true; this.errorText = '';
-    try { const updated = this.garments.filter((garment: Garment) => garment.id !== id); await this.garmentStore.save(this.context(), updated); this.garments = updated; if (this.eventGarmentId === id) { this.cancelEvent(); } }
+    try { const updated = this.garments.filter((garment: Garment) => garment.id !== id); await this.garmentStore.save(this.context(), updated); this.garments = updated; this.confirmDeleteId = 0; if (this.eventGarmentId === id) { this.cancelEvent(); } }
     catch { this.errorText = '无法删除本机衣物卡。请重试；没有上传数据。'; }
     finally { this.isLoading = false; }
   }
@@ -78,7 +90,8 @@ struct Index {
         TextInput({ placeholder: '本机备注（可选）', text: this.eventNote }).onChange((value: string) => this.eventNote = value)
         if (!this.canSaveEvent()) { Text('填写事件类型和发生日期后即可保存。').fontSize(13).fontColor($r('app.color.text_secondary')) }
         Button(this.failedEventGarmentId === garment.id ? '再次保存该照看事件' : '保存本机照看事件').width('100%').constraintSize({ minHeight: 48 }).backgroundColor($r('app.color.action_primary')).fontColor($r('app.color.text_on_primary')).borderRadius(14).enabled(this.canSaveEvent() && !this.isLoading).accessibilityText('保存仅在本机保留的照看事件').onClick(() => this.saveEvent())
-        Button('取消记录事件').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).accessibilityText('取消记录本机照看事件，不保存输入').onClick(() => this.cancelEvent())
+        Button('取消记录事件').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).accessibilityText('取消记录本机照看事件，不保存输入').onClick(() => this.cancelEvent())
       }.padding(12).backgroundColor($r('app.color.surface_card')).borderRadius(12).width('100%')
     }
   }
@@ -94,8 +107,17 @@ struct Index {
 
   build() {
     Scroll() { Column({ space: 16 }) {
-      Text('织日').fontSize(30).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
-      Text('为值得继续穿的一件衣物，留下下一步。').fontSize(17).fontColor($r('app.color.text_secondary'))
+      Row({ space: 12 }) {
+        Column({ space: 4 }) {
+          Text('织日').fontSize(26).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary')).lineHeight(34)
+          Text('为值得继续穿的一件衣物，留下下一步。').fontSize(17).fontColor($r('app.color.text_secondary')).lineHeight(24)
+        }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+        Text('非鉴定')
+          .fontSize(14).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
+          .padding({ left: 10, right: 10, top: 8, bottom: 8 })
+          .backgroundColor($r('app.color.surface_warning')).borderRadius(8)
+          .accessibilityText('不鉴定、不提供洗护建议')
+      }.width('100%').alignItems(VerticalAlign.Top)
       Column({ space: 6 }) {
         Text('本机衣物照看卡 · 不鉴定、不提供洗护建议').fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_warning'))
         Text('本切片仅保存文字卡片与用户自定约定。照片、Picker、提醒、分享、服务卡片和网络尚未实现。').fontSize(14).fontColor($r('app.color.text_secondary'))
@@ -111,7 +133,8 @@ struct Index {
         if (!this.canSave()) { Text('填写称呼、类别、状态和照看约定后即可保存。').fontSize(14).fontColor($r('app.color.text_secondary')) }
         Button('保存本机衣物卡').width('100%').constraintSize({ minHeight: 52 }).backgroundColor($r('app.color.action_primary')).fontColor($r('app.color.text_on_primary')).borderRadius(14).enabled(this.canSave() && !this.isLoading).accessibilityText('保存仅在本机保留的衣物照看卡').onClick(() => this.saveGarment())
       }.padding(20).backgroundColor($r('app.color.surface_card')).borderRadius(20).width('100%')
-      if (this.errorText.length > 0) { Column({ space: 8 }) { Text(this.errorText).fontSize(14).fontColor($r('app.color.text_warning')); Button('重试读取本机衣物卡').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.loadGarments()) }.padding(16).backgroundColor($r('app.color.surface_warning')).borderRadius(16).width('100%') }
+      if (this.errorText.length > 0) { Column({ space: 8 }) { Text(this.errorText).fontSize(14).fontColor($r('app.color.text_warning')); Button('重试读取本机衣物卡').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.loadGarments()) }.padding(16).backgroundColor($r('app.color.surface_warning')).borderRadius(16).width('100%') }
       Column({ space: 10 }) {
         Text('待照看衣物').fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
         if (this.isLoading) { Text('正在读取本机衣物卡…').fontSize(15).fontColor($r('app.color.text_secondary')) }
@@ -124,10 +147,20 @@ struct Index {
           else { Text('尚未填写下一步日期 · 未创建系统提醒').fontSize(13).fontColor($r('app.color.text_warning')) }
           if (garment.repairPrep.length > 0) { Text(`准备项：${garment.repairPrep}`).fontSize(13).fontColor($r('app.color.text_secondary')) }
           this.eventTimeline(garment)
-          Button(this.eventGarmentId === garment.id ? '收起事件表单' : '记录照看事件').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).accessibilityText(`为${garment.name}记录本机照看事件`).onClick(() => this.eventGarmentId === garment.id ? this.cancelEvent() : this.beginEvent(garment))
+          Button(this.eventGarmentId === garment.id ? '收起事件表单' : '记录照看事件').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).accessibilityText(`为${garment.name}记录本机照看事件`).onClick(() => this.eventGarmentId === garment.id ? this.cancelEvent() : this.beginEvent(garment))
           this.eventPanel(garment)
           Text('仅本机保存 · 未附图、未分享').fontSize(13).fontColor($r('app.color.text_success'))
-          Button('删除这张衣物卡').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).accessibilityText(`删除${garment.name}的本机衣物记录`).onClick(() => this.deleteGarment(garment.id))
+          if (this.confirmDeleteId === garment.id) {
+            Text('删除后无法从本应用恢复这张衣物卡和照看事件。没有上传。').fontSize(13).fontColor($r('app.color.text_danger'))
+            Button('确认删除这张衣物卡').fontColor($r('app.color.text_danger')).backgroundColor(Color.Transparent)
+              .constraintSize({ minHeight: 48 }).accessibilityText(`确认删除${garment.name}的本机衣物记录，此操作不能撤销`).onClick(() => this.deleteGarment(garment.id))
+            Button('取消删除').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+              .constraintSize({ minHeight: 48 }).onClick(() => this.confirmDeleteId = 0)
+          } else {
+            Button('删除这张衣物卡').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+              .constraintSize({ minHeight: 48 }).accessibilityText(`准备删除${garment.name}的本机衣物记录，下一步需要确认`).onClick(() => this.deleteGarment(garment.id))
+          }
         }.padding(16).backgroundColor($r('app.color.surface_success')).borderRadius(16).width('100%') }, (garment: Garment) => garment.id.toString()) }
       }.padding(20).backgroundColor($r('app.color.surface_card')).borderRadius(20).width('100%')
     }.padding({ left: 20, right: 20, top: 28, bottom: 36 }).alignItems(HorizontalAlign.Start).width('100%') }.width('100%').height('100%').backgroundColor($r('app.color.surface_canvas'))

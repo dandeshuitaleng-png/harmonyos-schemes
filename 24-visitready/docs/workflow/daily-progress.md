@@ -1,5 +1,18 @@
 # 每日开发进度
 
+## 2026-08-31 · 24 状态复核（按序推进）
+
+- 已复核本机预访卡：可离线创建、编辑、删除并预览场所昵称、时间、地址文本、同行人和个人计划；分享前字段选择只生成本地摘要，提醒日期也只显示在卡片内。页面明确不是认证或医疗服务，不请求定位、不创建系统提醒、也未调用附件或系统分享。
+- 构建证据：`assembleHap --no-daemon --no-incremental --stacktrace` 通过（`BUILD SUCCESSFUL in 7 s 532 ms`）；产物 `entry-default-unsigned.hap` 经 `unzip -t` 校验通过，SHA-256 为 `4d186b850847b6dc9c4bb0cf23b0312bc61b819d48276fd3bd1bb99c19eb6936`（123,818 bytes）。
+- 续办门禁：真实通知需先定义请求时机、时区、调度/取消和拒绝回退；系统分享、附件 Picker 与照片/文件拒绝路径要有数据保留和取消规则。读屏、150% 字号、重启恢复与签名真机验证也未完成，构建仍提示 `No signingConfig found for product default`。
+- 按当前“卡住一个方案就紧接下一个”的规则：保留以上续办条件，转入 `25-wovenday`。
+
+## 2026-08-31 · 24 UI/UX 工作流（预访卡）
+
+- **方案：** `24-visitready`。不是医疗服务。实现：非医疗徽章、删除确认。
+- **Build：** PASS 未签名 `BUILD SUCCESSFUL in 8 s 350 ms`。 HAP `123818` bytes，SHA-256 `7afed7cc1314fefe1c17952f403cb9b0026e31bbfc6aab37355499905d08220c`；unzip PASS。Visual BLOCKED。
+- **下次：** 立即 25 织日
+
 ## 2026-08-31 · 桌面入口配置复验
 
 - **范围：** 仅为既有 `EntryAbility` 加入标准 Home skill：`entity.system.home` 与 `action.system.home`；未接入通知、系统分享、Picker、网络、定位或签名。

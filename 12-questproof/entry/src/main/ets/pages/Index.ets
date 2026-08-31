@@ -112,7 +112,7 @@ struct Index {
   private policyView() {
     Column({ space: 16 }) {
       Text('隐私说明')
-        .fontSize(30)
+        .fontSize(26)
         .fontWeight(FontWeight.Bold)
         .fontColor($r('app.color.text_primary'))
       Text('可信任务贴 · com.harmonyradar.questproof')
@@ -164,6 +164,7 @@ struct Index {
           .fontSize(16)
           .fontColor($r('app.color.action'))
           .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
           .accessibilityText('返回任务演示页')
           .onClick(() => this.showPolicy = false)
       }
@@ -176,6 +177,7 @@ struct Index {
             .fontSize(15)
             .fontColor($r('app.color.action'))
             .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
             .accessibilityText('重新读取已阅读标记')
             .onClick(() => this.loadPrivacy())
         }
@@ -194,13 +196,31 @@ struct Index {
   @Builder
   private mainView() {
     Column({ space: 16 }) {
-      Text('可信任务贴')
-        .fontSize(30)
-        .fontWeight(FontWeight.Bold)
-        .fontColor($r('app.color.text_primary'))
-      Text('本机任务状态演示 · 不是真实回执')
-        .fontSize(16)
-        .fontColor($r('app.color.text_secondary'))
+      Row({ space: 12 }) {
+        Column({ space: 4 }) {
+          Text('可信任务贴')
+            .fontSize(26)
+            .fontWeight(FontWeight.Bold)
+            .fontColor($r('app.color.text_primary'))
+            .lineHeight(34)
+          Text('本机任务状态演示 · 不是真实回执')
+            .fontSize(16)
+            .fontColor($r('app.color.text_secondary'))
+            .lineHeight(24)
+        }
+        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Start)
+        Text('非链上')
+          .fontSize(14)
+          .fontWeight(FontWeight.Medium)
+          .fontColor($r('app.color.text_primary'))
+          .padding({ left: 10, right: 10, top: 8, bottom: 8 })
+          .backgroundColor($r('app.color.notice'))
+          .borderRadius(8)
+          .accessibilityText('没有链上结算或不可撤销凭证')
+      }
+      .width('100%')
+      .alignItems(VerticalAlign.Top)
 
       Column({ space: 6 }) {
         Text('没有代币、排行、押金、链上结算或不可撤销凭证。')
@@ -320,6 +340,7 @@ struct Index {
           .fontSize(15)
           .fontColor($r('app.color.action'))
           .backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 })
           .accessibilityText('查看当前版本隐私说明')
           .onClick(() => this.showPolicy = true)
       }

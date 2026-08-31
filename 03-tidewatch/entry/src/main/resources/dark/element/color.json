@@ -1,1 +1,17 @@
-{"color":[{"name":"surface_canvas","value":"#0D1D20"},{"name":"surface_card","value":"#162A2E"},{"name":"surface_notice","value":"#472F1B"},{"name":"surface_pending","value":"#14393E"},{"name":"text_primary","value":"#E6F7F8"},{"name":"text_secondary","value":"#B5CED1"},{"name":"text_muted","value":"#8EA9AD"},{"name":"text_notice","value":"#FFD09A"},{"name":"text_pending","value":"#91E0E8"},{"name":"action_primary","value":"#62CED8"},{"name":"text_on_primary","value":"#082023"}]}
+{
+  "color": [
+    { "name": "surface_canvas", "value": "#0D1D20" },
+    { "name": "surface_card", "value": "#162A2E" },
+    { "name": "surface_notice", "value": "#472F1B" },
+    { "name": "surface_pending", "value": "#14393E" },
+    { "name": "border_subtle", "value": "#3A5558" },
+    { "name": "text_primary", "value": "#E6F7F8" },
+    { "name": "text_secondary", "value": "#B5CED1" },
+    { "name": "text_muted", "value": "#A3BDC1" },
+    { "name": "text_notice", "value": "#FFD09A" },
+    { "name": "text_pending", "value": "#91E0E8" },
+    { "name": "text_danger", "value": "#FFB4A8" },
+    { "name": "action_primary", "value": "#62CED8" },
+    { "name": "text_on_primary", "value": "#082023" }
+  ]
+}

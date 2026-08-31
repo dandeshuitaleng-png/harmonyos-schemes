@@ -38,10 +38,36 @@ export interface DrillRecord {
   createdAt: string;
   kind: DrillKind;
   label: string;
+  sourceVersionId: string;
+  receivedAt: string;
+  conflictGroupId: string;
+  conflictStatus: string;
+  drillPackId: string;
+  drillPackTitle: string;
   locationPrecision: string;
   source: string;
   reviewStatus: string;
 }
+
+export interface DrillPack {
+  id: string;
+  title: string;
+  description: string;
+}
+
+// 这些是应用内置的演练提示，不是下载的地图、政府预警或真实救援资料。
+export const LOCAL_DRILL_PACKS: DrillPack[] = [
+  {
+    id: 'community-basics',
+    title: '社区基础演练包',
+    description: '用于练习记录 SOS、避险点、道路障碍和物资点；不含地图。'
+  },
+  {
+    id: 'family-preparedness',
+    title: '家庭预案演练包',
+    description: '用于练习家庭场景下的本机事件记录；不含联系人通知或位置。'
+  }
+];
 
 export const PRIVACY_ACCEPTED: string = 'accepted';
 export const PRIVACY_DECLINED: string = 'declined';
@@ -49,6 +75,7 @@ export const PRIVACY_DECLINED: string = 'declined';
 const PREFERENCES_NAME: string = 'beidou-neighboraid-drill-records';
 const RECORDS_KEY: string = 'records';
 const PRIVACY_KEY: string = 'privacy-choice';
+const DRILL_PACK_KEY: string = 'selected-drill-pack';
 
 export class DrillRecordStore {
   async loadPrivacyChoice(context: Context): Promise<string> {
@@ -60,6 +87,18 @@ export class DrillRecordStore {
   async savePrivacyChoice(context: Context, choice: string): Promise<void> {
     const store = await preferences.getPreferences(context, PREFERENCES_NAME);
     await store.put(PRIVACY_KEY, choice);
+    await store.flush();
+  }
+
+  async loadSelectedDrillPackId(context: Context): Promise<string> {
+    const store = await preferences.getPreferences(context, PREFERENCES_NAME);
+    const value = await store.get(DRILL_PACK_KEY, '') as string;
+    return typeof value === 'string' ? value : '';
+  }
+
+  async saveSelectedDrillPackId(context: Context, drillPackId: string): Promise<void> {
+    const store = await preferences.getPreferences(context, PREFERENCES_NAME);
+    await store.put(DRILL_PACK_KEY, drillPackId);
     await store.flush();
   }
 
@@ -107,6 +146,12 @@ export class DrillRecordStore {
           createdAt: parts[1],
           kind,
           label: parts[2],
+          sourceVersionId: `legacy-${id}`,
+          receivedAt: parts[1],
+          conflictGroupId: '',
+          conflictStatus: '当前无冲突版本',
+          drillPackId: '',
+          drillPackTitle: '未启用本机演练包',
           locationPrecision: '未添加位置',
           source: '本机演练',
           reviewStatus: '未提交'
@@ -128,6 +173,20 @@ export class DrillRecordStore {
           createdAt: item.createdAt,
           kind: toDrillKind(item.kind, item.label),
           label: item.label,
+          sourceVersionId: typeof item.sourceVersionId === 'string' && item.sourceVersionId.length > 0
+            ? item.sourceVersionId
+            : `local-${item.id}`,
+          receivedAt: typeof item.receivedAt === 'string' && item.receivedAt.length > 0
+            ? item.receivedAt
+            : item.createdAt,
+          conflictGroupId: typeof item.conflictGroupId === 'string' ? item.conflictGroupId : '',
+          conflictStatus: typeof item.conflictStatus === 'string' && item.conflictStatus.length > 0
+            ? item.conflictStatus
+            : '当前无冲突版本',
+          drillPackId: typeof item.drillPackId === 'string' ? item.drillPackId : '',
+          drillPackTitle: typeof item.drillPackTitle === 'string' && item.drillPackTitle.length > 0
+            ? item.drillPackTitle
+            : '未启用本机演练包',
           locationPrecision: typeof item.locationPrecision === 'string' && item.locationPrecision.length > 0
             ? item.locationPrecision
             : '未添加位置',

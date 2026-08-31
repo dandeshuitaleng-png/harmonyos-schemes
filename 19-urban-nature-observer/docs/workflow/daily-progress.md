@@ -1,5 +1,18 @@
 # 每日开发进度
 
+## 2026-08-31 · 19 状态复核（按序推进）
+
+- 已复核会话内可见特征观察：须选择观察任务、粗略环境及至少一个肉眼可见特征，才可确认“个人观察，未鉴定”；可二次确认删除，且不保存、不上传、不推断物种、健康状况或生态结论。
+- 构建证据：`assembleHap --no-daemon --no-incremental --stacktrace` 通过（`BUILD SUCCESSFUL in 7 s 673 ms`）；产物 `entry-default-unsigned.hap` 经 `unzip -t` 校验通过，SHA-256 为 `d40e75bb1bca70dbd17ad37b1821ba3ce6fab29a3c4a3f6cc6191c0a20f565a6`（58,410 bytes）。
+- 续办门禁：真实观察记录需先定义本地保留/删除、相机和定位权限、敏感物种地点模糊化、候选识别的置信度与人工确认、社区审核/公开范围；这些均需数据治理与真机验证。`No signingConfig found for product default`，故安装与视觉/无障碍验收仍为 BLOCKED。
+- 按当前“卡住一个方案就紧接下一个”的规则：保留以上续办条件，转入 `20-visual-table-book`。
+
+## 2026-08-31 · 19 UI/UX 工作流（可见特征）
+
+- **方案：** `19-urban-nature-observer`。不鉴定。实现：非鉴定徽章、已选择、删除确认。
+- **Build：** PASS 未签名 `BUILD SUCCESSFUL in 7 s 919 ms`。 HAP `58410` bytes，SHA-256 `9635a1ff500a3a47cea4f9eb7f534a2bf0228814e4e1f1d3338b825af205ec95`；unzip PASS。Visual BLOCKED。
+- **下次：** 立即 20 可视化订桌
+
 ## 2026-08-31 · 会话内可见特征观察与删除
 
 ### 范围与结果

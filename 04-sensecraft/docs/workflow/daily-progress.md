@@ -1,5 +1,19 @@
 # 每日开发进度
 
+## 2026-08-31 · 04 状态复核（按序推进）
+
+- 已复核受控模板切片：三个模板仅说明规划用途，主操作固定输出“无法确认”并提供人工替代路径；不调用相机、OCR、模型或云端，也不将药盒模板表述为医疗建议。
+- 构建证据：`assembleHap --no-daemon --no-incremental --stacktrace` 通过（`BUILD SUCCESSFUL in 7 s 721 ms`）；产物 `entry-default-unsigned.hap` 经 `unzip -t` 校验通过，SHA-256 为 `f4b56f2740fd88678f2e0efa154ffd2460320deaf3115ce3181b46ad3046c353`（63,279 bytes）。
+- 续办门禁：要实现 MVP 需先完成相机权限与素材生命周期、可替换 OCR/模型的低置信度策略、硬件按键/读屏/触觉真机验收；本机没有签名配置（`No signingConfig found for product default`），因此安装和无障碍视觉验收仍为 BLOCKED。现存 ArkTS 异常处理和 `getContext` 弃用警告不影响本次构建。
+- 按当前“卡住一个方案就紧接下一个”的规则：保留以上续办条件，转入 `05-freshloop`。
+
+## 2026-08-31 · 04 UI/UX 工作流（受控模板）
+
+- **方案：** 仅 `all-schemes/04-sensecraft`。不接相机、OCR、模型。
+- **实现：** 「非识别」徽章；模板「已选择」文字；去掉 `maxLines`；48vp。
+- **Build：** PASS 未签名 `BUILD SUCCESSFUL in 8 s 185 ms`。HAP `63279` bytes，SHA-256 `9748c5fc29f47fb2b9c0daead10aba96f0897d60fed9aba0a37aa76374958dda`。Visual BLOCKED。
+- **下次：** 立即 05 食光循环。
+
 ## 2026-08-29 · 盲行工坊
 
 - 当前节点：Node 4 / Verify。

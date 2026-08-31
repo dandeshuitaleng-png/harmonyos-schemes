@@ -1,1 +1,52 @@
-{"color":[{"name":"surface_canvas","value":"#102013"},{"name":"surface_card","value":"#1A3020"},{"name":"surface_notice","value":"#493219"},{"name":"surface_confirm","value":"#213D27"},{"name":"text_primary","value":"#E9F8E7"},{"name":"text_secondary","value":"#C0D8C2"},{"name":"text_notice","value":"#FFD19B"},{"name":"text_confirm","value":"#ADE5AF"},{"name":"action_primary","value":"#83D188"},{"name":"text_on_primary","value":"#14321A"}]}
+{
+  "color": [
+    {
+      "name": "surface_canvas",
+      "value": "#102013"
+    },
+    {
+      "name": "surface_card",
+      "value": "#1A3020"
+    },
+    {
+      "name": "surface_notice",
+      "value": "#493219"
+    },
+    {
+      "name": "surface_confirm",
+      "value": "#213D27"
+    },
+    {
+      "name": "text_primary",
+      "value": "#E9F8E7"
+    },
+    {
+      "name": "text_secondary",
+      "value": "#C0D8C2"
+    },
+    {
+      "name": "text_notice",
+      "value": "#FFD19B"
+    },
+    {
+      "name": "text_confirm",
+      "value": "#ADE5AF"
+    },
+    {
+      "name": "action_primary",
+      "value": "#83D188"
+    },
+    {
+      "name": "text_on_primary",
+      "value": "#14321A"
+    },
+    {
+      "name": "border_subtle",
+      "value": "#3A5560"
+    },
+    {
+      "name": "text_danger",
+      "value": "#FFB4A8"
+    }
+  ]
+}

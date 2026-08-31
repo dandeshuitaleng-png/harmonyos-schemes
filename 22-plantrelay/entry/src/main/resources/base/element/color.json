@@ -1,1 +1,44 @@
-{ "color":[{"name":"surface_canvas","value":"#F6F8FA"}] }
+{
+  "color": [
+    {
+      "name": "surface_canvas",
+      "value": "#F6F8FA"
+    },
+    {
+      "name": "surface_card",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "surface_notice",
+      "value": "#E7F5EA"
+    },
+    {
+      "name": "surface_warning",
+      "value": "#FFF2D8"
+    },
+    {
+      "name": "text_primary",
+      "value": "#1A2E22"
+    },
+    {
+      "name": "text_secondary",
+      "value": "#54665A"
+    },
+    {
+      "name": "action_primary",
+      "value": "#2F6B45"
+    },
+    {
+      "name": "text_on_primary",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "border_subtle",
+      "value": "#C5D0D6"
+    },
+    {
+      "name": "text_danger",
+      "value": "#8B1E1E"
+    }
+  ]
+}

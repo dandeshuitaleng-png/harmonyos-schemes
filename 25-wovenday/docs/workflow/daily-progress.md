@@ -1,5 +1,18 @@
 # 每日开发进度
 
+## 2026-08-31 · 25 状态复核（按序推进）
+
+- 已复核本机衣物照看卡：保存用户自定名称、类别、状态、下一步日期、照看约定与可选准备项，并可记录用户自定照看事件和二次确认删除；不鉴定、不提供洗护/修补/化学品建议，也未实现照片、Picker、提醒、系统分享、服务卡片、网络或账号。
+- 构建证据：`assembleHap --no-daemon --no-incremental --stacktrace` 通过（`BUILD SUCCESSFUL in 7 s 759 ms`）；产物 `entry-default-unsigned.hap` 经 `unzip -t` 校验通过，SHA-256 为 `716abda322f6431eba1f84abb10d19bb1a6ed50c01c2e5fe2ff9b0f6a3f52582`（97,285 bytes）。
+- 续办门禁：完整交接单字段移除与系统分享取消、可选照片 Picker 的取消/不可读、提醒日期的权限/时区/调度语义、编辑/归档和服务卡片均需各自规则与真机验证；`No signingConfig found for product default`，所以安装、重启恢复、读屏、150% 字号和视觉验收仍为 BLOCKED。
+- 本轮已按编号完成 01–25 的可安全复核；各方案的外部门禁均已写入相应 `daily-progress.md`，每日任务将从最早满足续办条件的方案重新开始。
+
+## 2026-08-31 · 25 UI/UX 工作流（衣物卡）
+
+- **方案：** `25-wovenday`。不鉴定。实现：非鉴定徽章、删除确认。
+- **Build：** PASS 未签名 `BUILD SUCCESSFUL in 8 s 118 ms`。 HAP `97285` bytes，SHA-256 `7cab57e079351a12cd56a57fcc92b23197c2958c02cd72b8634efe7e6bb4a466`；unzip PASS。Visual BLOCKED。
+- **下次：** 03–25 本机切片 UI 流水线已收口。签名、真机截图仍 BLOCKED。
+
 ## 2026-08-31 · 桌面入口配置复验
 
 - **范围：** 仅为既有 `EntryAbility` 加入标准 Home skill：`entity.system.home` 与 `action.system.home`；没有改动衣物、事件或隐私功能。

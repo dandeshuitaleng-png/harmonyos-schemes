@@ -1,5 +1,18 @@
 # 每日开发进度
 
+## 2026-08-31 · 23 状态复核（按序推进）
+
+- 已复核本机设备护照：可创建设备卡、记录送修/已修/报废等本机维修事件，并选择字段预览摘要；型号默认隐藏。不附加文件、不做故障诊断、报价、拆机教学、零件销售、预约或保修资格判断。
+- 构建证据：`assembleHap --no-daemon --no-incremental --stacktrace` 通过（`BUILD SUCCESSFUL in 7 s 585 ms`）；产物 `entry-default-unsigned.hap` 经 `unzip -t` 校验通过，SHA-256 为 `f93f699feb08382b9ffd985e1315ed681cf7149c3f0de14256e4268532da31e7`（106,421 bytes）。
+- 续办门禁：DocumentViewPicker、用户授权附件元数据、失效 URI/文件删除的可恢复状态、真实导出格式/保存位置/覆盖规则与保修提醒日期语义需先独立确定；真机读屏、大字号、重启与签名验证尚未具备。`No signingConfig found for product default`，故安装与视觉验收仍为 BLOCKED。
+- 按当前“卡住一个方案就紧接下一个”的规则：保留以上续办条件，转入 `24-visitready`。
+
+## 2026-08-31 · 23 UI/UX 工作流（设备卡）
+
+- **方案：** `23-repairpassport`。不诊断报价。实现：非诊断徽章、删除确认、语义色。
+- **Build：** PASS 未签名 `BUILD SUCCESSFUL in 8 s 155 ms`。 HAP `106421` bytes，SHA-256 `93811737b880d65124cad14c6cfbf0d63431f5b0af11d33d4e1a358d7e86fd4e`；unzip PASS。Visual BLOCKED。
+- **下次：** 立即 24 从容赴约
+
 ## 2026-08-31 · 桌面入口配置复验
 
 - **范围：** 仅为既有 `EntryAbility` 加入标准 Home skill：`entity.system.home` 与 `action.system.home`；未接入附件、导出、网络、签名或设备操作。

@@ -47,7 +47,7 @@ struct Index {
   @Builder
   policyView() {
     Column({ space: 16 }) {
-      Text('隐私说明').fontSize(30).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
+      Text('隐私说明').fontSize(26).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
       Text('青眼巡查 · com.harmonyradar.greenlens').fontSize(16).fontColor($r('app.color.text_secondary'))
       Column({ space: 6 }) {
         Text('本页只确认观察范围，不产生环境事实或执法结论。').fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_notice'))
@@ -59,7 +59,8 @@ struct Index {
         .onClick(() => this.acceptPrivacy())
       Text('如暂不使用，请停留在本页。').fontSize(14).fontColor($r('app.color.text_secondary'))
       if (this.privacyChoice === PRIVACY_ACCEPTED) {
-        Button('返回').fontSize(16).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.showPolicy = false)
+        Button('返回').fontSize(16).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.showPolicy = false)
       }
       if (this.actionError.length > 0) {
         Text(this.actionError).fontSize(14).fontColor($r('app.color.text_notice')).padding(14).backgroundColor($r('app.color.surface_notice')).borderRadius(14).width('100%')
@@ -70,8 +71,17 @@ struct Index {
   @Builder
   mainView() {
     Column({ space: 16 }) {
-      Text('青眼巡查').fontSize(30).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
-      Text('社区环境观察的范围确认').fontSize(17).fontColor($r('app.color.text_secondary'))
+      Row({ space: 12 }) {
+        Column({ space: 4 }) {
+          Text('青眼巡查').fontSize(26).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary')).lineHeight(34)
+          Text('社区环境观察的范围确认').fontSize(17).fontColor($r('app.color.text_secondary')).lineHeight(24)
+        }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+        Text('非执法')
+          .fontSize(14).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
+          .padding({ left: 10, right: 10, top: 8, bottom: 8 })
+          .backgroundColor($r('app.color.surface_notice')).borderRadius(8)
+          .accessibilityText('本页不产生环境事实或执法结论')
+      }.width('100%').alignItems(VerticalAlign.Top)
       Column({ space: 6 }) {
         Text('本页不产生环境事实或执法结论').fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_notice'))
         Text('没有相机、定位、传感器、AI 分类或上传；不会公开任何素材或地点。').fontSize(14).fontColor($r('app.color.text_notice'))
@@ -81,11 +91,17 @@ struct Index {
         ForEach(TOPICS, (topic: ObservationTopic) => {
           Button() {
             Column({ space: 5 }) {
-              Text(topic.title).fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
-              Text(topic.privacy).fontSize(14).fontColor($r('app.color.text_secondary')).maxLines(2)
+              Text(this.selectedId === topic.id ? `${topic.title} · 已选择` : topic.title)
+                .fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary')).lineHeight(24)
+              Text(topic.privacy).fontSize(14).fontColor($r('app.color.text_secondary')).lineHeight(22)
             }.alignItems(HorizontalAlign.Start).width('100%')
-          }.width('100%').padding(15).borderRadius(15)
+          }.width('100%').constraintSize({ minHeight: 48 }).padding(15).borderRadius(15)
            .backgroundColor(this.selectedId === topic.id ? $r('app.color.surface_notice') : $r('app.color.surface_card'))
+           .border({
+             width: this.selectedId === topic.id ? 0 : 1,
+             color: $r('app.color.border_subtle')
+           })
+           .accessibilityText(this.selectedId === topic.id ? `已选择${topic.title}` : `选择${topic.title}`)
            .onClick(() => { this.selectedId = topic.id; this.confirmed = false; })
         }, (topic: ObservationTopic) => topic.id)
       }.padding(20).backgroundColor($r('app.color.surface_card')).borderRadius(20).width('100%')
@@ -98,7 +114,8 @@ struct Index {
           Text('将来接入采集前，需要独立验证公开范围、位置模糊、人工复核与保留期。').fontSize(14).fontColor($r('app.color.text_secondary'))
         }.padding(20).backgroundColor($r('app.color.surface_confirm')).borderRadius(20).width('100%')
       }
-      Button('查看隐私说明').fontSize(15).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.showPolicy = true)
+      Button('查看隐私说明').fontSize(15).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.showPolicy = true)
     }.padding({ left: 20, right: 20, top: 28, bottom: 36 }).alignItems(HorizontalAlign.Start).width('100%').constraintSize({ maxWidth: 640 })
   }
 

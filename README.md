@@ -32,3 +32,7 @@
 | 25 | `25-wovenday`（织日 / WovenDay） | 确认照片、提醒与分享摘要规则后继续 MVP，并做真机验证 |
 
 各方案的研究资料与跨项目台账保留在对应文档中；每日开发与验收自动化以本目录为工程根路径。
+
+## UI/UX 工作流
+
+对本目录方案做界面设计或 ArkUI 开发时，按仓库技能 `.cursor/skills/harmonyos-scheme-ui/SKILL.md` 执行：先读该方案 `AGENTS.md`，用 UI UX Pro Max 生成 `docs/design/MASTER.md`，映射到 ArkUI 资源后再改页面。不要把 shadcn/ui、Nuxt UI 或 Creative Tim 当作鸿蒙组件库。

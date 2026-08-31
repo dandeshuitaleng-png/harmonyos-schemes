@@ -48,7 +48,7 @@ struct Index {
   @Builder
   policyView() {
     Column({ space: 16 }) {
-      Text('隐私说明').fontSize(30).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
+      Text('隐私说明').fontSize(26).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
       Text('食光循环 · com.harmonyradar.freshloop').fontSize(16).fontColor($r('app.color.text_secondary'))
       Column({ space: 6 }) {
         Text('本页只做本地安全规则说明，不发布食物、不接受预约、不显示领取点。').fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_notice'))
@@ -60,7 +60,8 @@ struct Index {
         .onClick(() => this.acceptPrivacy())
       Text('如暂不使用，请停留在本页。').fontSize(14).fontColor($r('app.color.text_secondary'))
       if (this.privacyChoice === PRIVACY_ACCEPTED) {
-        Button('返回').fontSize(16).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.showPolicy = false)
+        Button('返回').fontSize(16).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.showPolicy = false)
       }
       if (this.actionError.length > 0) {
         Text(this.actionError).fontSize(14).fontColor($r('app.color.text_notice')).padding(14).backgroundColor($r('app.color.surface_notice')).borderRadius(14).width('100%')
@@ -71,8 +72,17 @@ struct Index {
   @Builder
   mainView() {
     Column({ space: 16 }) {
-      Text('食光循环').fontSize(30).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
-      Text('社区食物转赠的本地安全筛选草稿').fontSize(17).fontColor($r('app.color.text_secondary'))
+      Row({ space: 12 }) {
+        Column({ space: 4 }) {
+          Text('食光循环').fontSize(26).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary')).lineHeight(34)
+          Text('社区食物转赠的本地安全筛选草稿').fontSize(17).fontColor($r('app.color.text_secondary')).lineHeight(24)
+        }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+        Text('非上架')
+          .fontSize(14).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
+          .padding({ left: 10, right: 10, top: 8, bottom: 8 })
+          .backgroundColor($r('app.color.surface_notice')).borderRadius(8)
+          .accessibilityText('当前页不发布食物、不接受预约')
+      }.width('100%').alignItems(VerticalAlign.Top)
       Column({ space: 6 }) {
         Text('通过筛选不等于食品安全、商家资质或可领取').fontSize(16).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_notice'))
         Text('本页不发布食物、不接受预约、不显示领取点，也不会对食品作平台背书。').fontSize(14).fontColor($r('app.color.text_notice'))
@@ -82,11 +92,17 @@ struct Index {
         ForEach(OPTIONS, (item: SafetyOption) => {
           Button() {
             Column({ space: 5 }) {
-              Text(item.name).fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
-              Text(item.blocked ? '硬规则：直接拒绝' : '需要补全信息后人工审核').fontSize(14).fontColor(item.blocked ? $r('app.color.text_blocked') : $r('app.color.text_safe'))
+              Text(this.selectedId === item.id ? `${item.name} · 已选择` : item.name)
+                .fontSize(17).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary')).lineHeight(24)
+              Text(item.blocked ? '硬规则：直接拒绝' : '需要补全信息后人工审核').fontSize(14).fontColor(item.blocked ? $r('app.color.text_blocked') : $r('app.color.text_safe')).lineHeight(22)
             }.alignItems(HorizontalAlign.Start).width('100%')
-          }.width('100%').padding(15).borderRadius(15)
+          }.width('100%').constraintSize({ minHeight: 48 }).padding(15).borderRadius(15)
            .backgroundColor(this.selectedId === item.id ? $r('app.color.surface_notice') : $r('app.color.surface_card'))
+           .border({
+             width: this.selectedId === item.id ? 0 : 1,
+             color: $r('app.color.border_subtle')
+           })
+           .accessibilityText(this.selectedId === item.id ? `已选择${item.name}` : `选择${item.name}`)
            .onClick(() => { this.selectedId = item.id; this.checked = false; })
         }, (item: SafetyOption) => item.id)
       }.padding(20).backgroundColor($r('app.color.surface_card')).borderRadius(20).width('100%')
@@ -100,7 +116,8 @@ struct Index {
           Text(this.selectedOption().blocked ? '此草稿不保存、不发布，也不能进入预约或领取。' : '这不是食品安全结论；此草稿不保存、不发布，工作人员可另行决定是否审核。').fontSize(14).fontColor($r('app.color.text_secondary'))
         }.padding(20).backgroundColor(this.selectedOption().blocked ? $r('app.color.surface_blocked') : $r('app.color.surface_safe')).borderRadius(20).width('100%')
       }
-      Button('查看隐私说明').fontSize(15).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).onClick(() => this.showPolicy = true)
+      Button('查看隐私说明').fontSize(15).fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+        .constraintSize({ minHeight: 48 }).onClick(() => this.showPolicy = true)
     }.padding({ left: 20, right: 20, top: 28, bottom: 36 }).alignItems(HorizontalAlign.Start).width('100%').constraintSize({ maxWidth: 640 })
   }
 

@@ -1,1 +1,48 @@
-{ "color": [{ "name": "surface_canvas", "value": "#11192B" }, { "name": "surface_card", "value": "#1B2942" }, { "name": "surface_notice", "value": "#48331C" }, { "name": "surface_active", "value": "#20375F" }, { "name": "surface_choice", "value": "#1F412D" }, { "name": "text_primary", "value": "#EAF0FF" }, { "name": "text_secondary", "value": "#BECAE4" }, { "name": "text_notice", "value": "#FFD29E" }, { "name": "text_success", "value": "#A9E1BE" }] }
+{
+  "color": [
+    {
+      "name": "surface_canvas",
+      "value": "#11192B"
+    },
+    {
+      "name": "surface_card",
+      "value": "#1B2942"
+    },
+    {
+      "name": "surface_notice",
+      "value": "#48331C"
+    },
+    {
+      "name": "surface_active",
+      "value": "#20375F"
+    },
+    {
+      "name": "surface_choice",
+      "value": "#1F412D"
+    },
+    {
+      "name": "text_primary",
+      "value": "#EAF0FF"
+    },
+    {
+      "name": "text_secondary",
+      "value": "#BECAE4"
+    },
+    {
+      "name": "text_notice",
+      "value": "#FFD29E"
+    },
+    {
+      "name": "text_success",
+      "value": "#A9E1BE"
+    },
+    {
+      "name": "border_subtle",
+      "value": "#3A5560"
+    },
+    {
+      "name": "text_danger",
+      "value": "#FFB4A8"
+    }
+  ]
+}

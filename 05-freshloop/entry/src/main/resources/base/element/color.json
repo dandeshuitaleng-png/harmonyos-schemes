@@ -1,1 +1,60 @@
-{"color":[{"name":"surface_canvas","value":"#FCF8F2"},{"name":"surface_card","value":"#FFFFFFFF"},{"name":"surface_notice","value":"#FFF0DE"},{"name":"surface_safe","value":"#EDF7E5"},{"name":"surface_blocked","value":"#FFF0F0"},{"name":"text_primary","value":"#392611"},{"name":"text_secondary","value":"#6D5A45"},{"name":"text_notice","value":"#914907"},{"name":"text_safe","value":"#356A21"},{"name":"text_blocked","value":"#A33838"},{"name":"action_primary","value":"#B45F06"},{"name":"text_on_primary","value":"#FFFFFFFF"}]}
+{
+  "color": [
+    {
+      "name": "surface_canvas",
+      "value": "#FCF8F2"
+    },
+    {
+      "name": "surface_card",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "surface_notice",
+      "value": "#FFF0DE"
+    },
+    {
+      "name": "surface_safe",
+      "value": "#EDF7E5"
+    },
+    {
+      "name": "surface_blocked",
+      "value": "#FFF0F0"
+    },
+    {
+      "name": "text_primary",
+      "value": "#392611"
+    },
+    {
+      "name": "text_secondary",
+      "value": "#6D5A45"
+    },
+    {
+      "name": "text_notice",
+      "value": "#914907"
+    },
+    {
+      "name": "text_safe",
+      "value": "#356A21"
+    },
+    {
+      "name": "text_blocked",
+      "value": "#A33838"
+    },
+    {
+      "name": "action_primary",
+      "value": "#B45F06"
+    },
+    {
+      "name": "text_on_primary",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "border_subtle",
+      "value": "#C5D0D6"
+    },
+    {
+      "name": "text_danger",
+      "value": "#8B1E1E"
+    }
+  ]
+}

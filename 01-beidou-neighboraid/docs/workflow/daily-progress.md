@@ -1,6 +1,121 @@
 # 每日开发进度
 
+## 2026-08-31 · 01 本机事件版本与冲突追溯基础
+
+- **方案与顺序：** 仅处理 `all-schemes/01-beidou-neighboraid`（01）；未开始 02。
+- **本轮目标：** 为未来已授权的近场摘要接收准备不可覆盖的版本字段；本轮不制造、导入或声称存在近场记录/冲突。
+
+### 实现与设计
+
+- `DrillRecord` 新增 `sourceVersionId`、`receivedAt`、`conflictGroupId`、`conflictStatus`；本机新建记录使用同一创建快照生成 ID、版本与接收时间。
+- 旧 JSON/分隔符存档均有兼容回退：来源版本为本地/历史标识，冲突状态为「当前无冲突版本」，不会因字段扩展丢弃已有记录。
+- 记录卡与字段预览将冲突状态、来源版本、接收时间和冲突组文字化展示；系统分享预览包含冲突状态。
+- `docs/design/drill-event-screen.md` 已同步数据源、记录卡与字段预览规格。
+
+### 验证
+
+| 层级 | 状态 | 当前证据与结论边界 |
+| --- | --- | --- |
+| Build | PASS（未签名） | `assembleHap` 返回 `TYPE CHECK SUCCESSFUL`、`CompileArkTS`、`PackageHap`、`BUILD SUCCESSFUL in 8 s 534 ms`。 |
+| HAP 完整性 | PASS | `unzip -t` 成功；产物 `146813` bytes，SHA-256 `14b2c55121803f65eeeafbcccba8f929909cc836aa3c4dec18db2e85fdddfa42`。 |
+| 冲突合并 / NearLink | BLOCKED | 当前没有近场权限、协议、双机或接收数据，因此没有把静态字段写成真实冲突处理通过。 |
+| Device / Visual / a11y | BLOCKED | 无签名安装、运行截图或重启恢复证据。 |
+
+### 下一步与重试
+
+- 继续 01：等待离线地图数据源和覆盖范围；近场字段仅在协议、权限与双机条件满足后接收并建立真实冲突组。
+- Debug 签名和可用设备满足后，验收旧记录迁移、新建版本字段、分享预览、系统面板取消/失败与重启恢复。
+
+## 2026-08-31 · 01 用户确认的本机记录分享
+
+- **方案与顺序：** 仅处理 `all-schemes/01-beidou-neighboraid`（01）；未开始 02。
+- **主路径：** 用户在单条本机记录中选择「预览后使用系统分享」→ 审阅类型、时间、演练包、精度、来源与审核状态 → 选择「打开系统分享面板」或取消。取消不改记录。
+- **隐私边界：** 不自动发送、不创建后端上传队列、不改变「未提交」审核状态；系统面板仅在用户明确确认后出现，接收目标由用户选择。
+
+### 实现与设计
+
+- `Index.ets`：使用原生 `@kit.ShareKit` 与 `@kit.ArkData` 的 `TEXT` 数据类型构建系统分享；加入独立的完整文本预览、取消返回及失败提示。
+- `docs/design/drill-event-screen.md`：补齐分享前预览的线框层级、组件映射、状态、恢复路径和截图项。
+- 没有修改权限、地图、定位、联系人、近场、上传或审核端配置。
+
+### 验证
+
+| 层级 | 状态 | 当前证据与结论边界 |
+| --- | --- | --- |
+| Build | PASS（未签名） | `assembleHap` 返回 `TYPE CHECK SUCCESSFUL`、`CompileArkTS`、`PackageHap`、`BUILD SUCCESSFUL in 8 s 609 ms`。 |
+| HAP 完整性 | PASS | `unzip -t` 成功；产物 `143631` bytes，SHA-256 `b0d97c8c134a1253d4833071670e3bc9eb79ccc9831096ebef5647c81aafdb18`。 |
+| System Share 运行时 | BLOCKED | 尚无可安装签名包/设备，未取得系统面板、取消或失败的真机证据。 |
+| Signing / Device / Visual | BLOCKED | 仍无 Debug 签名配置和当天可读取的 HDC 目标；未安装或截图。 |
+| 完整产品 MVP | 未完成 | 离线地图、真实近场加密摘要交换/冲突追溯、用户确认上传与审核端仍未实现。 |
+
+### 下一步与重试
+
+- 继续 01：等待离线地图数据源与覆盖范围授权，之后验证真实 API/许可证并补地图分区路径。
+- Debug 签名和可用设备满足后，复测分享前预览、系统面板、取消/失败、重启恢复及无障碍截图。
+
+## 2026-08-31 · 01 本机演练包选择切片
+
+- **方案与顺序：** 仅处理 `all-schemes/01-beidou-neighboraid`（01）；未开始 02。
+- **主路径：** 已同意本机保存的用户选择一个内置演练提示 → 选择被持久化 → 创建的本机事件保留所用演练包名称 → 字段预览可读。
+- **范围边界：** 演练包明确是应用内置的本机提示，**不是**离线地图下载、政府预警、救援指引、近场通信或网络上传；未新增权限、网络、定位、联系人、账号或后台能力。
+
+### 实现与设计
+
+- `entry/src/main/ets/data/DrillRecordStore.ets`：新增两种内置演练包、已选包的 Preferences 存取，并让新记录保留演练包 ID/名称；旧记录解码时回退为「未启用本机演练包」。
+- `entry/src/main/ets/pages/Index.ets`：在事件类型前提供可读的演练包选择器；每项明示不含地图/官方指引。启用状态、存储错误重试和记录字段预览均为原生 ArkUI 路径。
+- `docs/design/drill-event-screen.md`：补齐演练包的层级、状态、数据源与真机截图项。
+
+### 验证
+
+| 层级 | 状态 | 当前证据与结论边界 |
+| --- | --- | --- |
+| Build | PASS（未签名） | 2026-08-31 在正式英文路径执行 `assembleHap`：`TYPE CHECK SUCCESSFUL`、`CompileArkTS`、`PackageHap`、`BUILD SUCCESSFUL in 9 s 52 ms`；HAP `129585` bytes，SHA-256 `b15ac05ad4b4b6587b2ac81535b3e5d7621fb5676e58cef27ec7379554b4b57e`。 |
+| HAP 完整性 | PASS | `unzip -t entry-default-unsigned.hap` 返回 `No errors detected`。 |
+| Signing | BLOCKED | 构建原样提示 `No signingConfigs profile is configured`；本轮未读取、创建或修改签名材料。 |
+| Device / Visual / a11y | BLOCKED | 未安装、未采集演练包启用、重启恢复、深浅色或 150% 字号截图；源码和未签名构建不构成运行时证据。 |
+| 完整产品 MVP | 未完成 | 仍缺真实离线地图/可验证演练包获取、近场加密摘要交换与冲突追溯、用户确认上传和审核端。 |
+
+### 下一步与重试
+
+- 继续 01：已写入 [离线地图决策门禁](offline-map-decision.md)。在不伪造地图或联网能力的前提下，等待首个地图数据源及覆盖范围的明确授权；近场交换与上传均需先确认可用 API、服务与隐私方案。
+- 本轮补充核查：Map Kit 可作为原生地图展示候选，但未取得“本项目可下载并离线分区存储地图”的 API/许可证据；保持 BLOCKED，不能直接接入或宣称支持。
+- **设备复核：** 2026-08-31 执行 `hdc list targets`，5 秒无 stdout/stderr 且进程未结束，随后中断（exit 130）。这是当前自动化环境中“设备状态不可读取”的证据，不得解释为没有设备；本轮未安装、启动或截图。
+- **近场核查：** 已新增 [NearLink 交换门禁](nearlink-exchange-decision.md)。本机 SDK 有所需连接/读写接口，但依赖 `ACCESS_NEARLINK`、兼容双设备和待确认的应用层加密协议；当前仍未声明或调用该权限/能力。
+- 当用户在 DevEco Studio 保存仅供本机验证的 Debug 签名且 HDC 可列出目标时，重新构建签名包，并完整验证隐私、演练包选择、四类事件、字段预览、清除、终止/重启恢复、浅深色和 150% 字号。
+
+## 2026-08-31 · 01 UI/UX 工作流首轮（设计系统 + 演练页落地）
+
+- **方案：** 仅 `all-schemes/01-beidou-neighboraid`（北斗邻援）。未开始 02。
+- **本轮路径：** 用户完成「阅读隐私 → 选择四类本地事件之一 → 创建本机记录 → 分行查看字段 → 二次确认后清除」；紧急情况打开系统电话。不实现地图、定位、近场、上传。
+- **节点：** Design → Implement → Verify（构建）。Visual/真机仍 BLOCKED。
+
+### 设计
+
+- UI UX Pro Max 生成 `docs/design/MASTER.md`。丢弃其社区论坛版式、报警红主色、Google Fonts/GSAP；采用 Accessible & Ethical：高对比、16fp+、状态用文字、清除需确认。
+- 主色保持 civic 青灰 `action_primary`，避免做成官方 110 皮肤。新增 `border_subtle`、`text_danger`；记录卡不再使用成功绿底。
+- 屏幕规格更新：`docs/design/drill-event-screen.md`。
+
+### 实现
+
+- `Index.ets`：标题「演练」徽章；类型芯片未选描边、已选含「已选择」；记录元数据分行；清除二次确认与系统返回取消；触控最小高度 48vp；正文行高。逻辑与 Preferences 契约未改。
+- `color.json` 浅/深色语义色微调对比，页面仍只引用 `$r('app.color.*')`。
+
+### 验证
+
+| 层级 | 状态 | 证据 |
+| --- | --- | --- |
+| Build | PASS（未签名） | `assembleHap` `TYPE CHECK SUCCESSFUL`、`BUILD SUCCESSFUL in 9 s 650 ms`；HAP `114824` bytes，SHA-256 `31076dafdf34f8fade4942ee70c5ce9572268e85b41aee39239f130c0dc653ab`；`unzip -t` 无错误 |
+| Signing | BLOCKED | `signingConfigs: []`，跳过 HAP 签名 |
+| Device / Visual / a11y | BLOCKED | 无当天安装与截图 |
+| 能力边界 | PASS（静态） | `entry/src/main/ets` 未检出 WebView/网络/定位权限等；系统电话仍走 `ohos.want.action.dial` |
+
+### 下一步
+
+- 本方案 UI 切片已按工作流落地代码；真机截图（隐私、空态、四类创建、预览、清除确认、深浅色、150% 字号）需 Debug 签名与可见设备。
+- 用户未要求开始 02。完整产品 MVP 仍缺离线地图/演练包、近场与确认上传。
+
 ## 2026-08-30 12:45 · 01 英文规范路径骨架与提交归档复验
+
 
 - 唯一处理 `all-schemes/1-beidou-neighboraid`；本轮当前规则按编号升序，未跳到 21 或 02。详细交接与完整命令见 [本轮报告](2026-08-30-124542-skeleton-audit.md)。
 - 现有骨架无缺件；16 必需路径、12 JSON/JSON5、79 资源引用通过；构建前后 21 个工程文件 SHA-256 一致，未修改源码或配置。

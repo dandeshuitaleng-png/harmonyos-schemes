@@ -13,6 +13,7 @@ struct Index {
   @State private selectedVisibleFeatures: string[] = [];
   @State private reviewCreated: boolean = false;
   @State private deletedNotice: boolean = false;
+  @State private confirmDelete: boolean = false;
 
   private visibleOptions(): string[] {
     if (this.task === '叶缘') { return LEAF_EDGE_OPTIONS; }
@@ -23,8 +24,8 @@ struct Index {
   }
   private hasVisibleFeature(option: string): boolean { return this.selectedVisibleFeatures.indexOf(option) >= 0; }
   private canConfirm(): boolean { return this.task.length > 0 && this.place.length > 0 && this.selectedVisibleFeatures.length > 0; }
-  private selectTask(task: string): void { this.task = task; this.selectedVisibleFeatures = []; this.reviewCreated = false; this.deletedNotice = false; }
-  private selectPlace(place: string): void { this.place = place; this.reviewCreated = false; this.deletedNotice = false; }
+  private selectTask(task: string): void { this.task = task; this.selectedVisibleFeatures = []; this.reviewCreated = false; this.deletedNotice = false; this.confirmDelete = false; }
+  private selectPlace(place: string): void { this.place = place; this.reviewCreated = false; this.deletedNotice = false; this.confirmDelete = false; }
   private toggleVisibleFeature(option: string): void {
     const next: string[] = [];
     let existed = false;
@@ -32,12 +33,38 @@ struct Index {
     if (!existed) { next.push(option); }
     this.selectedVisibleFeatures = next; this.reviewCreated = false; this.deletedNotice = false;
   }
-  private removeSessionReview(): void { this.reviewCreated = false; this.selectedVisibleFeatures = []; this.deletedNotice = true; }
+  private removeSessionReview(): void {
+    if (!this.confirmDelete) {
+      this.confirmDelete = true;
+      return;
+    }
+    this.reviewCreated = false;
+    this.selectedVisibleFeatures = [];
+    this.deletedNotice = true;
+    this.confirmDelete = false;
+  }
+
+  onBackPress(): boolean {
+    if (this.confirmDelete) {
+      this.confirmDelete = false;
+      return true;
+    }
+    return false;
+  }
 
   build() {
     Scroll() { Column({ space: 16 }) {
-      Text('城市自然观察').fontSize(30).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
-      Text('城市植物特征观察 · 不识别、不定位、不上传').fontSize(17).fontColor($r('app.color.text_secondary'))
+      Row({ space: 12 }) {
+        Column({ space: 4 }) {
+          Text('城市自然观察').fontSize(26).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary')).lineHeight(34)
+          Text('城市植物特征观察 · 不识别、不定位、不上传').fontSize(17).fontColor($r('app.color.text_secondary')).lineHeight(24)
+        }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+        Text('非鉴定')
+          .fontSize(14).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
+          .padding({ left: 10, right: 10, top: 8, bottom: 8 })
+          .backgroundColor($r('app.color.notice')).borderRadius(8)
+          .accessibilityText('本页不推断物种或健康状况')
+      }.width('100%').alignItems(VerticalAlign.Top)
       Column({ space: 6 }) {
         Text('个人观察 · 未鉴定').fontSize(17).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_notice'))
         Text('请只记录肉眼可见特征；本页不推断物种、健康状况或生态结论。').fontSize(14).fontColor($r('app.color.text_notice'))
@@ -71,7 +98,16 @@ struct Index {
           Text(`${this.place} · 观察任务：${this.task}`).fontSize(16).fontColor($r('app.color.text_primary'))
           Text(`肉眼可见：${this.selectedVisibleFeatures.join('；')}`).fontSize(15).fontColor($r('app.color.text_primary'))
           Text('仅保留在当前会话；不保存、不上传，也不生成物种结论。').fontSize(14).fontColor($r('app.color.text_secondary'))
-          Button('删除本次个人观察').fontColor($r('app.color.action')).backgroundColor(Color.Transparent).accessibilityText('删除本次会话内个人观察').onClick(() => this.removeSessionReview())
+          if (this.confirmDelete) {
+            Text('删除后无法从本页恢复这次会话观察。没有保存或上传。').fontSize(14).fontColor($r('app.color.text_danger'))
+            Button('确认删除本次个人观察').fontColor($r('app.color.text_danger')).backgroundColor(Color.Transparent)
+              .constraintSize({ minHeight: 48 }).accessibilityText('确认删除本次会话内个人观察，此操作不能撤销').onClick(() => this.removeSessionReview())
+            Button('取消删除').fontColor($r('app.color.action')).backgroundColor(Color.Transparent)
+              .constraintSize({ minHeight: 48 }).onClick(() => this.confirmDelete = false)
+          } else {
+            Button('删除本次个人观察').fontColor($r('app.color.action')).backgroundColor(Color.Transparent)
+              .constraintSize({ minHeight: 48 }).accessibilityText('准备删除本次会话内个人观察，下一步需要确认').onClick(() => this.removeSessionReview())
+          }
         }.padding(20).backgroundColor($r('app.color.active')).borderRadius(20).width('100%')
       }
       if (this.deletedNotice) { Text('已删除本次会话观察；没有任何内容被保存或上传。').fontSize(14).fontColor($r('app.color.text_secondary')) }
