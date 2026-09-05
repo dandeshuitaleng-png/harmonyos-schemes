@@ -364,3 +364,75 @@
 
 - **本地事件类型切片：代码与正式路径构建通过；运行时和视觉验收未通过。** 当前工程仍未达到 `AGENTS.md` 所列完整产品 MVP：离线地图/演练包、真实近场交换与冲突追溯、用户确认上传和审核端仍未实现。
 - **下次首个动作：** 在不伪造系统或网络能力的前提下，先设计并实现离线演练包的本机导入/读取与事件关联；签名和设备可用后，再补当前切片的真机交互、重启恢复与截图证据。
+
+## 2026-09-01 · 每日原生 UI/UX 设计推进：本机演练包选择
+
+### 范围与设计节点
+
+- **按序结论：** `01-beidou-neighboraid` 仍是最早未完成方案；没有跳到 02。本轮只推进一条核心路径：已同意本机存储后，选择一个内置演练包并把选择关联到下一条本机事件。
+- **设计模式：** ArkUI screen specification（未改 ArkTS）。已读取 `AGENTS.md`、`docs/design/MASTER.md`、`docs/design/drill-event-screen.md`、现有 `Index.ets`、`DrillRecordStore.ets` 及两套语义颜色资源。
+- **UI UX Pro Max 输入：** `offline emergency safety mobile accessibility touch feedback error recovery`。采纳：明确错误恢复、≥44px（本项目统一为 ≥48vp）触控目标、相邻目标 ≥8vp、状态用文字而非仅颜色、纵向主滚动并保留系统返回；未采用其 Web/CSS/ARIA/震动实现建议。
+
+### 产出与可实现约束
+
+- **新增规格：** `docs/design/offline-drill-pack-screen.md`。它将页面固定为 `pages/Index` 内的渐进披露区，不创建伪路由或地图下载页；定义了紧凑/平板/大字号/深浅色、加载、未选择、已选择、拒绝隐私、读写失败、离线和成功状态。
+- **与现有契约一致：** 仅使用 `LOCAL_DRILL_PACKS`、`selectedDrillPackId`、`DrillRecordStore` 和当前 `color.json` 语义名。说明明确排除离线地图、官方预警、网络同步、联系人通知和后台任务。
+- **无障碍与交互决策：** 包名、说明、选中“已启用”和不可用原因均需可读；选项全宽、最小 48vp，选中不只变色；错误必须给本机读写重试路径；不采用横向滑动、长按或装饰动画。
+
+### 证据、缺失条件与下步
+
+- **设计规格：PASS。** Markdown 链接/标题结构、当前数据字段与既有色彩 token 已做静态一致性检查；未改动签名、Profile、包名、版本、上传或审核配置。
+- **Build：沿用上轮 PASS（未签名编译证据）。** 本轮没有源码变更或新构建；该结论不延伸为安装、运行或发布通过。
+- **Signing / Device / Visual：BLOCKED。** `signingConfigs` 仍为空；没有当前设备目标、可安装签名 HAP 或截图，不能从规格或源码认定界面已渲染、读屏、大字号、深浅色或平板通过。
+- **下次首个动作：** 若继续设计，先把“演练包选择 → 创建记录”作为同页交互实现并保持此规格；若进入验证，需用户先在 DevEco Studio 保存仅供本机验证的 Debug 签名并重新使 HDC 设备可用，随后按规格采集截图与重启恢复证据。
+- **重试触发：** Debug 签名、本机可识别 HDC 目标、可安装 HAP 三项同时满足时，立即复测本页的未选/选择 A/选择 B/拒绝隐私/错误恢复与 150% 字号、深浅色、平板截图。
+
+## 2026-09-02 · 每日原生 UI/UX 设计推进：演练包状态反馈落地
+
+- **按序与路径：** 继续 `01-beidou-neighboraid`，仅处理“选择本机演练包 → 创建本机记录”同页路径，没有切换到 02。
+- **实现模式：** ArkUI implementation。读取 `AGENTS.md`、`docs/design/MASTER.md`、昨日页面规格与当前 `Index.ets` 后，发现规格要求的“选择摘要”和“加载不可操作”未完全落到按钮状态。
+- **UI UX Pro Max 依据：** 查询 `native mobile selected disabled state accessibility loading touch target error recovery`，采纳最小触控尺寸、8vp 间距、明确 disabled 状态和错误恢复原则；不采用 CSS、鼠标指针、ARIA 或震动实现。
+- **实际改动：** `drillPackButton` 在读取本机状态期间以 `.enabled(!isLoading)` 停用、以 48% 强度区分，并给读屏输出“正在读取本机状态，暂时无法选择…”。包区域增加文字化选择摘要：未选时说明记录会标记“未启用”，选中时展示当前包名和“仅保存在本机”。没有新增数据、权限、网络、地图、近场或后台能力。
+- **静态验证：PASS。** `git diff --check` 通过；检查 `selectedDrillPackId`、`LOCAL_DRILL_PACKS`、`saveSelectedDrillPackId` 与既有语义 token 的引用一致。未读取或改动任何签名材料，未执行上传、提交或商店操作。
+- **Build / Device / Visual：尚未本轮验证。** 这是源码与静态契约结果，不代表界面已渲染。Debug 签名、可识别 HDC 目标、可安装 HAP 和当前截图仍缺失，故运行时、读屏、大字号、深浅色、平板与重启恢复仍为 **BLOCKED**。
+- **下次首个动作与重试触发：** 三项门禁（Debug 签名、HDC 设备、可安装 HAP）同时满足时，先在真机按未选 → 选 A → 重启恢复 → 选 B → 创建记录路径取证；否则继续 01 的安全设计/实现工作，不跳到 02。
+
+## 2026-09-03 · 每日原生 UI/UX 设计推进：分享前预览
+
+- **按序与路径：** 继续 `01-beidou-neighboraid`，只完善“查看一条本机记录 → 分享前预览 → 用户决定是否打开系统分享面板”路径；没有进入 02。
+- **设计模式：** ArkUI screen specification。读取了 `AGENTS.md`、`docs/design/MASTER.md`、现有事件规格、`Index.ets` 的 ShareKit 路径和当前页面状态。
+- **UI UX Pro Max 依据：** 查询 `native mobile share confirmation privacy preview cancel accessibility destructive data disclosure`；采纳显式确认、成功反馈不得误导、错误需要恢复、触控目标与颜色对比原则。Web-only 的批量操作、CSS 与 HTML 语义未纳入 ArkUI。
+- **新增规格：** `docs/design/share-preview-screen.md`，固定为现有 `sharePreviewView()` 内部视图，定义正常、文本不可用、打开系统面板、成功、失败、取消/返回状态；明确“已打开系统面板”不等同“已分享”，取消、失败均不得修改或外发本机记录。
+- **静态证据：PASS。** 规格字段与 `shareText()`、`openSharePreview()`、`sharePreview()`、`ShareController.show()` 和现有返回处理一致；本轮仅改设计文档，未触及 ArkTS、签名、Profile、网络、上传或商店操作。
+- **Build / Device / Visual：本轮不适用或 BLOCKED。** 未改源码，因此不把以前的未签名编译结果重复计为当前验证；当前系统分享、读屏、深浅色、大字号、横屏与错误恢复没有运行时截图，仍不能标为通过。
+- **下次首个动作与重试触发：** 真机门禁满足后先执行“预览 → 取消 → 再预览 → 打开系统分享面板 → 返回”的截图闭环，并单独验证系统面板失败时的重试。门禁未满足时继续 01 的安全原生设计工作，不跳过编号。
+
+## 2026-09-04 · 每日原生 UI/UX 设计推进：系统分享请求态与恢复
+
+- **按序与路径：** 继续 `01-beidou-neighboraid`，只落实“分享前预览 → 打开系统分享面板”的重复点击防护与失败恢复，不切换到 02。
+- **实现模式：** ArkUI implementation。已重读 `AGENTS.md`、设计系统、分享前预览规格和 `Index.ets` 中的 ShareKit 调用。
+- **UI UX Pro Max 依据：** 查询 `native mobile async action duplicate tap loading confirmation accessible error retry`；采纳异步操作要有请求反馈、禁用重复提交、错误有恢复入口和 48vp 操作目标。没有使用 Web/CSS/ARIA 方案。
+- **实际改动：** 新增本地 UI 状态 `isOpeningShare`。系统面板请求期间主按钮显示“正在打开…”，不可重复点击且降为 48% 强度；取消入口与系统返回不再中断打开过程。成功后只写“已打开系统分享面板”并返回记录页；空文本或系统失败均留在预览页，显示说明与“重试打开系统分享面板”，不改动、上传或导出记录。
+- **静态验证：PASS。** 已检查请求态覆盖 `openSharePreview()`、`sharePreview()`、`finally` 复位、系统返回、确认按钮、失败重试和取消分支；`git diff --check` 通过。未读取或修改证书、Profile、私钥、版本、网络、上传或商店配置。
+- **Build / Device / Visual：BLOCKED。** 当前没有可安装签名 HAP、可识别 HDC 目标或截图；不能从源码推定 ShareKit 面板、读屏、深浅色、最大字号、横屏或返回行为通过。
+- **下次首个动作与重试触发：** Debug 签名、HDC 设备、可安装 HAP 三项同时满足后，实测“连续点确认 → 系统面板 → 返回”“取消”“系统面板失败 → 重试”，并采集深浅色、150% 字号和横屏截图；满足前继续 01 的安全工作。
+
+## 2026-09-04 · 每日原生 UI/UX 设计推进：本机隐私选择
+
+- **按序与路径：** 继续 `01-beidou-neighboraid`，仅说明“首次隐私选择 → 同意保存或仅电话 → 进入对应状态”的本机路径，未切换到 02。
+- **设计模式：** ArkUI screen specification。已复核 `AGENTS.md`、设计系统、事件页规格、`policyView()`、`acceptPrivacy()`、`declinePrivacy()` 与 Preferences 数据契约。
+- **UI UX Pro Max 依据：** 查询 `native mobile privacy consent choice informed decision disabled loading accessibility error recovery`；采纳信息充分、拒绝不设为死路、错误有就近恢复、操作状态文字化和触控目标原则。没有引入 Web/CSS/ARIA、外部隐私 SDK、网络或权限能力。
+- **新增规格：** `docs/design/privacy-choice-screen.md`。固定在现有内部视图 `policyView()`，定义首次选择、同意、拒绝、保存中、存储失败和回看说明状态；明确同意只允许本机 Preferences 保存，不表示同意上传、定位、联系人、报警或第三方处理。
+- **静态证据：PASS。** 规格与 `privacyChoice`、`PRIVACY_ACCEPTED`、`PRIVACY_DECLINED`、`savePrivacyChoice()`、系统返回及现有语义 token 一致；本轮只改设计文档，未修改 ArkTS、签名、Profile、版本、网络、上传或商店配置。
+- **Build / Device / Visual：本轮不适用或 BLOCKED。** 没有代码修改或当前可安装包；同意/拒绝重启恢复、存储失败、读屏、深浅色、横屏与最大字号没有当天运行证据，不能标为通过。
+- **下次首个动作与重试触发：** Debug 签名、HDC 设备、可安装 HAP 同时满足后，按规格执行首次拒绝 → 重启 → 再同意 → 重启 → 存储失败重试的真机取证；未满足前继续 01 的安全设计工作。
+
+## 2026-09-05 · 每日原生 UI/UX 设计推进：隐私选择请求态与重试
+
+- **按序与路径：** 继续 `01-beidou-neighboraid`，仅落实“同意本机保存或仅电话 → 保存 Preferences → 成功/按原选择重试”路径；没有切换到 02。
+- **实现模式：** ArkUI implementation。已重读 `AGENTS.md`、设计系统、隐私选择规格与 `Index.ets` 的隐私选择读写逻辑。
+- **UI UX Pro Max 依据：** 查询 `native mobile consent choice async loading disabled repeated tap error recovery accessibility`，采纳异步保存状态、阻止重复点击、就近错误说明与按原操作重试；未采用 Web/CSS/ARIA 或外部隐私服务。
+- **实际改动：** 新增 `isSavingPrivacyChoice` 与 `pendingPrivacyChoice`。保存时同意按钮显示“正在保存…”，两种选择与返回不再可并发操作，系统返回也不会中断；失败卡按用户原操作提供“重试同意并继续”或“重试仅使用系统电话”，没有误称为已保存或上传。选择成功后才进入记录读取或仅电话状态。
+- **静态验证：PASS。** 已检查 `acceptPrivacy()` / `declinePrivacy()` 统一到单一保存函数、`finally` 复位、保存失败分支、重试分支、系统返回和现有 `PRIVACY_*` 数据契约；`git diff --check` 通过。未读取、复制或修改签名材料，未触及网络、上传、版本或商店配置。
+- **Build / Device / Visual：BLOCKED。** 当前无签名可安装 HAP、HDC 目标或截图；无法由静态代码确认 Preferences 失败注入、重启保持、读屏、大字号、深浅色、横屏或系统返回运行通过。
+- **下次首个动作与重试触发：** Debug 签名、HDC 设备、可安装 HAP 同时满足后，实测连续点同意/拒绝、保存失败后的原选择重试、拒绝与同意的重启保持以及深浅色/150%字号/横屏；门禁未满足前继续 01 安全工作。

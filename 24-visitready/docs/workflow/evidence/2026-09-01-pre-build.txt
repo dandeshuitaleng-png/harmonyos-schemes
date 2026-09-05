@@ -1,0 +1,35 @@
+RUN 2026-08-31T23:00:35.190Z ROOT /Users/huangnianpeng/Desktop/7/hongmengOS/all-schemes SCHEME_COUNT 25
+INVENTORY 25-wovenday {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 24-visitready {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 23-repairpassport {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 22-plantrelay {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 21-stepaccess {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 20-visual-table-book {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 19-urban-nature-observer {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 18-standby-appointment {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 17-neo-explorer {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 16-fridge-pantry {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 15-disaster-recovery-map {"required":15,"missing":[],"alternatives":{"entry/src/main/ets/EntryAbility.ets":"entry/src/main/ets/EntryAbility.ts","entry/src/main/resources/base/media/app_icon.svg":"AppScope/resources/base/media/app_icon.png"},"workflow":true}
+INVENTORY 14-ai-speaking-practice {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 13-allyecho {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 12-questproof {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 11-gentlesteps {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 10-farmvoice {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 09-stillside {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 08-aidtrace {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 07-voicebridge {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 06-greenlens {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 05-freshloop {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 04-sensecraft {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 03-tidewatch {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 02-quietbeacon {"required":15,"missing":[],"alternatives":{},"workflow":true}
+INVENTORY 01-beidou-neighboraid {"required":15,"missing":[],"alternatives":{},"workflow":true}
+CONFIG 25-wovenday {"mainElement":"EntryAbility","stageMode":true,"moduleTarget":true,"abilityExists":true,"routesExist":true,"pages":["pages/Index"],"homeActions":["action.system.home"],"homeEntity":true,"exported":true,"deviceTypes":["phone","tablet"],"permissions":[],"signingConfigCount":0,"products":[{"name":"default","compileSdkVersion":"6.1.1(24)","compatibleSdkVersion":"6.1.0(23)","targetSdkVersion":"6.1.0(23)","runtimeOS":"HarmonyOS"}]}
+CONFIG_NOTE 25-wovenday legacy Home action accepted by current package-entry rules; consider current action on a future authorized config task
+CONFIG 24-visitready {"mainElement":"EntryAbility","stageMode":true,"moduleTarget":true,"abilityExists":true,"routesExist":true,"pages":["pages/Index"],"homeActions":["action.system.home"],"homeEntity":true,"exported":true,"deviceTypes":["phone","tablet"],"permissions":[],"signingConfigCount":0,"products":[{"name":"default","compileSdkVersion":"6.1.1(24)","compatibleSdkVersion":"6.1.0(23)","targetSdkVersion":"6.1.0(23)","runtimeOS":"HarmonyOS"}]}
+CONFIG_NOTE 24-visitready legacy Home action accepted by current package-entry rules; consider current action on a future authorized config task
+CONFIG 23-repairpassport {"mainElement":"EntryAbility","stageMode":true,"moduleTarget":true,"abilityExists":true,"routesExist":true,"pages":["pages/Index"],"homeActions":["action.system.home"],"homeEntity":true,"exported":true,"deviceTypes":["phone","tablet"],"permissions":[],"signingConfigCount":0,"products":[{"name":"default","compileSdkVersion":"6.1.1(24)","compatibleSdkVersion":"6.1.0(23)","targetSdkVersion":"6.1.0(23)","runtimeOS":"HarmonyOS"}]}
+CONFIG_NOTE 23-repairpassport legacy Home action accepted by current package-entry rules; consider current action on a future authorized config task
+SOURCE_MANIFEST [["AppScope/app.json5","bd8f88cbf57451a6d26e88e79be3135d95f62ac39dcc60983024ed49598954fd"],["AppScope/resources/base/element/string.json","4576253443e851e391a378b0cb806c587fbca28b4ca5a9d72de1db7665876258"],["build-profile.json5","e1941c87ee6b506177973d34ea2fa876b6e313bd52a7721b3c42898a5794a5c9"],["entry/src/main/ets/EntryAbility.ets","ffe0e37dba9c928309d56376b33b1de15b3c795664ead29e2cadc7471d15361b"],["entry/src/main/ets/data/VisitCardStore.ets","08cfbda1316c7ee64f00deddf74ca4e25b13691746e11a5ce80981dbbe806611"],["entry/src/main/ets/pages/Index.ets","7103523f9e763eda30e61e34d6c3e80a6262dfc833a5b283d53093fe8f45078a"],["entry/src/main/module.json5","f5c524deb1fe16c360336e869d34ae39898fbba4c2d27369d96d511b48e65d26"],["entry/src/main/resources/base/element/color.json","08f99ac7e73790f9e8cf7cc90acd65cf1aff2926e8d4917d6fcb35e3ce73a446"],["entry/src/main/resources/base/media/app_icon.svg","e77e0db68a7f48b51d81b03b2cd993ed54daade668b743fc06932789d8937866"],["entry/src/main/resources/base/profile/main_pages.json","4ca3fb089a34d7f463b3af626b3d472b4ae5b2021c64606d272c926535fe0814"],["entry/src/main/resources/dark/element/color.json","9140850e85f7d1e071e1b84c9e07e7caf1e2e83e694e3e995496f77e1d0c4ce6"],["hvigor/hvigor-config.json5","2b2e594695eaa007c0edac8e862ebc8f10ac854787fd0a24d51ac7b033bce184"],["hvigorfile.ts","d210bcce551132620eae18f5d78809f30c9db2a1435d0542f92eed1291965d63"],["oh-package.json5","e6c3a721d555365bb55218eaff8573a5f51877cc59bf4d8633f9101dce1bb486"]]
+RESTRICTED_IMPORT_MATCHES []
+CONFIG_FAILURE_COUNT 0

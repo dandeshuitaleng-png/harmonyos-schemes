@@ -83,3 +83,87 @@
 | 全量数字衣橱/穿搭 | [Whering](https://apps.apple.com/us/app/whering-your-digital-closet/id1519461680)、[Stylebook](https://apps.apple.com/us/app/stylebook/id335709058) | 强势产品已覆盖衣橱、搭配、日历、统计、同步；全量录入和图像处理超出两周 MVP。 |
 
 没有为未入选方向创建项目目录；没有实现应用代码。鸿蒙应用市场、元服务中心及 HarmonyOS/OpenHarmony 的直接同类状态仍需人工复核，不能从公开索引无结果推导为不存在。
+
+## 2026-09-01：本日无推荐
+
+检索日期：2026-09-01（Asia/Shanghai）。本轮未创建 `26-*` 目录，也未修改编号表；当前最大编号仍为 `25-wovenday`。
+
+### 已核验候选：熟人之间的闲置物借还
+
+- [Library of Things](https://www.libraryofthings.co.uk/) 是持续运营的社会企业，公开说明预约、取用、归还本地物品的模式；[myTurn](https://myturn.com/) 公开提供物品借还、预约、提醒和资产管理，且 2026 年仍有更新记录。这两项可证明真实使用场景和维护状态。
+- Apple App Store（美国，检索日期同上）已有三款非常接近的产品：[Mooch](https://apps.apple.com/us/app/mooch-lend-borrow-and-track/id6469733215)（好友库存、借还与双方确认）、[Borrow](https://apps.apple.com/us/app/borrow/id885644065)（借出/借入跟踪、到期提醒、分享催还）、[Brrow](https://apps.apple.com/us/app/brrow-save-and-earn/id6743072945)（邻里租借/出借市场）。Apple 页面仅作竞争证据，不能推断鸿蒙状态。
+- 同时检索华为应用市场、元服务中心与 HarmonyOS/OpenHarmony 的公开网页索引；没有得到可复核的完整同类清单，结论只能是**待人工复核**，不能称“鸿蒙没有”。
+
+| 评分项 | 分数 | 结论 |
+|---|---:|---|
+| 真实问题、来源与竞争证据 | 4/5 | 运营服务、维护中的产品及三款近似 App 已核验。 |
+| 差异化 | 3/5 | 即使缩小为熟人离线借还，也与 Borrow 和 Mooch 的核心路径直接重合。 |
+| 鸿蒙原生可行性 | 4/5 | 本地存储、分享、提醒和无障碍语义有既有官方能力证据。 |
+| 两周 MVP | 5/5 | 单机借还卡可在两周完成。 |
+| 风险 | 4/5 | 不做支付、担保、陌生人匹配或位置共享可控制风险，但物损纠纷仍需明确边界。 |
+| **总分** | **20/25** | 差异化低于 4 分，未达到 21/25 准入线。 |
+
+结论：本日无推荐。为避免以轻微改名重复成熟借还产品，本轮只保留研究记录；没有实现应用代码。
+
+## 2026-09-02：本日无推荐
+
+检索日期：2026-09-02（Asia/Shanghai）。本轮按“优先好上架”筛选：优先纯本地、低权限、无账号/支付/内容审核、无敏感行业与外部资质依赖的闭环。未创建 `26-*` 目录，也未修改编号表。
+
+### 已核验候选：搬家箱子与储物清单
+
+- [Sortly 的搬家库存页面](https://www.sortly.com/solutions/home-inventory-software/moving/) 与 [Moving Boxes Organizer（美国 App Store）](https://apps.apple.com/us/app/moving-boxes-organizer/id6766885651?platform=watch) 说明照片、搜索、二维码标签与本地库存是已有明确使用场景；后者近期版本仍有更新。
+- Apple App Store（美国，检索日期同上）还核验了 [BoxOrganizer](https://apps.apple.com/us/app/boxorganizer-inventory/id1558366385)、[BoxBuddy](https://apps.apple.com/us/app/boxbuddy-moving-box-organizer/id6758800955) 与 [Boxes](https://apps.apple.com/us/app/boxes-storage-made-simple/id1335784284?platform=ipad)。三者已覆盖箱子/物品清单、二维码/标签、搜索、分享、照片或导出等核心路径。Apple 页面只作为竞争证据。
+- 以“搬家、箱子、收纳、清单”检索华为应用市场、元服务中心、HarmonyOS/OpenHarmony 的公开网页索引，未取得可复核的完整同类清单；状态只能标记为**待人工复核**，不能据此称“鸿蒙没有”。
+
+| 评分项 | 分数 | 结论 |
+|---|---:|---|
+| 真实问题、来源与竞争证据 | 4/5 | 两类独立来源及三款相近产品均已核验。 |
+| 差异化 | 2/5 | 本地、隐私、二维码与搜索均已被近似产品直接覆盖，改名无法形成可辩护差异。 |
+| 鸿蒙原生可行性 | 4/5 | ArkUI、本地持久化、Picker/分享与服务卡片可承载低权限 MVP。 |
+| 两周 MVP | 5/5 | 手动箱子卡、文字条目和搜索可由一人两周完成。 |
+| 风险与上架可行性 | 5/5 | 无需账号、支付、医疗/金融数据或公开内容；但高上架可行性不足以弥补差异化。 |
+| **总分** | **20/25** | 差异化低于 4 分，未达到准入线。 |
+
+结论：本日无推荐。该方向的上架风险较低，但产品同质化明显，不能以低风险为由降低准入门槛；未实现任何应用代码。
+
+## 2026-09-03：本日无推荐
+
+检索日期：2026-09-03（Asia/Shanghai）。本轮继续优先纯本地、少权限、无支付/内容审核/敏感行业的上架友好方案；未创建 `26-*` 目录，也未修改编号表。
+
+### 已核验候选：合住场景的洗衣排班
+
+- [WashQ 官网](https://washq.co.uk/) 与 [Share the Load 官网](https://www.strousetechnologies.com/share-the-load) 都说明合住者为共享洗衣机安排时段的真实场景，后者公开提供下载入口及近期版本信息。
+- Apple App Store（美国，检索日期同上）已核验 [Share The Load](https://apps.apple.com/us/app/share-the-load/id6480417573)（合住洗衣排班、邀请与历史）、[WashWallet](https://apps.apple.com/us/app/washwallet/id6756781711)（设备状态、通知与支付）及 [WASH-Connect](https://apps.apple.com/us/app/wash-connect/id1469627109)（设备可用性、通知、支付与报修）。Apple 页面只作竞品证据。
+- 华为应用市场、元服务中心、HarmonyOS/OpenHarmony 社区的公开网页索引没有形成可复核的完整同类清单，故鸿蒙直接同类状态为**待人工复核**，不能声称不存在。
+
+| 评分项 | 分数 | 结论 |
+|---|---:|---|
+| 真实问题、来源与竞争证据 | 4/5 | 两个持续运营服务与三款近似 App 已核验。 |
+| 差异化 | 2/5 | 排班、邀请、通知与历史均已由直接竞品覆盖。 |
+| 鸿蒙原生可行性 | 4/5 | 本地日历、提醒、分享和无障碍语义可组成低权限 MVP。 |
+| 两周 MVP | 5/5 | 单户排班卡和提醒可由一人两周完成。 |
+| 风险与上架可行性 | 5/5 | 若不接设备、不支付、不采集位置或联系人，发布边界清晰。 |
+| **总分** | **20/25** | 差异化低于 4 分，未达到准入线。 |
+
+结论：本日无推荐。虽然该方向易上架，但不能以“容易做、容易上架”替代产品差异；未实现任何应用代码。
+
+## 2026-09-05：本日无推荐
+
+检索日期：2026-09-05（Asia/Shanghai）。本轮仍优先低权限、无账号、无支付与无外部内容审核的上架友好路径；未创建 `26-*` 目录，也未修改编号表。
+
+### 已核验候选：桌游聚会的私密准备卡
+
+- [BoardGameGeek 官方 App（美国 App Store）](https://apps.apple.com/us/app/boardgamegeek/id1559701270?platform=vision) 与 [SeatUp 官网](https://seatup.app/) 说明桌游收藏、场次记录、同好组织是有真实使用场景的持续产品方向。
+- Apple App Store（美国，检索日期同上）进一步核验 [Board Game Shelf](https://apps.apple.com/us/app/board-game-shelf/id6469036106?platform=ipad)（收藏、筛选、随机选择、场次/玩家统计）、[BoardGameGeek](https://apps.apple.com/us/app/boardgamegeek/id1559701270?platform=vision)（官方社区、内容与收藏）以及 [Board Game Night!](https://apps.apple.com/us/story/id1459678890)（Apple 的桌游聚会内容页）。这些页面仅用于竞品与需求证据。
+- 华为应用市场、元服务中心、HarmonyOS/OpenHarmony 社区的公开网页索引无法形成完整同类清单；因此鸿蒙直接同类状态为**待人工复核**，不能声称不存在。
+
+| 评分项 | 分数 | 结论 |
+|---|---:|---|
+| 真实问题、来源与竞争证据 | 4/5 | 官方生态与运行中的聚会产品可复核。 |
+| 差异化 | 3/5 | 私密准备卡虽可避开公共社区和版权内容，但收藏、筛选、组局与记录的主路径已被成熟产品覆盖。 |
+| 鸿蒙原生可行性 | 4/5 | 本地卡片、分享、提醒和无障碍语义可完成，不需外部数据。 |
+| 两周 MVP | 5/5 | 用户手动输入游戏名、人数、物品清单与分享预览可在两周实现。 |
+| 风险与上架可行性 | 5/5 | 不接入游戏资料库、不传播规则或图片、不做公开社交，发布边界清晰。 |
+| **总分** | **21/25** | 总分达线，但差异化仅 3 分，不满足每项至少 4 分的硬门槛。 |
+
+结论：本日无推荐。未以低风险 MVP 包装成熟桌游管理能力；未实现任何应用代码。

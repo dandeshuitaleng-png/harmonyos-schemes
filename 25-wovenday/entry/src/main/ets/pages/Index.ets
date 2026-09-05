@@ -16,6 +16,7 @@ struct Index {
   @State private eventNote: string = '';
   @State private eventGarmentId: number = 0;
   @State private failedEventGarmentId: number = 0;
+  @State private editingGarmentId: number = 0;
   @State private isLoading: boolean = true;
   @State private errorText: string = '';
   @State private confirmDeleteId: number = 0;
@@ -43,12 +44,13 @@ struct Index {
     catch { this.errorText = '无法读取本机衣物卡。请重试；不会影响任何外部服务。'; }
     finally { this.isLoading = false; }
   }
-  private clearForm(): void { this.name = ''; this.category = ''; this.statusText = ''; this.nextActionDate = ''; this.careAgreement = ''; this.repairPrep = ''; }
+  private clearForm(): void { this.name = ''; this.category = ''; this.statusText = ''; this.nextActionDate = ''; this.careAgreement = ''; this.repairPrep = ''; this.editingGarmentId = 0; }
   private async saveGarment(): Promise<void> {
     if (!this.canSave() || this.isLoading) { return; }
-    const garment: Garment = { id: Date.now(), name: this.name.trim(), category: this.category.trim(), statusText: this.statusText.trim(), nextActionDate: this.nextActionDate.trim(), careAgreement: this.careAgreement.trim(), repairPrep: this.repairPrep.trim(), events: [] };
+    const existing = this.garments.find((item: Garment) => item.id === this.editingGarmentId);
+    const garment: Garment = { id: existing ? existing.id : Date.now(), name: this.name.trim(), category: this.category.trim(), statusText: this.statusText.trim(), nextActionDate: this.nextActionDate.trim(), careAgreement: this.careAgreement.trim(), repairPrep: this.repairPrep.trim(), events: existing?.events ?? [] };
     this.isLoading = true; this.errorText = '';
-    try { const updated = [garment, ...this.garments]; await this.garmentStore.save(this.context(), updated); this.garments = updated; this.clearForm(); }
+    try { const updated = existing ? this.garments.map((item: Garment) => item.id === garment.id ? garment : item) : [garment, ...this.garments]; await this.garmentStore.save(this.context(), updated); this.garments = updated; this.clearForm(); }
     catch { this.errorText = '无法保存本机衣物卡。请保留填写内容后重试；没有上传数据。'; }
     finally { this.isLoading = false; }
   }
@@ -58,13 +60,18 @@ struct Index {
       return;
     }
     this.isLoading = true; this.errorText = '';
-    try { const updated = this.garments.filter((garment: Garment) => garment.id !== id); await this.garmentStore.save(this.context(), updated); this.garments = updated; this.confirmDeleteId = 0; if (this.eventGarmentId === id) { this.cancelEvent(); } }
+    try { const updated = this.garments.filter((garment: Garment) => garment.id !== id); await this.garmentStore.save(this.context(), updated); this.garments = updated; this.confirmDeleteId = 0; if (this.eventGarmentId === id) { this.cancelEvent(); } if (this.editingGarmentId === id) { this.clearForm(); } }
     catch { this.errorText = '无法删除本机衣物卡。请重试；没有上传数据。'; }
     finally { this.isLoading = false; }
   }
   private beginEvent(garment: Garment): void {
     this.eventGarmentId = garment.id; this.failedEventGarmentId = 0; this.errorText = '';
     this.eventType = ''; this.eventDate = ''; this.eventNote = '';
+  }
+  private beginEdit(garment: Garment): void {
+    this.editingGarmentId = garment.id; this.confirmDeleteId = 0; this.cancelEvent();
+    this.name = garment.name; this.category = garment.category; this.statusText = garment.statusText;
+    this.nextActionDate = garment.nextActionDate; this.careAgreement = garment.careAgreement; this.repairPrep = garment.repairPrep;
   }
   private cancelEvent(): void { this.eventGarmentId = 0; this.failedEventGarmentId = 0; this.eventType = ''; this.eventDate = ''; this.eventNote = ''; }
   private async saveEvent(): Promise<void> {
@@ -123,7 +130,7 @@ struct Index {
         Text('本切片仅保存文字卡片与用户自定约定。照片、Picker、提醒、分享、服务卡片和网络尚未实现。').fontSize(14).fontColor($r('app.color.text_secondary'))
       }.padding(16).backgroundColor($r('app.color.surface_warning')).borderRadius(18).width('100%')
       Column({ space: 10 }) {
-        Text('记录一件待照看衣物').fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
+        Text(this.editingGarmentId === 0 ? '记录一件待照看衣物' : '编辑本机衣物卡').fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
         TextInput({ placeholder: '衣物个人称呼（必填）', text: this.name }).onChange((value: string) => this.name = value)
         TextInput({ placeholder: '类别，例如 外套（必填）', text: this.category }).onChange((value: string) => this.category = value)
         TextInput({ placeholder: '当下状态文字（必填）', text: this.statusText }).onChange((value: string) => this.statusText = value)
@@ -131,7 +138,8 @@ struct Index {
         TextInput({ placeholder: '我的照看约定（必填）', text: this.careAgreement }).onChange((value: string) => this.careAgreement = value)
         TextInput({ placeholder: '送修或清洁前准备项（可选）', text: this.repairPrep }).onChange((value: string) => this.repairPrep = value)
         if (!this.canSave()) { Text('填写称呼、类别、状态和照看约定后即可保存。').fontSize(14).fontColor($r('app.color.text_secondary')) }
-        Button('保存本机衣物卡').width('100%').constraintSize({ minHeight: 52 }).backgroundColor($r('app.color.action_primary')).fontColor($r('app.color.text_on_primary')).borderRadius(14).enabled(this.canSave() && !this.isLoading).accessibilityText('保存仅在本机保留的衣物照看卡').onClick(() => this.saveGarment())
+        Button(this.editingGarmentId === 0 ? '保存本机衣物卡' : '保存修改').width('100%').constraintSize({ minHeight: 52 }).backgroundColor($r('app.color.action_primary')).fontColor($r('app.color.text_on_primary')).borderRadius(14).enabled(this.canSave() && !this.isLoading).accessibilityText(this.editingGarmentId === 0 ? '保存仅在本机保留的衣物照看卡' : '保存对本机衣物卡的修改').onClick(() => this.saveGarment())
+        if (this.editingGarmentId !== 0) { Button('取消编辑').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent).constraintSize({ minHeight: 48 }).accessibilityText('取消编辑，不修改原衣物卡').onClick(() => this.clearForm()) }
       }.padding(20).backgroundColor($r('app.color.surface_card')).borderRadius(20).width('100%')
       if (this.errorText.length > 0) { Column({ space: 8 }) { Text(this.errorText).fontSize(14).fontColor($r('app.color.text_warning')); Button('重试读取本机衣物卡').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
         .constraintSize({ minHeight: 48 }).onClick(() => this.loadGarments()) }.padding(16).backgroundColor($r('app.color.surface_warning')).borderRadius(16).width('100%') }
@@ -147,6 +155,8 @@ struct Index {
           else { Text('尚未填写下一步日期 · 未创建系统提醒').fontSize(13).fontColor($r('app.color.text_warning')) }
           if (garment.repairPrep.length > 0) { Text(`准备项：${garment.repairPrep}`).fontSize(13).fontColor($r('app.color.text_secondary')) }
           this.eventTimeline(garment)
+          Button('编辑这张衣物卡').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
+            .constraintSize({ minHeight: 48 }).accessibilityText(`编辑${garment.name}的本机衣物卡`).onClick(() => this.beginEdit(garment))
           Button(this.eventGarmentId === garment.id ? '收起事件表单' : '记录照看事件').fontColor($r('app.color.action_primary')).backgroundColor(Color.Transparent)
         .constraintSize({ minHeight: 48 }).accessibilityText(`为${garment.name}记录本机照看事件`).onClick(() => this.eventGarmentId === garment.id ? this.cancelEvent() : this.beginEvent(garment))
           this.eventPanel(garment)

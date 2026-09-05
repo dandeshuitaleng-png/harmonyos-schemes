@@ -20,7 +20,7 @@
 | 13 | `13-allyecho` | 真机验证感受卡，并确认系统分享边界 |
 | 14 | `14-ai-speaking-practice` | 明确 AI/语音服务、数据去向与用户同意规则 |
 | 15 | `15-disaster-recovery-map` | 补齐发布门槛并进行真机验收 |
-| 16 | `16-fridge-pantry` | 实现持久化与真实数据边界，再做真机验证 |
+| 16 | `16-fridge-pantry` | 配置签名后进行真机、视觉与持久化验收 |
 | 17 | `17-neo-explorer` | 定位并解决当前发布阻塞项 |
 | 18 | `18-standby-appointment` | 验证真机与持久化，再决定真实日历接入 |
 | 19 | `19-urban-nature-observer` | 配置签名后进行真机、视觉与持久化验收 |

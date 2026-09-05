@@ -73,3 +73,23 @@ Clear focus rings (3-4px), ARIA labels, skip links, responsive design, reduced m
 ## 鸿蒙落地（2026-08-31）
 
 类型 26fp、正文允许换行、透明按钮最小高度 48vp。不把 UUPM 的 Web 字体/GSAP/报警红主色直接进工程。Visual 无截图则 BLOCKED。
+
+## 鸿蒙落地（2026-09-03）
+
+本轮仍用已有暖色厨房板，不覆盖 MASTER 主体，也不把 UUPM 的 Marketplace 搜索 CTA、餐厅衬线或报警红主色推进工程。
+
+| 角色 | `color.json` | 用途 |
+| --- | --- | --- |
+| 页底 | `canvas` `#FFF9F1` | 页面背景 |
+| 卡片 | `card` `#FFFFFF` | 表单、列表容器 |
+| 提示面 | `notice` `#FFF0D5` | 边界说明、更近条目 |
+| 选中面 | `active` `#FDE6BD` | 已选择、今日提示 |
+| 主文 | `text_primary` `#403224` | 标题与正文 |
+| 次文 | `text_secondary` `#7A6751` | 说明 |
+| 提示文 | `text_notice` `#87531C` | 边界与日期距离 |
+| 成功文 | `text_success` `#4E7330` | 今日提示标题（须配文字，不只靠色） |
+| 主操作 | `action` / `on_action` | 保存按钮 |
+| 危险文 | `text_danger` `#8B1E1E` | 删除确认 |
+| 描边 | `border_subtle` `#C5D0D6` | 未选条目 |
+
+字体：HarmonyOS Sans。标题 26fp / 20fp，正文 ≥16fp，行高约 1.5，允许换行。间距 8/12/16/24/32 vp。触控 ≥48vp。表单用可见标签，不用仅 placeholder。空列表必须给出下一步。丢弃：Google Fonts、GSAP、emoji 图标、hover 菜单、用红色表示「过期/不可食用」。

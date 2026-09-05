@@ -23,6 +23,8 @@ struct Index {
   @State private privacyChoice: string = '';
   @State private privacyReady: boolean = false;
   @State private showPolicy: boolean = false;
+  @State private isSavingPrivacyChoice: boolean = false;
+  @State private pendingPrivacyChoice: string = '';
   @State private selectedKind: DrillKind = 'sos';
   @State private selectedDrillPackId: string = '';
   @State private previewRecordId: number = 0;
@@ -30,6 +32,7 @@ struct Index {
   @State private showSharePreview: boolean = false;
   @State private sharePreviewTitle: string = '';
   @State private sharePreviewText: string = '';
+  @State private isOpeningShare: boolean = false;
 
   aboutToAppear(): void {
     this.bootstrap();
@@ -37,6 +40,9 @@ struct Index {
 
   onBackPress(): boolean {
     if (this.showPolicy && this.privacyChoice.length > 0) {
+      if (this.isSavingPrivacyChoice) {
+        return true;
+      }
       this.showPolicy = false;
       return true;
     }
@@ -45,6 +51,9 @@ struct Index {
       return true;
     }
     if (this.showSharePreview) {
+      if (this.isOpeningShare) {
+        return true;
+      }
       this.showSharePreview = false;
       return true;
     }
@@ -127,29 +136,37 @@ struct Index {
   }
 
   private async acceptPrivacy(): Promise<void> {
-    try {
-      await this.recordStore.savePrivacyChoice(this.hostContext(), PRIVACY_ACCEPTED);
-      this.privacyChoice = PRIVACY_ACCEPTED;
-      this.showPolicy = false;
-      this.storageError = '';
-      await this.loadRecords();
-    } catch {
-      this.storageError = '无法保存隐私选择。请重试；没有上传任何内容。';
-    }
+    await this.savePrivacyChoice(PRIVACY_ACCEPTED);
   }
 
   private async declinePrivacy(): Promise<void> {
+    await this.savePrivacyChoice(PRIVACY_DECLINED);
+  }
+
+  private async savePrivacyChoice(choice: string): Promise<void> {
+    if (this.isSavingPrivacyChoice) {
+      return;
+    }
+    this.isSavingPrivacyChoice = true;
+    this.pendingPrivacyChoice = choice;
+    this.storageError = '';
     try {
-      await this.recordStore.savePrivacyChoice(this.hostContext(), PRIVACY_DECLINED);
-      this.privacyChoice = PRIVACY_DECLINED;
+      await this.recordStore.savePrivacyChoice(this.hostContext(), choice);
+      this.privacyChoice = choice;
       this.showPolicy = false;
+      this.pendingPrivacyChoice = '';
+      if (choice === PRIVACY_ACCEPTED) {
+        await this.loadRecords();
+        return;
+      }
       this.records = [];
       this.selectedDrillPackId = '';
       this.confirmClear = false;
-      this.storageError = '';
       this.latestMessage = '未保存本机演练记录。紧急情况请使用系统电话。';
     } catch {
       this.storageError = '无法保存隐私选择。请重试；没有上传任何内容。';
+    } finally {
+      this.isSavingPrivacyChoice = false;
     }
   }
 
@@ -242,13 +259,19 @@ struct Index {
   private openSharePreview(record: DrillRecord): void {
     this.sharePreviewTitle = `${drillKindLabel(record.kind)}本机演练记录`;
     this.sharePreviewText = this.shareText(record);
+    this.isOpeningShare = false;
     this.showSharePreview = true;
   }
 
   private async sharePreview(): Promise<void> {
-    if (this.sharePreviewText.length === 0) {
+    if (this.sharePreviewText.length === 0 || this.isOpeningShare) {
+      if (this.sharePreviewText.length === 0) {
+        this.storageError = '无法准备分享文本。请返回记录后重新打开预览；本机记录没有被修改或上传。';
+      }
       return;
     }
+    this.isOpeningShare = true;
+    this.storageError = '';
     try {
       const shareData = new systemShare.SharedData({
         utd: utd.UniformDataType.TEXT,
@@ -259,8 +282,11 @@ struct Index {
       const context = this.hostContext() as common.UIAbilityContext;
       await controller.show(context, {});
       this.latestMessage = '已打开系统分享面板。由你选择接收目标；本应用没有上传或代发。';
+      this.showSharePreview = false;
     } catch {
       this.storageError = '无法打开系统分享面板。可返回后重试；本机记录没有被修改或上传。';
+    } finally {
+      this.isOpeningShare = false;
     }
   }
 
@@ -295,7 +321,13 @@ struct Index {
       .fontColor(this.selectedDrillPackId === drillPack.id ? $r('app.color.text_on_primary') : $r('app.color.text_primary'))
       .border({ width: this.selectedDrillPackId === drillPack.id ? 0 : 1, color: $r('app.color.border_subtle') })
       .borderRadius(12)
-      .accessibilityText(this.selectedDrillPackId === drillPack.id ? `已启用${drillPack.title}` : `启用${drillPack.title}，${drillPack.description}`)
+      .enabled(!this.isLoading)
+      .opacity(this.isLoading ? 0.48 : 1)
+      .accessibilityText(this.isLoading
+        ? `正在读取本机状态，暂时无法选择${drillPack.title}`
+        : this.selectedDrillPackId === drillPack.id
+          ? `已启用${drillPack.title}，${drillPack.description}`
+          : `启用${drillPack.title}，${drillPack.description}`)
       .onClick(() => this.selectDrillPack(drillPack))
   }
 
@@ -365,7 +397,7 @@ struct Index {
       .backgroundColor($r('app.color.surface_card'))
       .borderRadius(16)
       .width('100%')
-      Button('同意并继续')
+      Button(this.isSavingPrivacyChoice ? '正在保存本机选择…' : '同意并继续')
         .fontSize(17)
         .fontWeight(FontWeight.Medium)
         .width('100%')
@@ -373,23 +405,43 @@ struct Index {
         .backgroundColor($r('app.color.action_primary'))
         .fontColor($r('app.color.text_on_primary'))
         .borderRadius(12)
-        .accessibilityText('同意隐私说明并继续使用本机演练记录')
+        .enabled(!this.isSavingPrivacyChoice)
+        .opacity(this.isSavingPrivacyChoice ? 0.48 : 1)
+        .accessibilityText(this.isSavingPrivacyChoice
+          ? '正在保存本机隐私选择，请稍候'
+          : '同意隐私说明并继续使用本机演练记录')
         .onClick(() => this.acceptPrivacy())
-      this.textButton('仅使用系统电话，不保存记录', '拒绝保存本机记录，仅保留系统电话入口', () => this.declinePrivacy())
-      if (this.privacyChoice.length > 0) {
+      if (this.isSavingPrivacyChoice) {
+        Text('正在保存本机选择，请稍候。')
+          .fontSize(14)
+          .lineHeight(22)
+          .fontColor($r('app.color.text_secondary'))
+      } else {
+        this.textButton('仅使用系统电话，不保存记录', '拒绝保存本机记录，仅保留系统电话入口', () => this.declinePrivacy())
+      }
+      if (this.privacyChoice.length > 0 && !this.isSavingPrivacyChoice) {
         this.textButton('返回', '返回演练主页面', () => {
           this.showPolicy = false;
         })
       }
       if (this.storageError.length > 0) {
-        Text(this.storageError)
-          .fontSize(14)
-          .lineHeight(22)
-          .fontColor($r('app.color.text_warning'))
-          .padding(14)
-          .backgroundColor($r('app.color.surface_warning'))
-          .borderRadius(12)
-          .width('100%')
+        Column({ space: 8 }) {
+          Text(this.storageError)
+            .fontSize(14)
+            .lineHeight(22)
+            .fontColor($r('app.color.text_warning'))
+          if (this.pendingPrivacyChoice === PRIVACY_ACCEPTED) {
+            this.textButton('重试同意并继续', '重试保存同意隐私说明的本机选择', () => this.acceptPrivacy())
+          } else if (this.pendingPrivacyChoice === PRIVACY_DECLINED) {
+            this.textButton('重试仅使用系统电话', '重试保存不记录本机演练的选择', () => this.declinePrivacy())
+          } else {
+            this.textButton('重试读取本机隐私选择', '重新读取本机隐私选择', () => this.bootstrap())
+          }
+        }
+        .padding(14)
+        .backgroundColor($r('app.color.surface_warning'))
+        .borderRadius(12)
+        .width('100%')
       }
     }
     .padding({ left: 20, right: 20, top: 28, bottom: 36 })
@@ -483,6 +535,14 @@ struct Index {
             .fontSize(14)
             .lineHeight(22)
             .fontColor($r('app.color.text_secondary'))
+          Text(this.selectedDrillPackId.length === 0
+            ? '尚未启用本机演练包；创建记录时会明确标记未启用。'
+            : `当前已启用：${this.drillPackTitle()}；选择仅保存在本机。`)
+            .fontSize(14)
+            .lineHeight(22)
+            .fontColor(this.selectedDrillPackId.length === 0
+              ? $r('app.color.text_warning')
+              : $r('app.color.text_secondary'))
           ForEach(LOCAL_DRILL_PACKS, (drillPack: DrillPack) => {
             Column({ space: 6 }) {
               Text(drillPack.description)
@@ -736,7 +796,7 @@ struct Index {
         .backgroundColor($r('app.color.surface_warning'))
         .borderRadius(16)
         .width('100%')
-      Button('打开系统分享面板')
+      Button(this.isOpeningShare ? '正在打开系统分享面板…' : '打开系统分享面板')
         .fontSize(17)
         .fontWeight(FontWeight.Medium)
         .width('100%')
@@ -744,11 +804,35 @@ struct Index {
         .backgroundColor($r('app.color.action_primary'))
         .fontColor($r('app.color.text_on_primary'))
         .borderRadius(12)
-        .accessibilityText('确认内容并打开系统分享面板')
+        .enabled(!this.isOpeningShare && this.sharePreviewText.length > 0)
+        .opacity(this.isOpeningShare || this.sharePreviewText.length === 0 ? 0.48 : 1)
+        .accessibilityText(this.isOpeningShare
+          ? '正在打开系统分享面板，请稍候'
+          : '确认内容并打开系统分享面板')
         .onClick(() => this.sharePreview())
-      this.textButton('取消，不分享', '取消系统分享并返回演练记录', () => {
-        this.showSharePreview = false;
-      })
+      if (this.isOpeningShare) {
+        Text('正在打开系统分享面板，请稍候。')
+          .fontSize(14)
+          .lineHeight(22)
+          .fontColor($r('app.color.text_secondary'))
+      } else {
+        this.textButton('取消，不分享', '取消系统分享并返回演练记录', () => {
+          this.showSharePreview = false;
+        })
+      }
+      if (this.storageError.length > 0) {
+        Column({ space: 8 }) {
+          Text(this.storageError)
+            .fontSize(14)
+            .lineHeight(22)
+            .fontColor($r('app.color.text_warning'))
+          this.textButton('重试打开系统分享面板', '重试打开系统分享面板，本机记录不会被修改', () => this.sharePreview())
+        }
+        .padding(16)
+        .backgroundColor($r('app.color.surface_warning'))
+        .borderRadius(16)
+        .width('100%')
+      }
     }
     .padding({ left: 20, right: 20, top: 28, bottom: 36 })
     .alignItems(HorizontalAlign.Start)
