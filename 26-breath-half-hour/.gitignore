@@ -1,0 +1,14 @@
+.DS_Store
+.idea/
+.hvigor/
+.cxx/
+.gradle/
+build/
+entry/build/
+oj_modules/
+oh_modules/
+node_modules/
+*.hap
+*.hsp
+*.har
+*.log

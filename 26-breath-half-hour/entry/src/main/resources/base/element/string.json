@@ -1,0 +1,8 @@
+{
+  "string": [
+    { "name": "app_name", "value": "喘息半小时" },
+    { "name": "module_desc", "value": "喘息半小时 HarmonyOS MVP" },
+    { "name": "EntryAbility_desc", "value": "喘息半小时" },
+    { "name": "EntryAbility_label", "value": "喘息半小时" }
+  ]
+}
