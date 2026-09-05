@@ -1,0 +1,8 @@
+{
+  "string": [
+    { "name": "app_name", "value": "社区转介跟进卡" },
+    { "name": "module_desc", "value": "社区转介跟进卡 HarmonyOS MVP" },
+    { "name": "EntryAbility_desc", "value": "社区转介跟进卡" },
+    { "name": "EntryAbility_label", "value": "社区转介跟进卡" }
+  ]
+}

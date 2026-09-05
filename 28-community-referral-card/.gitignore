@@ -1,0 +1,6 @@
+/.hvigor/
+/.ohos/
+/build/
+/entry/build/
+/entry/.preview/
+.DS_Store
