@@ -1,0 +1,36 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "无声窗口 HarmonyOS 应用"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "无声窗口"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "无声窗口"
+    },
+    {
+      "name": "internet_permission_reason",
+      "value": "用于后续可选在线服务；当前 MVP 不连接后端。"
+    },
+    {
+      "name": "tab_home",
+      "value": "首页"
+    },
+    {
+      "name": "tab_timeline",
+      "value": "时间"
+    },
+    {
+      "name": "tab_companion",
+      "value": "陪伴"
+    },
+    {
+      "name": "tab_profile",
+      "value": "我的"
+    }
+  ]
+}
