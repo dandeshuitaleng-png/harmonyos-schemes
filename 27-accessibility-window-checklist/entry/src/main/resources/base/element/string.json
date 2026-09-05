@@ -1,0 +1,7 @@
+{
+  "string": [
+    { "name": "module_desc", "value": "无障碍窗口检查表入口模块" },
+    { "name": "EntryAbility_desc", "value": "无障碍窗口检查表" },
+    { "name": "EntryAbility_label", "value": "无障碍窗口检查表" }
+  ]
+}

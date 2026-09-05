@@ -30,6 +30,8 @@
 | 23 | `23-repairpassport`（修物志 / Mendbook） | 确认附件与导出规则后继续 MVP，并做真机验证 |
 | 24 | `24-visitready`（从容赴约 / ReadyVisit） | 确认通知与分享规则后继续 MVP，并做真机验证 |
 | 25 | `25-wovenday`（织日 / WovenDay） | 确认照片、提醒与分享摘要规则后继续 MVP，并做真机验证 |
+| 26 | `26-breath-half-hour`（喘息半小时） | 在 DevEco 中完成真机验证并补齐本地构建记录 |
+| 27 | `27-accessibility-window-checklist`（无障碍窗口检查表） | 在 DevEco 中打开英文路径工程并补齐 WSL/Node 构建验证 |
 
 各方案的研究资料与跨项目台账保留在对应文档中；每日开发与验收自动化以本目录为工程根路径。
 

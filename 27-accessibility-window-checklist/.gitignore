@@ -1,0 +1,8 @@
+/.hvigor/
+/.idea/
+/build/
+/entry/build/
+*.hap
+*.hsp
+*.har
+.DS_Store
