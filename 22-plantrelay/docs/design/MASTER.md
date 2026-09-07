@@ -1,66 +1,83 @@
-# 叶伴 · 设计系统
+# 叶伴 · 软陶花园设计系统
 
-> 由 UI UX Pro Max 根据 query `local plant care notes not-diagnosis` 生成。 颜色/字体/动效必须再按 `.cursor/skills/harmonyos-scheme-ui/arkui-mapping.md` 映射到 ArkUI 资源， 不得把 CSS、GSAP 或 Web 字体直接进工程。
+> Version: 2.0 · Updated: 2026-09-07 · Mode: native ArkUI UI/UX refactor
 
-落地检查：
-- [x] hex 已写入现有 color.json 语义名（丢弃 Web 主色若冲突）
-- [x] 字体 HarmonyOS Sans / 16fp+
-- [x] 已丢弃 GSAP 与 Google Fonts import
-- [x] 反模式与 AGENTS.md 禁止事项对齐
+本版依据用户“趣味性、3D 卡通效果、可玩可交互性”的明确要求，替代 2026-08-31 版 Organic Biophilic 表单外观。旧版营销落地页、社会评价、Inter 和 Web hover 建议不再作为实现依据。
 
----
+## 1. 体验原则
 
-## Design System: 叶伴
+进入可以轻触的小花园，再把植物照护任务交给具体的人。本轮主路径为“安排任务 → 接手 → 填写完成信息 → 本机保存成功”。保留真实本机记录与摘要字段预览，不增加识别、健康值、建议、积分、提醒、照片、网络和导出能力。
 
-### Pattern
-- **Name:** Storytelling-Driven + Social Proof
-- **CTA Placement:** Above fold
-- **Sections:** Hero > Features > CTA
+| 原则 | 可观察规则 |
+| --- | --- |
+| 趣味来自反馈 | 点触盆栽短暂摇摆；赤陶、鼠尾草、淡紫配色即时可见；点击不改变任务状态 |
+| 立体来自形体 | 原生 Canvas 的软陶盆口、渐变明暗、叶片层叠、柔软落影，不用整屏静态图或 WebView |
+| 任务先于装饰 | 未接手显示“确认接手”，接手后显示“记录完成”，每阶段一个明确主操作 |
+| 真实状态 | 仅持久化成功后出现完成文字与庆祝；失败保留输入和原状态 |
+| 同一信息优先级 | 手机与平板均为状态、任务、操作；不发明仪表盘或示例数据 |
 
-### Style
-- **Name:** Organic Biophilic
-- **Mode Support:** Light ✓ Full | Dark ✓ Full
-- **Keywords:** Nature, organic shapes, green, sustainable, rounded, flowing, wellness, earthy, natural textures
-- **Best For:** Wellness apps, sustainability brands, eco products, health apps, meditation, organic food brands
-- **Performance:** ⚡ Excellent | **Accessibility:** ✓ WCAG AA
+## 2. 语义色
 
-### Colors
-| Role | Hex | CSS Variable |
-|------|-----|--------------|
-| Primary | `#15803D` | `--color-primary` |
-| On Primary | `#FFFFFF` | `--color-on-primary` |
-| Secondary | `#059669` | `--color-secondary` |
-| Accent/CTA | `#D97706` | `--color-accent` |
-| Background | `#F0FDF4` | `--color-background` |
-| Foreground | `#0F172A` | `--color-foreground` |
-| Muted | `#F0F7F3` | `--color-muted` |
-| Border | `#E2EFE7` | `--color-border` |
-| Destructive | `#DC2626` | `--color-destructive` |
-| Ring | `#15803D` | `--color-ring` |
+界面使用 `$r('app.color.*')`。base/dark 两套 color.json 保留原有 10 名并新增 10 名，名称一一对应；深色为独立森林配色。ARGB 用于 shadow_soft。
 
-*Notes: Nature green + sun yellow*
+| Token | Light | Dark | 用途 |
+| --- | --- | --- | --- |
+| surface_canvas | #F7F4E9 | #171F1A | 奶油/深森林页面底色 |
+| surface_card | #FFFDF8 | #222D25 | 任务、表单、摘要 |
+| surface_notice | #E8F0DD | #2B3B2C | 本机状态、已完成说明 |
+| surface_warning | #F8E9BE | #403821 | 待补充、待确认说明 |
+| text_primary | #24392E | #F3F1E5 | 标题与正文 |
+| text_secondary | #526557 | #BAC8B9 | 次要文字 |
+| action_primary | #2D6447 | #B4D6A6 | 当前阶段主按钮 |
+| text_on_primary | #FFFFFF | #203625 | 主按钮文字 |
+| border_subtle | #D7DDCD | #465448 | 非关键分隔与边界 |
+| text_danger | #913F35 | #F3B5A7 | 错误文字 |
+| surface_sunken | #EEEADD | #121912 | 输入区、凹入辅助面板 |
+| surface_garden | #E4EBD4 | #293A2C | 花园承托面 |
+| surface_chip | #EBF0E3 | #324333 | 次级筛选、状态容器 |
+| accent_peach | #E8B294 | #C08D72 | 赤陶装饰 |
+| accent_lilac | #CABDE3 | #A79ABD | 淡紫装饰 |
+| accent_sun | #EDCF7F | #D5B86F | 暖黄装饰、庆祝点缀 |
+| text_on_accent | #323D2F | #202D22 | peach/lilac/sun 上的短文字 |
+| shadow_soft | #1425392D | #60000000 | 少量柔软阴影 |
+| surface_error | #FBEAE3 | #462B26 | 错误容器 |
+| outline_focus | #76572F | #EDCF7F | 焦点与关键输入边界 |
 
-### Typography
-- **Heading:** Inter
-- **Body:** Inter
-- **Mood:** Warm + Humanist + Natural
+border_subtle 不能单独标识控件和状态。状态必须配“待接手 / 已接手 / 已完成”等文字；text_on_accent 不用于深色 garden。Canvas 使用集中定义的独立美术色板，以软陶基色补充明暗层，不承载 UI 文字和业务状态，不跟随文本高对比颜色反转。画布透明；外部承托面、控件与焦点仍用语义资源。
 
-### Key Effects
-Rounded corners (16-24px), organic curves (border-radius variations), natural shadows, flowing SVG shapes
+## 3. 字体、间距与形体
 
-### Avoid (Anti-patterns)
-- Inconsistent styling
-- Poor contrast ratios
+系统 HarmonyOS Sans：主标题 28–32fp Bold，区块标题 20–24fp，正文与按钮 16–17fp，次级帮助 14–16fp。正文换行，卡片和按钮随大字号增高，不截断关键动作。
 
-### Pre-Delivery Checklist
-- [ ] No emojis as icons (use SVG: Heroicons/Lucide)
-- [ ] cursor-pointer on all clickable elements
-- [ ] Hover states with smooth transitions (150-300ms)
-- [ ] Light mode: text contrast 4.5:1 minimum
-- [ ] Focus states visible for keyboard nav
-- [ ] prefers-reduced-motion respected
-- [ ] Responsive: 375px, 768px, 1024px, 1440px
+间距 4/8/12/16/24/32vp；320vp 横向留白 16vp，普通手机 20–24vp。卡片内边距 16–20vp；主景圆角 28–32vp、卡片 20–24vp、输入 12–16vp。软陶感集中在盆栽与主按钮，不给每张卡片重阴影。
 
-## 鸿蒙落地（2026-08-31）
+## 4. 组件与状态
 
-类型 26fp、正文允许换行、透明按钮最小高度 48vp。不把 UUPM 的 Web 字体/GSAP/报警红主色直接进工程。Visual 无截图则 BLOCKED。
+| 组件 | 交互与状态 |
+| --- | --- |
+| 主按钮 | 森林绿底、明确动词；按压 0.97–0.99 缩放、焦点描边；保存中禁重复提交并显示正在保存 |
+| 盆栽 | 点触单次摇摆；配色有文字及选中标记；减少动效时静态反馈 |
+| 新建/完成表单 | 原生全页渐进表单，可见字段标签；缺必填说明原因；失败保留输入 |
+| 任务卡 | 完整昵称、房间、任务、照护人、状态；文字换行；当前阶段主按钮 |
+| 摘要 | 原生字段预览页；照护人与备注默认不包含；全部取消时提示至少选一项 |
+
+## 5. 适配、无障碍与动效
+
+320vp 起单栏滚动；花园/交接/足迹在安全区上方，内容留足底部导航空间。600vp 以上内容居中限制宽度，可采用主景/概况双栏但不改顺序。新增、完成、摘要和关于为原生全页子视图，系统返回回原入口；键盘弹出仍能滚到保存和取消。
+
+150% 字号下不固定文本卡高度，长昵称、房间、任务、时间与备注完整换行。所有交互最小 48×48vp，主按钮建议 52–56vp 起。导航、筛选、配色同时有文字和选中标记，不依赖颜色或 hover。
+
+读屏按视觉顺序；Canvas 内部细节不逐个聚焦，可玩入口名称说明点击效果。页内提供“减少动效”手动开关，并通过 API 23 的 AccessibilityKit 读取、监听系统减少动态效果；任一开关启用后停摇摆、倾转和运动星点，最终状态与成功文字保持。反馈单阶段 150–300ms、摇摆总计约 300–600ms，不自动循环；退出或关闭动效停止待执行动画。
+
+## 6. 鸿蒙落地与验收边界
+
+1. 色板已写入 base/dark 两套 20 个 color.json 语义资源。
+2. 字体使用系统 HarmonyOS Sans，14/16/17/20/24/28/32fp，普通正文最低 16fp。
+3. UUPM 自然色、Clay 形体、触控、动效、加载与无障碍建议仅作输入；丢弃营销落地页、社会评价、Google Fonts、GSAP、CSS、Web hover。
+4. 当前为实现规格；构建、签名、设备、视觉和无障碍分别需实际证据。无当前构建运行截图时 Visual / Accessibility 为 BLOCKED，源码或未签名 HAP 不代表通过。
+
+## 7. Three.js 参考的原生转译
+
+参考 Three.js 的场景、相机、材质、OrbitControls 与阴影示例，只吸收三条体验原则：物体有统一光向和接触阴影；拖动提供有限视角反馈；松手回到稳定构图。叶伴以 ArkUI Canvas 的渐变与柔影模拟软陶材质，以水平 PanGesture 驱动最大约 18 度的透视倾转。未引入 Three.js、WebGL、WebGPU、JavaScript 运行时或 WebView，也未复制其示例素材。
+
+Three.js 阴影文档指出实时阴影会随投光源和物体数量增加重复渲染成本，也给出平面假阴影作为轻量方案。本组件采用椭圆径向渐变接触影，不使用持续渲染循环，符合本地小工具的性能边界。

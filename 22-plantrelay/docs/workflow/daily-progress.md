@@ -1,5 +1,14 @@
 # 每日开发进度
 
+## 2026-09-07 · 软陶花园 UI/UX 重构
+
+- **范围：** 按用户要求将 22 号叶伴重构为有趣、3D 卡通、可玩可交互的原生 ArkUI 体验；参考 Three.js 的场景/材质/OrbitControls/轻量假阴影原则，没有引入 Three.js、WebGL/WebGPU、WebView、网络或外部美术资源。
+- **实现：** 单页重组为花园 / 交接 / 足迹；新建、完成、摘要和关于使用可返回的全页渐进表单。新增原生 Canvas 软陶盆栽、三种每卡持久化配色、点按摇摆、水平拖动倾转、完成写入成功庆祝、手动及系统减少动态联动。保留原 `leafmate/cards`，旧记录自动补 palette=0。
+- **业务边界：** 玩耍与换色不更改确认/完成状态；完成仍要求先接手和填写时间。摘要仅本地预览，照护人与备注默认隐藏。没有样例植物、诊断、健康值、建议、提醒、照片、导出、账号或同步。
+- **验证：** 数据契约 7 项检查通过；`TYPE CHECK SUCCESSFUL`、`CompileArkTS`、`PackageHap`、`BUILD SUCCESSFUL in 10 s 551 ms`；HAP `unzip -t` 无错误，SHA-256 `814c5e056f3ed185c869558c6a7eb28fc2804166fad77558e2be1ba0ed58c36d`。DevEco 原生 Previewer 已检查 Light/Dark、360vp/320vp、换色、新建、接手、完成和足迹，首轮发现的计数、选中框、图标和反馈位移问题已修正。
+- **结论边界：** Build PASS（未签名）；Previewer 抽样界面 PASS。构建仍提示 `No signingConfig found for product default`，HDC 无目标；错误态、真机持久化、横屏/平板、150% 字号、读屏和系统减少动态实测仍 BLOCKED，因此 Device / Accessibility / Store 未验收。
+- **复现：** `scripts/native-preview.cjs` 可从当前 `modules.abc` 捕获原生帧；清单和自审见 `docs/visual-qa/`。下一步在签名与设备可用后执行两盆植物的飞行模式、重启恢复和可访问性路径。
+
 ## 2026-08-31 · 22 状态复核（按序推进）
 
 - 已复核本地植物交接板：创建用户自定任务与照护人昵称后，可确认接手、填写完成时间/备注，并在本地预览可选择字段的摘要；不识别、不诊断、不提供照护建议，且未实现照片、提醒、真实导出、同步或社群。
