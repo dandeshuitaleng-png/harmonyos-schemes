@@ -1,1 +1,6 @@
 # Obfuscation rules placeholder for release builds.
+
+-enable-property-obfuscation
+-enable-toplevel-obfuscation
+-enable-filename-obfuscation
+-enable-export-obfuscation
