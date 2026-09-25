@@ -24,3 +24,22 @@
 - AppGallery Connect（2026-08-29 续办）：调试 Profile「潮汐守望调试」已在后台列表显示为**生效**，类型为调试，包名为 `com.harmonyradar.tidewatch`，有效期至 2027-08-27。已绑定既有调试证书与已登记平板，未申请受限 ACL。
 - 未做：未读取、未写入本机私钥或 DevEco 签名密码；未把 Profile 文件提交进仓库。本机 Downloads 中尚未出现对应 `.p7b`（后台列表可自行点「下载」）。
 - 阻塞：真机安装仍依赖 DevEco 保存本机调试签名后重新构建。
+
+## 2026-09-21 · 独立项目开发与离线观察闭环
+
+- 新克隆到 `/Users/Admin/Projects/tidewatch-development`，建立 `codex/tidewatch-development` 分支及独立 `TideWatch.code-workspace`，DevEco项目为`03-tidewatch`。
+- 已编写完整开发方案及P1–P4接入路线，完成本轮离线文字观察簿：真实内容表单、分类与风险、编辑、查询、过期历史、删除确认、持久化版本兼容与异常保护。
+- 测试17/17通过；当前DevEco API26编译，保留API23兼容；未签名HAP构建通过。
+- 新建专用API24模拟器，验证创建/编辑/应用重启恢复、隐私撤回恢复、筛选、删除取消与确认、空表单错误和深浅色。
+- 修复界面切换滚动位置沿用问题。详细构建指纹、截图、测试证据及未完成项见 `validation-report.md`。
+
+## 2026-09-21 · DevEco模块识别修复
+
+- 现象：编辑运行配置时模块为`[none]`，提示“未找到模块”。
+- 定位：IDE打开日志显示初始按text editor项目处理，未完成鸿蒙工程同步；工程自身的entry声明完整。
+- 实际处理：在本项目窗口执行“文件→同步和刷新项目”。23:00:29日志确认`sync module success`、`Sync succeed`与`sync project finish`；IDE自动生成entry运行配置。
+- 已核对界面：模块entry、产品default、目标default、默认Ability，“未找到模块”消失。截图保存至`docs/verification/ide-run-configuration.png`。本次未改业务源码。
+
+## 2026-09-23 · v0.2 数据基础
+
+关系型数据库、旧数据迁移/校验/清理、事务回滚已接入正式应用。20主机测试、11原生数据库用例及升级/编辑/重启/隐私/删除流程通过。状态与剩余事项统一见../evolution/state.md，保留既有全仓库守卫失败。

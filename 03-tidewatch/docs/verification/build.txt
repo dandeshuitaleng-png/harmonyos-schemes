@@ -1,0 +1,78 @@
+> hvigor TYPE CHECK SUCCESSFUL in 785 ms
+> hvigor WARN: The version number of the 'entry' module does not comply with the SemVer specification.
+               This will affect the installation and publication by ohpm.
+               Make sure the value of version in the oh-package.json5 file of the module complies with the SemVer specification.
+> hvigor Finished :entry:default@PreBuild... after 364 ms
+> hvigor Finished :entry:default@CreateModuleInfo... after 2 ms
+> hvigor Finished :entry:default@GenerateMetadata... after 4 ms
+> hvigor Finished :entry:default@ConfigureCmake... after 1 ms
+> hvigor Finished :entry:default@MergeProfile... after 13 ms
+> hvigor Finished :entry:default@CreateBuildProfile... after 2 ms
+> hvigor Finished :entry:default@PreCheckSyscap... after 1 ms
+> hvigor Finished :entry:default@GeneratePkgContextInfo... after 11 ms
+> hvigor Finished :entry:default@GeneratePkgSdkInfo... after 5 ms
+> hvigor Finished :entry:default@ProcessIntegratedHsp... after 2 ms
+> hvigor Finished :entry:default@BuildNativeWithCmake... after 1 ms
+> hvigor Finished :entry:default@MakePackInfo... after 4 ms
+> hvigor Finished :entry:default@SyscapTransform... after 2 ms
+> hvigor Finished :entry:default@ProcessProfile... after 210 ms
+> hvigor Finished :entry:default@ProcessRouterMap... after 5 ms
+> hvigor Finished :entry:default@ProcessShareConfig... after 2 ms
+> hvigor Finished :entry:default@ProcessStartupConfig... after 2 ms
+> hvigor Finished :entry:default@BuildNativeWithNinja... after 1 ms
+> hvigor Finished :entry:default@ProcessResource... after 5 ms
+> hvigor Finished :entry:default@GenerateLoaderJson... after 14 ms
+> hvigor Finished :entry:default@ProcessLibs... after 12 ms
+> hvigor Finished :entry:default@CompileResource... after 349 ms
+> hvigor Finished :entry:default@DoNativeStrip... after 3 ms
+> hvigor Finished :entry:default@BuildJS... after 7 ms
+> hvigor Finished :entry:default@CacheNativeLibs... after 33 ms
+> hvigor WARN: WARN: ArkTS:WARN File: /Users/Admin/Projects/tidewatch-development/03-tidewatch/entry/src/main/ets/data/ObservationStore.ets:15:37
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: /Users/Admin/Projects/tidewatch-development/03-tidewatch/entry/src/main/ets/data/ObservationStore.ets:16:29
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: /Users/Admin/Projects/tidewatch-development/03-tidewatch/entry/src/main/ets/data/ObservationStore.ets:21:37
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: /Users/Admin/Projects/tidewatch-development/03-tidewatch/entry/src/main/ets/data/ObservationStore.ets:22:34
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: /Users/Admin/Projects/tidewatch-development/03-tidewatch/entry/src/main/ets/data/ObservationStore.ets:28:19
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: /Users/Admin/Projects/tidewatch-development/03-tidewatch/entry/src/main/ets/data/ObservationStore.ets:29:19
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: /Users/Admin/Projects/tidewatch-development/03-tidewatch/entry/src/main/ets/data/ObservationStore.ets:42:37
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: /Users/Admin/Projects/tidewatch-development/03-tidewatch/entry/src/main/ets/data/ObservationStore.ets:43:31
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: /Users/Admin/Projects/tidewatch-development/03-tidewatch/entry/src/main/ets/data/ObservationStore.ets:48:37
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: /Users/Admin/Projects/tidewatch-development/03-tidewatch/entry/src/main/ets/data/ObservationStore.ets:49:34
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: /Users/Admin/Projects/tidewatch-development/03-tidewatch/entry/src/main/ets/data/ObservationStore.ets:54:19
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: /Users/Admin/Projects/tidewatch-development/03-tidewatch/entry/src/main/ets/data/ObservationStore.ets:55:19
+ Function may throw exceptions. Special handling is required.
+
+
+> hvigor Finished :entry:default@CompileArkTS... after 13 s 500 ms
+> hvigor Finished :entry:default@GeneratePkgModuleJson... after 5 ms
+> hvigor Finished :entry:default@ProcessCompiledResources... after 1 ms
+> hvigor Finished :entry:default@PackageHap... after 1 s 162 ms
+> hvigor Finished :entry:default@PackingCheck... after 9 ms
+> hvigor WARN: No signingConfig found for product default
+> hvigor Finished :entry:default@SignHap... after 2 ms
+> hvigor Finished :entry:default@CollectDebugSymbol... after 1 ms
+> hvigor Finished :entry:assembleHap... after 1 ms
+> hvigor BUILD SUCCESSFUL in 26 s 464 ms
+
+33 tasks in total: 33 executed, 0 up-to-date

@@ -1,0 +1,3 @@
+PASS: 03-tidewatch has AGENTS/build-profile and repository README registration.
+PASS: 90 tracked/untracked nonignored project paths contain no forbidden signing/config/package extensions.
+Whole-repository guard remains failed on unchanged project 26; see baseline evidence.

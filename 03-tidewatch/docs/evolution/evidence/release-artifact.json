@@ -1,0 +1,9 @@
+{
+  "path": "entry/build/default/outputs/default/entry-default-unsigned.hap",
+  "sha256": "349f01a8128f5109c9df438bd41e1ed2beff73a461fc417ac6047537b57f5616",
+  "bytes": 172615,
+  "version": "0.2.0",
+  "sourceManifestSha256": "5c7636f9d94c08820630edc3016e61ff9c6a64092787028f9d752fe3fe84a66b",
+  "nativeAdapterAndTestsUnchangedSinceT002": true,
+  "sourceUnchangedSinceT003": true
+}

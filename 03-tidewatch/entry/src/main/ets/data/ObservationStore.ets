@@ -1,66 +1,37 @@
 import { preferences } from '@kit.ArkData';
-
-export interface ObservationDraft { id: number; source: string; collectedAt: string; expiresAt: string; status: string; }
+import { RdbSnapshotIO } from './RdbSnapshotIO';
+import { ObservationDraft } from './Observation';
+import { ObservationRepository } from './ObservationRepository';
 
 export const PRIVACY_ACCEPTED: string = 'accepted';
 export const PRIVACY_DECLINED: string = 'declined';
-
 const STORE_NAME: string = 'tidewatch-observation-drafts';
-const DRAFTS_KEY: string = 'drafts';
 const PRIVACY_KEY: string = 'privacy-choice';
 
 export class ObservationStore {
+  private repository: ObservationRepository | undefined = undefined;
+  private getRepository(context: Context): ObservationRepository {
+    if (this.repository === undefined) this.repository = new ObservationRepository(new RdbSnapshotIO(context));
+    return this.repository;
+  }
   async loadPrivacyChoice(context: Context): Promise<string> {
     const store = await preferences.getPreferences(context, STORE_NAME);
-    const value = await store.get(PRIVACY_KEY, '') as string;
-    return typeof value === 'string' ? value : '';
+    const value = await store.get(PRIVACY_KEY, '');
+    return value === PRIVACY_ACCEPTED || value === PRIVACY_DECLINED ? value : '';
   }
-
   async savePrivacyChoice(context: Context, choice: string): Promise<void> {
+    if (choice !== PRIVACY_ACCEPTED && choice !== PRIVACY_DECLINED) throw new Error('隐私选择无效');
     const store = await preferences.getPreferences(context, STORE_NAME);
-    await store.put(PRIVACY_KEY, choice);
-    await store.flush();
-  }
-
-  async clear(context: Context): Promise<void> {
-    const store = await preferences.getPreferences(context, STORE_NAME);
-    await store.delete(DRAFTS_KEY);
-    await store.flush();
-  }
-
-  async load(context: Context): Promise<ObservationDraft[]> {
-    const store = await preferences.getPreferences(context, STORE_NAME);
-    const raw = await store.get(DRAFTS_KEY, '') as string;
-    if (raw.length === 0) return [];
+    const previous = await store.get(PRIVACY_KEY, '');
     try {
-      const parsed = JSON.parse(raw) as ObservationDraft[];
-      if (Array.isArray(parsed)) {
-        const valid: ObservationDraft[] = [];
-        for (let index = 0; index < parsed.length; index += 1) {
-          const item = parsed[index];
-          if (typeof item.id === 'number' && typeof item.source === 'string' && typeof item.collectedAt === 'string'
-            && typeof item.expiresAt === 'string' && typeof item.status === 'string') {
-            valid.push(item);
-          }
-        }
-        return valid;
-      }
-    } catch {}
-    const drafts: ObservationDraft[] = [];
-    const lines = raw.split('\n');
-    for (let index = 0; index < lines.length; index += 1) {
-      const parts = lines[index].split('|');
-      const id = Number(parts[0]);
-      if (parts.length === 5 && Number.isFinite(id) && parts[1].length > 0 && parts[2].length > 0 && parts[3].length > 0 && parts[4].length > 0) {
-        drafts.push({ id, source: parts[1], collectedAt: parts[2], expiresAt: parts[3], status: parts[4] });
-      }
+      await store.put(PRIVACY_KEY, choice);
+      await store.flush();
+    } catch (error) {
+      await store.put(PRIVACY_KEY, previous);
+      await store.flush();
+      throw new Error((error as Error).message);
     }
-    return drafts;
   }
-
-  async save(context: Context, drafts: ObservationDraft[]): Promise<void> {
-    const store = await preferences.getPreferences(context, STORE_NAME);
-    await store.put(DRAFTS_KEY, JSON.stringify(drafts));
-    await store.flush();
-  }
+  async load(context: Context): Promise<ObservationDraft[]> { return this.getRepository(context).load(); }
+  async save(context: Context, drafts: ObservationDraft[]): Promise<void> { await this.getRepository(context).save(drafts); }
 }

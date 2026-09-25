@@ -1,0 +1,5 @@
+[Info]App install path:/tmp/tidewatch-native.jERjKw/entry/build/default/outputs/default/entry-default-unsigned.hap msg:install bundle successfully.
+AppMod finish
+force stop process successfully.
+start ability successfully.
+No native test report returned; inspect the dedicated emulator.

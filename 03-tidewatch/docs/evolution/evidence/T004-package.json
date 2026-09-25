@@ -1,0 +1,14 @@
+{
+  "sourceFingerprint": "5c7636f9d94c08820630edc3016e61ff9c6a64092787028f9d752fe3fe84a66b",
+  "cleanHapSha256": "93919c25ba935f16304fa66fcd262af8bea7dae4abdffed1a03ae0723b63a15f",
+  "bytes": 172615,
+  "pages": {
+    "src": [
+      "pages/Index"
+    ]
+  },
+  "versionName": "0.2.0",
+  "versionCode": 1000001,
+  "testEntryAbsent": true,
+  "permissions": []
+}

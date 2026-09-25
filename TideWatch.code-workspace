@@ -1,0 +1,4 @@
+{
+  "folders": [{ "name": "潮汐守望 · TideWatch", "path": "03-tidewatch" }],
+  "settings": { "files.exclude": { "**/.hvigor": true, "**/oh_modules": true, "**/build": true } }
+}

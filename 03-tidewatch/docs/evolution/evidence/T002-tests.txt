@@ -1,0 +1,30 @@
+✔ creates a real observation with private status and bounded lifetime (2.45ms)
+✔ input boundaries reject blank, short, long and invalid enum fields (1.068666ms)
+✔ creation trims text and rejects invalid hours, clock and capacity (0.471416ms)
+✔ same millisecond IDs remain unique (0.223416ms)
+✔ editing preserves evidence age and expiry (0.339375ms)
+✔ expiry is inclusive at the exact cutoff (0.147208ms)
+✔ JSON legacy migration preserves age without inventing a classification (1.744333ms)
+✔ delimited legacy migration is supported (0.250208ms)
+✔ corrupted, null, unknown version and ambiguous legacy records fail closed (0.465292ms)
+✔ duplicate, invalid chronology or non-private stored records are rejected (0.370459ms)
+✔ snapshot round trip retains expired history when adding a new record (0.279708ms)
+✔ search/filter changes neither the underlying collection nor history (0.342542ms)
+✔ repository refuses write before a successful load (0.575667ms)
+✔ corrupt data is not silently reset or overwritten (0.190292ms)
+✔ failed persistence requires reload before another mutation (0.658292ms)
+✔ concurrent write and read cannot overtake an in-flight save (0.55475ms)
+✔ repository survives recreation using a file-backed test adapter (13.178709ms)
+(node:6563) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ SQLite schema and bind order roundtrip all fields without executing text (7.067416ms)
+✔ SQLite replacement transaction rollback retains previous collection (0.717208ms)
+✔ migration marker survives empty collection and unique IDs prevent duplicates (0.683875ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 115.081708

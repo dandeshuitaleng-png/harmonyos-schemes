@@ -1,75 +1,25 @@
-# 潮汐守望 · 设计系统
+# 潮汐守望 · ArkUI设计规则
 
-> 由 UI UX Pro Max 根据 query `offline coastal observation not-forecast local draft high-contrast` 生成。 颜色/字体/动效必须再按 `.cursor/skills/harmonyos-scheme-ui/arkui-mapping.md` 映射到 ArkUI 资源， 不得把 CSS、GSAP 或 Web 字体直接进工程。
+更新：2026-09-21。以现有ArkUI颜色资源为准，不引入Web字体、CSS或Web动画库。
 
-落地检查：
-- [x] hex 已写入现有 color.json 语义名
-- [x] 字体 HarmonyOS Sans / 16fp+
-- [x] 已丢弃 Web 字体与 GSAP
-- [x] 不把草稿写成预报或公告
+## 信息与样式
 
----
+- 主标题30fp，表单标题24fp，卡片标题20fp；正文和表单16fp，时间与来源14fp。
+- 使用系统字体，主内容左对齐；单列最大宽度640vp，页面留白20vp，卡片内边距18vp。
+- 主操作使用`action_primary`和`text_on_primary`；辅助操作使用`surface_pending`和`action_primary`。
+- 正文、辅助文字、提示、危险操作分别使用`text_primary`、`text_secondary`、`text_notice`、`text_danger`。
+- 背景使用`surface_canvas`，卡片使用`surface_card`。所有语义颜色同时定义浅色/深色资源。
+- 按钮最小高度48vp，主要保存/创建按钮52–54vp。标题和描述允许换行，长列表可滚动。
 
-## Design System: 潮汐守望
+## 可信状态
 
-### Pattern
-- **Name:** Hero + Features + CTA
-- **Conversion Focus:** Deep CTA placement. Use contrasting color (at least 7:1 contrast ratio). Sticky navbar CTA.
-- **CTA Placement:** Hero (sticky) + Bottom
-- **Color Strategy:** Hero: Brand primary or vibrant. Features: Card bg #FAFAFA. CTA: Contrasting accent color
-- **Sections:** 1. Hero with headline/image, 2. Value prop, 3. Key features (3-5), 4. CTA section, 5. Footer
+首页说明观察并非实时预报；紧急情况提供系统拨号入口，不自动拨打。
+卡片同时显示采集时间、有效期、来源、尚无审核人及未上传状态。风险等级来自用户现场判断，不包装为官方预警。
 
-### Style
-- **Name:** Accessible & Ethical
-- **Mode Support:** Light ✓ Full | Dark ✓ Full
-- **Keywords:** High contrast, large text (16px+), keyboard navigation, screen reader friendly, WCAG compliant, focus state, semantic
-- **Best For:** Government, healthcare, education, inclusive products, large audience, legal compliance, public
-- **Performance:** ⚡ Excellent | **Accessibility:** ✓ WCAG AAA
+过期是时间状态；待审核是尚未接入服务时的草稿状态，两者不能互相替代。没有服务端回执就不能展示上传成功、审核通过或公共公告。
 
-### Colors
-| Role | Hex | CSS Variable |
-|------|-----|--------------|
-| Primary | `#0F172A` | `--color-primary` |
-| On Primary | `#FFFFFF` | `--color-on-primary` |
-| Secondary | `#334155` | `--color-secondary` |
-| Accent/CTA | `#0369A1` | `--color-accent` |
-| Background | `#F8FAFC` | `--color-background` |
-| Foreground | `#020617` | `--color-foreground` |
-| Muted | `#E8ECF1` | `--color-muted` |
-| Border | `#E2E8F0` | `--color-border` |
-| Destructive | `#DC2626` | `--color-destructive` |
-| Ring | `#0F172A` | `--color-ring` |
+## 交互
 
-*Notes: High contrast navy + blue*
+保存完成后才更新UI，异步期间禁用修改。错误保留表单；损坏数据禁止覆盖。单条/全部删除需确认。返回未保存表单时确认放弃。
 
-### Typography
-- **Heading:** Playfair Display
-- **Body:** Source Serif 4
-- **Mood:** monochrome, editorial, austere, typographic, pocket manifesto, luxury, high contrast, brutalist mobile
-- **Best For:** Luxury fashion mobile apps, editorial publications, digital exhibitions, portfolio apps, high-contrast e-reader aesthetics
-- **Google Fonts:** https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400|Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300
-- **CSS Import:**
-```css
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap');
-```
-
-### Key Effects
-Clear focus rings (3-4px), ARIA labels, skip links, responsive design, reduced motion, 44x44px touch targets
-
-### Avoid (Anti-patterns)
-- Small text
-- Complex navigation
-- AI purple/pink gradients
-
-### Pre-Delivery Checklist
-- [ ] No emojis as icons (use SVG: Heroicons/Lucide)
-- [ ] cursor-pointer on all clickable elements
-- [ ] Hover states with smooth transitions (150-300ms)
-- [ ] Light mode: text contrast 4.5:1 minimum
-- [ ] Focus states visible for keyboard nav
-- [ ] prefers-reduced-motion respected
-- [ ] Responsive: 375px, 768px, 1024px, 1440px
-
-## 鸿蒙落地（2026-08-31）
-
-丢弃实时预报/地图/相机视觉。主色保持沿海青 `action_primary`。草稿字段分行（来源、采集、有效至、待审核、仅本机不公开）。清除需二次确认。不是公共公告。
+截图检查已经覆盖手机浅色和深色；大字体、读屏与平板适配仍需独立设备验收，不宣称已经达到某一无障碍认证等级。
