@@ -1,0 +1,17 @@
+PASS 本机观察 · 0/10
+PASS 暂时看不清 · 已选择
+PASS 边缘看起来平滑
+PASS 暂时看不清
+Traceback (most recent call last):
+  File "/Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/scripts/emulator-smoke.py", line 93, in <module>
+    expect('本机观察 · 1/10')
+    ~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/scripts/emulator-smoke.py", line 67, in expect
+    find(text, direction)
+    ~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/scripts/emulator-smoke.py", line 51, in find
+    for n in dump():
+             ~~~~^^
+  File "/Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/scripts/emulator-smoke.py", line 42, in dump
+    raise RuntimeError('App is not visible; stop rather than operate on another app')
+RuntimeError: App is not visible; stop rather than operate on another app

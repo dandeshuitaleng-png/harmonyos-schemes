@@ -1,0 +1,12 @@
+SHA256 85fdd87acb5fc066210e449a9da9c945f03b8b52d66f2114cb1c4451db18a636
+Bytes 97745
+Archive:  entry/build/default/outputs/default/entry-default-unsigned.hap
+    testing: module.json              OK
+    testing: resources.index          OK
+    testing: resources/base/profile/main_pages.json   OK
+    testing: resources/base/media/app_icon.svg   OK
+    testing: ets/modules.abc          OK
+    testing: ets/sourceMaps.map       OK
+    testing: pack.info                OK
+    testing: pkgSdkInfo.json          OK
+No errors detected in compressed data of entry/build/default/outputs/default/entry-default-unsigned.hap.

@@ -1,0 +1,25 @@
+{
+  "device": "127.0.0.1:5555",
+  "started_at": "20260923T082834Z",
+  "checks": [
+    "本机观察 · 0/10",
+    "暂时看不清 · 已选择",
+    "边缘看起来平滑",
+    "暂时看不清",
+    "本机观察 · 1/10",
+    "公园 · 叶缘",
+    "本机观察 · 1/10",
+    "公园 · 叶缘",
+    "边缘看起来平滑",
+    "叶缘 · 已选择",
+    "公园 · 已选择",
+    "边缘看起来平滑",
+    "本机观察 · 2/10",
+    "本机观察 · 2/10",
+    "本机观察 · 1/10",
+    "本机观察 · 1/10",
+    "本机观察 · 0/10"
+  ],
+  "status": "FAIL",
+  "error": "Command '['/Applications/DevEco-Studio.app/Contents/sdk/default/openharmony/toolchains/hdc', '-t', '127.0.0.1:5555', 'shell', 'uitest', 'dumpLayout', '-b', 'com.hongmengoutputs.urbannature', '-p', '/data/local/tmp/nature19-test.json']' timed out after 20 seconds"
+}

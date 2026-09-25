@@ -1,0 +1,4 @@
+{
+  "folders": [{ "name": "19 城市自然观察", "path": "." }],
+  "settings": { "files.exclude": { "**/.hvigor": true, "**/oh_modules": true, "**/build": true } }
+}

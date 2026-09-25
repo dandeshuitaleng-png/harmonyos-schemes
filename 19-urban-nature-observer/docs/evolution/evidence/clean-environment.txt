@@ -1,0 +1,3 @@
+Temporary verification directory: /var/folders/x9/z_6sgd3n0r3bj_22z5p64fxw0000gp/T/nature19-clean-qmu9_u_z
+Excluded: build, .hvigor, oh_modules, node_modules, .idea, local.properties
+DevEco Studio is installed on this host; this is a clean project copy, not a clean OS.

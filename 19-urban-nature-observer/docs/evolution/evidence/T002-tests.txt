@@ -1,0 +1,23 @@
+✔ all task/environment combinations accept every valid feature and reject incomplete input (2.276333ms)
+✔ uncertain observation is exclusive in both directions; deselection works (1.752ms)
+✔ flower and fruit may coexist but not with absent or unclear (0.259208ms)
+✔ versioned archive restores records without retaining unknown fields (0.594166ms)
+✔ malformed, future versions and invalid records are refused (0.958167ms)
+✔ capacity is bounded and worst-case valid payload fits application 8192-byte budget (2.295625ms)
+✔ save/restore then deletion survive a fresh storage instance (109.944ms)
+✔ failed save rolls cache and disk back, then permits a successful retry (26.963084ms)
+✔ failed delete retains prior records, including after reopening storage (38.259334ms)
+✔ rollback failure blocks further writes and reads until a new session (19.23125ms)
+✔ corrupt data cannot be overwritten; a read exception remains retryable (50.966792ms)
+✔ concurrent writes and reads cannot race an in-flight flush (20.89825ms)
+✔ reserved all ID cannot enter a selectable history record or reach storage (18.525708ms)
+✔ UTF-8 and JSON escaping expansion cannot exceed the application archive budget (16.251916ms)
+✔ archive limit counts ASCII, multibyte and supplementary codepoints exactly (10.719667ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1010.013291

@@ -1,0 +1,50 @@
+EVIDENCE /Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/docs/evolution/evidence/smoke/20260923T082834Z-d5c49134
+PASS 本机观察 · 0/10
+PASS 暂时看不清 · 已选择
+PASS 边缘看起来平滑
+PASS 暂时看不清
+PASS 本机观察 · 1/10
+PASS 公园 · 叶缘
+PASS 本机观察 · 1/10
+PASS 公园 · 叶缘
+PASS 边缘看起来平滑
+PASS 叶缘 · 已选择
+PASS 公园 · 已选择
+PASS 边缘看起来平滑
+PASS 本机观察 · 2/10
+PASS 本机观察 · 2/10
+PASS 本机观察 · 1/10
+PASS 本机观察 · 1/10
+PASS 本机观察 · 0/10
+Traceback (most recent call last):
+  File "/Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/scripts/emulator-smoke.py", line 129, in <module>
+    expect('本机观察 · 0/10')
+    ~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/scripts/emulator-smoke.py", line 73, in expect
+    find(text, direction)
+    ~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/scripts/emulator-smoke.py", line 63, in find
+    swipe(direction)
+    ~~~~~^^^^^^^^^^^
+  File "/Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/scripts/emulator-smoke.py", line 50, in swipe
+    dump()  # Stop before injecting input if the target window disappeared.
+    ~~~~^^
+  File "/Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/scripts/emulator-smoke.py", line 31, in dump
+    run('shell', 'uitest', 'dumpLayout', '-b', bundle, '-p', '/data/local/tmp/nature19-test.json')
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/scripts/emulator-smoke.py", line 26, in run
+    result = subprocess.run([hdc, '-t', args.device, *cmd], capture_output=True, text=True, timeout=20)
+  File "/Users/Admin/miniforge3/lib/python3.14/subprocess.py", line 557, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/Admin/miniforge3/lib/python3.14/subprocess.py", line 1221, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/Admin/miniforge3/lib/python3.14/subprocess.py", line 2154, in _communicate
+    self._check_timeout(endtime, orig_timeout, stdout, stderr)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/Admin/miniforge3/lib/python3.14/subprocess.py", line 1268, in _check_timeout
+    raise TimeoutExpired(
+    ...<2 lines>...
+            stderr=b''.join(stderr_seq) if stderr_seq else None)
+subprocess.TimeoutExpired: Command '['/Applications/DevEco-Studio.app/Contents/sdk/default/openharmony/toolchains/hdc', '-t', '127.0.0.1:5555', 'shell', 'uitest', 'dumpLayout', '-b', 'com.hongmengoutputs.urbannature', '-p', '/data/local/tmp/nature19-test.json']' timed out after 20 seconds

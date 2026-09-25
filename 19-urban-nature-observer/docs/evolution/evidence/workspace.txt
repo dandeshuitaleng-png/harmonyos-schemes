@@ -1,0 +1,40 @@
+
+Version:          Cursor 3.20.21 (f09fca384ceca23f7bf21f9c23655b162641d740, 2026-09-13T19:02:51.781Z)
+OS Version:       Darwin arm64 25.6.0
+CPUs:             Apple M2 (8 x 2400)
+Memory (System):  16.00GB (0.12GB free)
+Load (avg):       70, 82, 102
+VM:               0%
+Screen Reader:    no
+Process Argv:
+GPU Status:       2d_canvas:                              enabled
+                  direct_rendering_display_compositor:    disabled_off_ok
+                  gpu_compositing:                        enabled
+                  multiple_raster_threads:                enabled_on
+                  opengl:                                 enabled_on
+                  rasterization:                          enabled
+                  raw_draw:                               disabled_off_ok
+                  skia_graphite:                          disabled_off
+                  trees_in_viz:                           disabled_off
+                  video_decode:                           enabled
+                  video_encode:                           enabled
+                  webgl:                                  enabled
+                  webgpu:                                 enabled
+                  webnn:                                  disabled_off
+
+CPU %	Mem MB	   PID	Process
+    4	   131	 49974	cursor main
+   14	    49	 50060	   gpu-process
+    0	    33	 50062	   utility-network-service
+    0	    33	 50078	shared-process
+    0	    16	 50133	mcp-process
+    0	    33	 50134	conversation-search
+    0	    16	 50161	   utility-process
+    0	    16	 62765	ptyHost
+
+Workspace Stats:
+|  Window (Cursor Agents)
+|    Folder (19-urban-nature-observer): 225 files
+|      File types: json(34) json5(10) md(10) txt(9) ts(8) msgpack(7)
+|                  protoBin(6) png(4) ets(4) map(3)
+|      Conf files:

@@ -1,0 +1,46 @@
+✔ all task/environment combinations accept every valid feature and reject incomplete input (2.453167ms)
+✔ uncertain observation is exclusive in both directions; deselection works (1.116625ms)
+✔ flower and fruit may coexist but not with absent or unclear (0.192042ms)
+✔ versioned archive restores records without retaining unknown fields (0.468833ms)
+✔ malformed, future versions and invalid records are refused (0.585042ms)
+✔ capacity is bounded and worst-case valid payload fits application 8192-byte budget (0.998167ms)
+✔ save/restore then deletion survive a fresh storage instance (72.404167ms)
+✔ failed save rolls cache and disk back, then permits a successful retry (16.624417ms)
+✔ failed delete retains prior records, including after reopening storage (60.715542ms)
+✔ rollback failure blocks further writes and reads until a new session (18.863333ms)
+✔ corrupt data cannot be overwritten; a read exception remains retryable (39.638625ms)
+✔ concurrent writes and reads cannot race an in-flight flush (15.560875ms)
+✔ reserved all ID cannot enter a selectable history record or reach storage (14.650292ms)
+✖ UTF-8 and JSON escaping expansion cannot exceed the application archive budget (8.256084ms)
+✔ archive limit counts ASCII, multibyte and supplementary codepoints exactly (5.937125ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 14
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 831.483084
+
+✖ failing tests:
+
+test at tests/observations.test.cjs:141:1
+✖ UTF-8 and JSON escaping expansion cannot exceed the application archive budget (8.256084ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+    assert.ok(Buffer.byteLength(archive(tooLarge), 'utf8') > 8192)
+
+      at TestContext.<anonymous> (/Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/tests/observations.test.cjs:143:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

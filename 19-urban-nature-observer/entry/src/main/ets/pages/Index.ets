@@ -1,116 +1,242 @@
-const FEATURE_TASKS: string[] = ['叶缘', '叶脉', '花果', '树皮'];
-const PLACES: string[] = ['公园', '街边', '校园', '社区'];
-const LEAF_EDGE_OPTIONS: string[] = ['边缘看起来平滑', '边缘有明显锯齿', '边缘有分裂或裂片', '暂时看不清'];
-const LEAF_VEIN_OPTIONS: string[] = ['可见一条主脉', '可见多条分叉脉', '可见大致平行的脉', '暂时看不清'];
-const FLOWER_FRUIT_OPTIONS: string[] = ['看到花或花苞', '看到果实或种子结构', '未见花果', '暂时看不清'];
-const BARK_OPTIONS: string[] = ['表面较平滑', '表面粗糙有纹理', '有片状脱落或裂纹', '暂时看不清'];
+import { common } from '@kit.AbilityKit';
+import { TASKS, PLACES, MAX_RECORDS, Observation, optionsFor, guidanceFor, toggleFeature, validSelection } from '../model/Observation';
+import { ObservationStore } from '../storage/ObservationStore';
 
 @Entry
 @Component
 struct Index {
   @State private task: string = '';
   @State private place: string = '';
-  @State private selectedVisibleFeatures: string[] = [];
-  @State private reviewCreated: boolean = false;
-  @State private deletedNotice: boolean = false;
-  @State private confirmDelete: boolean = false;
+  @State private features: string[] = [];
+  @State private records: Observation[] = [];
+  @State private ready: boolean = false;
+  @State private busy: boolean = false;
+  @State private message: string = '';
+  @State private storageError: string = '';
+  @State private pendingDelete: string = '';
+  private scroller: Scroller = new Scroller();
+  private store: ObservationStore | undefined = undefined;
 
-  private visibleOptions(): string[] {
-    if (this.task === '叶缘') { return LEAF_EDGE_OPTIONS; }
-    if (this.task === '叶脉') { return LEAF_VEIN_OPTIONS; }
-    if (this.task === '花果') { return FLOWER_FRUIT_OPTIONS; }
-    if (this.task === '树皮') { return BARK_OPTIONS; }
-    return [];
-  }
-  private hasVisibleFeature(option: string): boolean { return this.selectedVisibleFeatures.indexOf(option) >= 0; }
-  private canConfirm(): boolean { return this.task.length > 0 && this.place.length > 0 && this.selectedVisibleFeatures.length > 0; }
-  private selectTask(task: string): void { this.task = task; this.selectedVisibleFeatures = []; this.reviewCreated = false; this.deletedNotice = false; this.confirmDelete = false; }
-  private selectPlace(place: string): void { this.place = place; this.reviewCreated = false; this.deletedNotice = false; this.confirmDelete = false; }
-  private toggleVisibleFeature(option: string): void {
-    const next: string[] = [];
-    let existed = false;
-    this.selectedVisibleFeatures.forEach((item: string) => { if (item === option) { existed = true; } else { next.push(item); } });
-    if (!existed) { next.push(option); }
-    this.selectedVisibleFeatures = next; this.reviewCreated = false; this.deletedNotice = false;
-  }
-  private removeSessionReview(): void {
-    if (!this.confirmDelete) {
-      this.confirmDelete = true;
-      return;
+  aboutToAppear(): void { this.loadRecords(); }
+
+  private loadRecords(): void {
+    this.ready = false;
+    this.storageError = '';
+    try {
+      const context = this.getUIContext().getHostContext() as common.UIAbilityContext;
+      if (!this.store) { this.store = new ObservationStore(context); }
+      this.records = this.store.load();
+      this.ready = true;
+    } catch (error) {
+      this.storageError = '本机记录暂时无法读取。请重试；已有数据不会被自动清空。';
     }
-    this.reviewCreated = false;
-    this.selectedVisibleFeatures = [];
-    this.deletedNotice = true;
-    this.confirmDelete = false;
+  }
+
+  private canSave(): boolean {
+    return this.ready && !this.busy && this.records.length < MAX_RECORDS && validSelection(this.task, this.place, this.features);
+  }
+
+  private selectTask(task: string): void {
+    if (this.task !== task) { this.features = []; }
+    this.task = task;
+    this.message = '';
+    this.pendingDelete = '';
+  }
+
+  private selectPlace(place: string): void {
+    this.place = place;
+    this.message = '';
+    this.pendingDelete = '';
+  }
+
+  private selectFeature(feature: string): void {
+    this.features = toggleFeature(this.task, this.features, feature);
+    this.message = '';
+    this.pendingDelete = '';
+  }
+
+  private async saveObservation(): Promise<void> {
+    if (!this.canSave() || !this.store) { return; }
+    this.busy = true;
+    this.pendingDelete = '';
+    const now: number = Date.now();
+    const record: Observation = {
+      id: `${now}-${Math.random().toString(36).slice(2, 10)}`,
+      createdAt: now, task: this.task, place: this.place, features: this.features.slice()
+    };
+    const next: Observation[] = [record, ...this.records];
+    try {
+      await this.store.save(next);
+      this.records = next;
+      this.features = [];
+      this.message = '已保存到本机，可在下方回顾。下次打开应用仍可查看。';
+    } catch (error) {
+      this.message = '保存失败，尚未确认写入本机。你的选择已保留，请重试。';
+      this.checkStorageHealth();
+    } finally { this.busy = false; }
+  }
+
+  private async deleteRecords(): Promise<void> {
+    if (!this.ready || this.busy || !this.store || this.pendingDelete === '') { return; }
+    const next: Observation[] = this.pendingDelete === 'all' ? [] :
+      this.records.filter((item: Observation) => item.id !== this.pendingDelete);
+    this.busy = true;
+    try {
+      await this.store.save(next);
+      this.records = next;
+      this.pendingDelete = '';
+      this.message = '已从本机删除所选观察记录。';
+    } catch (error) {
+      this.message = '删除未完成，列表暂时保留。请重试。';
+      this.checkStorageHealth();
+    } finally { this.busy = false; }
+  }
+
+  private checkStorageHealth(): void {
+    if (this.store && !this.store.isReady()) {
+      this.ready = false;
+      this.storageError = '存储状态暂时无法确认，已暂停写入。请关闭应用后重新打开，检查记录是否保存。';
+    }
+  }
+
+  private revisit(record: Observation): void {
+    this.task = record.task;
+    this.place = record.place;
+    this.features = [];
+    this.pendingDelete = '';
+    this.message = '已选择同类任务和环境，请重新观察并勾选特征。原记录保持不变。';
+    this.scroller.scrollEdge(Edge.Top);
+  }
+
+  private dateLabel(timestamp: number): string {
+    const date: Date = new Date(timestamp);
+    const minute: string = date.getMinutes() < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`;
+    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${date.getHours()}:${minute}`;
   }
 
   onBackPress(): boolean {
-    if (this.confirmDelete) {
-      this.confirmDelete = false;
-      return true;
-    }
+    if (this.busy) { return true; }
+    if (this.pendingDelete !== '') { this.pendingDelete = ''; return true; }
     return false;
   }
 
+  private isSelected(label: string): boolean {
+    return this.task === label || this.place === label || this.features.indexOf(label) >= 0;
+  }
+
+  @Builder
+  option(label: string, action: () => void) {
+    Button(this.isSelected(label) ? `${label} · 已选择` : label)
+      .width('100%').constraintSize({ minHeight: 48 }).padding(12).borderRadius(14)
+      .backgroundColor(this.isSelected(label) ? $r('app.color.active') : $r('app.color.canvas'))
+      .fontColor($r('app.color.text_primary')).fontSize(16)
+      .accessibilityText(`${label}，${this.isSelected(label) ? '已选择' : '未选择'}`)
+      .enabled(!this.busy).onClick(action)
+  }
+
+  @Builder
+  deletionConfirmation(label: string) {
+    Column({ space: 8 }) {
+      Text(label).fontSize(16).fontColor($r('app.color.text_danger'))
+      Button(this.busy ? '正在删除…' : '确认删除')
+        .constraintSize({ minHeight: 48 }).width('100%').fontColor($r('app.color.text_danger'))
+        .backgroundColor($r('app.color.card')).enabled(!this.busy).onClick(() => this.deleteRecords())
+      Button('取消').constraintSize({ minHeight: 48 }).width('100%').fontColor($r('app.color.action'))
+        .backgroundColor($r('app.color.card')).enabled(!this.busy).onClick(() => this.pendingDelete = '')
+    }.width('100%')
+  }
+
   build() {
-    Scroll() { Column({ space: 16 }) {
-      Row({ space: 12 }) {
-        Column({ space: 4 }) {
-          Text('城市自然观察').fontSize(26).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary')).lineHeight(34)
-          Text('城市植物特征观察 · 不识别、不定位、不上传').fontSize(17).fontColor($r('app.color.text_secondary')).lineHeight(24)
-        }.layoutWeight(1).alignItems(HorizontalAlign.Start)
-        Text('非鉴定')
-          .fontSize(14).fontWeight(FontWeight.Medium).fontColor($r('app.color.text_primary'))
-          .padding({ left: 10, right: 10, top: 8, bottom: 8 })
-          .backgroundColor($r('app.color.notice')).borderRadius(8)
-          .accessibilityText('本页不推断物种或健康状况')
-      }.width('100%').alignItems(VerticalAlign.Top)
-      Column({ space: 6 }) {
-        Text('个人观察 · 未鉴定').fontSize(17).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_notice'))
-        Text('请只记录肉眼可见特征；本页不推断物种、健康状况或生态结论。').fontSize(14).fontColor($r('app.color.text_notice'))
-      }.padding(16).backgroundColor($r('app.color.notice')).borderRadius(18).width('100%')
-      Column({ space: 8 }) {
-        Text('1. 选择观察任务').fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
-        ForEach(FEATURE_TASKS, (item: string) => {
-          Button(this.task === item ? `${item} · 已选择` : item).width('100%').constraintSize({ minHeight: 48 }).borderRadius(14).backgroundColor(this.task === item ? $r('app.color.active') : $r('app.color.card')).fontColor($r('app.color.text_primary')).accessibilityText(this.task === item ? `已选择${item}观察任务` : `选择${item}观察任务`).onClick(() => this.selectTask(item))
-        }, (item: string) => item)
-      }.padding(20).backgroundColor($r('app.color.card')).borderRadius(20).width('100%')
-      Column({ space: 8 }) {
-        Text('2. 选择粗略环境').fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
-        ForEach(PLACES, (item: string) => {
-          Button(this.place === item ? `${item} · 已选择` : item).width('100%').constraintSize({ minHeight: 48 }).borderRadius(14).backgroundColor(this.place === item ? $r('app.color.active') : $r('app.color.card')).fontColor($r('app.color.text_primary')).accessibilityText(this.place === item ? `已选择${item}粗略环境` : `选择${item}粗略环境，不记录定位`).onClick(() => this.selectPlace(item))
-        }, (item: string) => item)
-      }.padding(20).backgroundColor($r('app.color.card')).borderRadius(20).width('100%')
-      if (this.task.length > 0) {
+    Scroll(this.scroller) {
+      Column({ space: 16 }) {
+        Column({ space: 6 }) {
+          Text('城市自然观察').fontSize(26).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
+          Text('发现身边植物，留下自己的观察').fontSize(17).fontColor($r('app.color.text_secondary'))
+        }.width('100%').alignItems(HorizontalAlign.Start)
         Column({ space: 8 }) {
-          Text(`3. 勾选肉眼可见的${this.task}特征`).fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
-          Text('可选择多个；“暂时看不清”也是有效观察，不表示鉴定失败。').fontSize(14).fontColor($r('app.color.text_secondary'))
-          ForEach(this.visibleOptions(), (item: string) => {
-            Button(this.hasVisibleFeature(item) ? `${item} · 已勾选` : item).width('100%').constraintSize({ minHeight: 48 }).borderRadius(14).backgroundColor(this.hasVisibleFeature(item) ? $r('app.color.active') : $r('app.color.card')).fontColor($r('app.color.text_primary')).accessibilityText(this.hasVisibleFeature(item) ? `已勾选可见特征${item}` : `勾选可见特征${item}`).onClick(() => this.toggleVisibleFeature(item))
-          }, (item: string) => item)
+          Text('个人观察 · 未鉴定').fontSize(18).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_notice'))
+          Text('记录肉眼所见，不推断物种或健康状况。观察时不采摘、不品尝、不打扰。')
+            .fontSize(16).fontColor($r('app.color.text_notice'))
+          Text('仅在你点击保存后写入本机；不拍照、不定位、不上传。')
+            .fontSize(16).fontColor($r('app.color.text_notice'))
+        }.padding(16).backgroundColor($r('app.color.notice')).borderRadius(18).width('100%')
+        if (!this.ready) {
+          Column({ space: 8 }) {
+            Text(this.storageError).fontSize(16).fontColor($r('app.color.text_danger'))
+            Button('重新读取本机记录').constraintSize({ minHeight: 48 }).onClick(() => this.loadRecords())
+          }.padding(16).backgroundColor($r('app.color.card')).borderRadius(18).width('100%')
+        }
+        Column({ space: 8 }) {
+          Text('1. 选择观察任务').fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
+          ForEach(TASKS, (item: string) => { this.option(item, () => this.selectTask(item)); }, (item: string) => item)
+          Text(guidanceFor(this.task)).fontSize(16).fontColor($r('app.color.text_secondary'))
         }.padding(20).backgroundColor($r('app.color.card')).borderRadius(20).width('100%')
-      }
-      if (!this.canConfirm()) { Text(this.task.length === 0 ? '先选择一项观察任务。' : this.place.length === 0 ? '选择粗略环境后继续；不会记录定位。' : '至少勾选一个肉眼可见特征后才能确认观察。').fontSize(14).fontColor($r('app.color.text_secondary')) }
-      Button('确认本次个人观察').width('100%').height(54).backgroundColor($r('app.color.action')).fontColor($r('app.color.on_action')).borderRadius(15).enabled(this.canConfirm()).accessibilityText(this.canConfirm() ? '确认本次个人观察，未鉴定且不保存上传' : '请先选择任务、环境和至少一个可见特征').onClick(() => { this.reviewCreated = true; this.deletedNotice = false; })
-      if (this.reviewCreated) {
         Column({ space: 8 }) {
-          Text('个人观察，未鉴定').fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_success'))
-          Text(`${this.place} · 观察任务：${this.task}`).fontSize(16).fontColor($r('app.color.text_primary'))
-          Text(`肉眼可见：${this.selectedVisibleFeatures.join('；')}`).fontSize(15).fontColor($r('app.color.text_primary'))
-          Text('仅保留在当前会话；不保存、不上传，也不生成物种结论。').fontSize(14).fontColor($r('app.color.text_secondary'))
-          if (this.confirmDelete) {
-            Text('删除后无法从本页恢复这次会话观察。没有保存或上传。').fontSize(14).fontColor($r('app.color.text_danger'))
-            Button('确认删除本次个人观察').fontColor($r('app.color.text_danger')).backgroundColor(Color.Transparent)
-              .constraintSize({ minHeight: 48 }).accessibilityText('确认删除本次会话内个人观察，此操作不能撤销').onClick(() => this.removeSessionReview())
-            Button('取消删除').fontColor($r('app.color.action')).backgroundColor(Color.Transparent)
-              .constraintSize({ minHeight: 48 }).onClick(() => this.confirmDelete = false)
-          } else {
-            Button('删除本次个人观察').fontColor($r('app.color.action')).backgroundColor(Color.Transparent)
-              .constraintSize({ minHeight: 48 }).accessibilityText('准备删除本次会话内个人观察，下一步需要确认').onClick(() => this.removeSessionReview())
+          Text('2. 选择粗略环境').fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
+          Text('只记环境类别，不记录具体地点。').fontSize(16).fontColor($r('app.color.text_secondary'))
+          ForEach(PLACES, (item: string) => { this.option(item, () => this.selectPlace(item)); }, (item: string) => item)
+        }.padding(20).backgroundColor($r('app.color.card')).borderRadius(20).width('100%')
+        if (this.task !== '') {
+          Column({ space: 8 }) {
+            Text(`3. 观察${this.task}特征`).fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
+            Text('可多选。“暂时看不清”会替换其他选项；花果“未见”与“看到”不能同时选择。')
+              .fontSize(16).fontColor($r('app.color.text_secondary'))
+            ForEach(optionsFor(this.task), (item: string) => {
+              this.option(item, () => this.selectFeature(item));
+            }, (item: string) => item)
+          }.padding(20).backgroundColor($r('app.color.card')).borderRadius(20).width('100%')
+        }
+        if (this.records.length >= MAX_RECORDS) {
+          Text('本机已保存10条观察。请先删除不需要的记录，再保存新的观察。').fontSize(16).fontColor($r('app.color.text_notice'))
+        } else if (!validSelection(this.task, this.place, this.features)) {
+          Text(this.task === '' ? '先选择一项观察任务。' : this.place === '' ? '再选择观察环境。' : '至少选择一个可见特征，也可以选择暂时看不清。')
+            .fontSize(16).fontColor($r('app.color.text_secondary'))
+        }
+        Button(this.busy ? '正在处理…' : '保存本次观察到本机')
+          .width('100%').constraintSize({ minHeight: 54 }).padding(14).borderRadius(15)
+          .backgroundColor($r('app.color.action')).fontColor($r('app.color.on_action')).fontSize(17)
+          .enabled(this.canSave()).onClick(() => this.saveObservation())
+        if (this.message !== '') {
+          Text(this.message).fontSize(16).fontColor($r('app.color.text_primary')).width('100%')
+        }
+        Column({ space: 12 }) {
+          Text(`本机观察 · ${this.records.length}/10`).fontSize(22).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
+          Text('按保存时间回顾；可逐条删除或清空。未保存的选择在退出后丢弃。卸载或清除应用数据后记录不可恢复。')
+            .fontSize(16).fontColor($r('app.color.text_secondary'))
+          if (this.ready && this.records.length === 0) {
+            Text('还没有保存的观察。从一株身边的植物开始吧。').fontSize(17).fontColor($r('app.color.text_secondary'))
           }
-        }.padding(20).backgroundColor($r('app.color.active')).borderRadius(20).width('100%')
-      }
-      if (this.deletedNotice) { Text('已删除本次会话观察；没有任何内容被保存或上传。').fontSize(14).fontColor($r('app.color.text_secondary')) }
-    }.padding({ left: 20, right: 20, top: 28, bottom: 36 }).alignItems(HorizontalAlign.Start).width('100%') }.width('100%').height('100%').backgroundColor($r('app.color.canvas'))
+          ForEach(this.records, (record: Observation) => {
+            Column({ space: 10 }) {
+              Text(`${record.place} · ${record.task}`).fontSize(20).fontWeight(FontWeight.Bold).fontColor($r('app.color.text_primary'))
+              Text('个人观察，未鉴定').fontSize(16).fontColor($r('app.color.text_success'))
+              Text(this.dateLabel(record.createdAt)).fontSize(16).fontColor($r('app.color.text_secondary'))
+              Text(record.features.join('；')).fontSize(17).fontColor($r('app.color.text_primary'))
+              Text(guidanceFor(record.task)).fontSize(16).fontColor($r('app.color.text_secondary'))
+              Button('再次观察同类特征').constraintSize({ minHeight: 48 }).width('100%')
+                .fontColor($r('app.color.action')).backgroundColor($r('app.color.card')).enabled(!this.busy)
+                .onClick(() => this.revisit(record))
+              if (this.pendingDelete === record.id) {
+                this.deletionConfirmation(`删除这条${record.place}的${record.task}观察？删除后无法恢复。`)
+              } else {
+                Button('删除这条观察').constraintSize({ minHeight: 48 }).width('100%')
+                  .fontColor($r('app.color.text_danger')).backgroundColor($r('app.color.card')).enabled(!this.busy && this.ready)
+                  .accessibilityText(`删除${this.dateLabel(record.createdAt)}的${record.place}${record.task}观察，需要确认`)
+                  .onClick(() => { this.pendingDelete = record.id; this.message = ''; })
+              }
+            }.padding(18).backgroundColor($r('app.color.active')).borderRadius(18).width('100%').alignItems(HorizontalAlign.Start)
+          }, (record: Observation) => record.id)
+          if (this.records.length > 0) {
+            if (this.pendingDelete === 'all') {
+              this.deletionConfirmation(`清空全部${this.records.length}条本机观察？此操作无法恢复。`)
+            } else {
+              Button('清空全部本机观察').constraintSize({ minHeight: 48 }).width('100%')
+                .fontColor($r('app.color.text_danger')).backgroundColor($r('app.color.card')).enabled(!this.busy && this.ready)
+                .onClick(() => { this.pendingDelete = 'all'; this.message = ''; })
+            }
+          }
+        }.width('100%').alignItems(HorizontalAlign.Start)
+      }.padding({ left: 20, right: 20, top: 28, bottom: 36 }).alignItems(HorizontalAlign.Start).width('100%')
+    }.width('100%').height('100%').backgroundColor($r('app.color.canvas'))
   }
 }

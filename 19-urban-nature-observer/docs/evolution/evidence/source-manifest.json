@@ -1,0 +1,28 @@
+{
+  "files": {
+    "AppScope/app.json5": "a1116521a9aec9df5ed11bb06879445d45543705c29755c73b64b0d82fc859ac",
+    "AppScope/resources/base/element/string.json": "022641c70fa8af8f80b9e70852eb29b16f63448cfdd9609865fb56eecd786113",
+    "build-profile.json5": "af2ba057c56552bb4e1f802097040aba32fa5eb38bbbae452e59f9b1d8f934a3",
+    "entry/build-profile.json5": "cf06c8ea46a83e6974a96a4c49123e05409f2ec407c3bfacdcfdd95b60e01990",
+    "entry/hvigorfile.ts": "898dfe731c5baccda8f883b1f3e8444e036b38d1839ebf169caa0f0764aac667",
+    "entry/oh-package.json5": "450f014700c32c384175ff204b41afc0c813026e32d2b50f42dc1b4cd5437b4b",
+    "entry/src/main/ets/EntryAbility.ets": "8b907933d2c1b4901dda6b9459a516ab8613ca3f66141992433cacc300cca84c",
+    "entry/src/main/ets/model/Observation.ts": "8bea5fb3317b06545d5b2922bc3b76fc77bcc275e576ddc5f8a745dbb78109b5",
+    "entry/src/main/ets/pages/Index.ets": "1f0de14fc4a22e09d3aeb711733c891ab268da27269b31d198f40e9646eab68e",
+    "entry/src/main/ets/storage/ObservationStore.ets": "526d9d30dfdeaf6586083ec5b9f81970c3eccc7eed49333041b310d3898c9d96",
+    "entry/src/main/module.json5": "df85935dd194dd44df4a926335e2df033d6c26d709a938a6e521539e8fcd5086",
+    "entry/src/main/resources/base/element/color.json": "b68d4b546d75a0571ec83fa23df77d757c33bc3597e675fb9cbc8ffa3282321d",
+    "entry/src/main/resources/base/media/app_icon.svg": "f1f80c0fc947d7eb68ee26386e5d92b8a05fdd42bdff6483e16627f7ccc69865",
+    "entry/src/main/resources/base/profile/main_pages.json": "4ca3fb089a34d7f463b3af626b3d472b4ae5b2021c64606d272c926535fe0814",
+    "entry/src/main/resources/dark/element/color.json": "fdfe6d562f965e8c6de169552c4b43189da28ecfdbfbe1fe10f46d028aec8ed7",
+    "hvigor/hvigor-config.json5": "2b2e594695eaa007c0edac8e862ebc8f10ac854787fd0a24d51ac7b033bce184",
+    "hvigorfile.ts": "d210bcce551132620eae18f5d78809f30c9db2a1435d0542f92eed1291965d63",
+    "oh-package.json5": "a1b229a36c45a2b6423f45b92124a2d509debbe363fce7cbeed05effa6e503d3",
+    "scripts/build.sh": "8c051f13aa8f6e7cf9628909467de6a4e47afd5538690dd41d988b00c4a6e38b",
+    "scripts/emulator-smoke.py": "245b6d05a9981fe2a4333a4f9dfbcaa4ae0d743266a3b72cac360cbdfa90d7b4",
+    "scripts/smoke_support.py": "a2cb1440e0a5a2db6ef2954ab5ccb3f8b2ca42be16aa9adcb14fc9ce6a897398",
+    "tests/observations.test.cjs": "c6c026ac2931d6917eb101605f8d5c94ef8eec7fe8578ab31a26372b8e87f540",
+    "tests/test_smoke_support.py": "e652b47b1290f969c12afdccde2e720fe37fc2d1ee178a702529ae17cbd80d2c"
+  },
+  "sha256": "2f90ca8e6d50e2409e13c3ddc4aa79e624ef31347acda3b5084e1947ee2405ea"
+}

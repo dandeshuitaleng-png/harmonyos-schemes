@@ -1,0 +1,6 @@
+19-urban-nature-observer – README.md [19-urban-nature-observer], 03-tidewatch, 17-neo-explorer, 26breathhalfhour – README.md [26breathhalfhour]
+
+2026-09-23 16:20:09,377 [502358352]   INFO - #com.huawei.deveco.build.ohos.sync.module.ContentEntriesSetup - Add exclude folder:/Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/build
+2026-09-23 16:20:09,411 [502358386]   INFO - #com.huawei.deveco.build.ohos.sync.module.ContentEntriesSetup - Add exclude folder:/Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/entry/build
+2026-09-23 16:20:09,448 [502358423]   INFO - com.huawei.deveco.res.ohos.rrm.listener.ResourceProjectSetup OhosResource - the ohos project model:19-urban-nature-observer setup.
+2026-09-23 16:20:09,448 [502358423]   INFO - com.huawei.ace.ohos.lsp.imp.ArkClientProjectSetup ArkUI - the ohos project model:19-urban-nature-observer setup.

@@ -1,0 +1,20 @@
+EVIDENCE /Users/Admin/Projects/harmonyos-nature-19/19-urban-nature-observer/docs/evolution/evidence/smoke/20260923T083626Z-13f51d0c
+PASS 本机观察 · 0/10
+PASS 暂时看不清 · 已选择
+PASS 边缘看起来平滑
+PASS 暂时看不清
+PASS 本机观察 · 1/10
+PASS 公园 · 叶缘
+PASS 本机观察 · 1/10
+PASS 公园 · 叶缘
+PASS 边缘看起来平滑
+PASS 叶缘 · 已选择
+PASS 公园 · 已选择
+PASS 边缘看起来平滑
+PASS 本机观察 · 2/10
+PASS 本机观察 · 2/10
+PASS 本机观察 · 1/10
+PASS 本机观察 · 1/10
+PASS 本机观察 · 0/10
+PASS 本机观察 · 0/10
+PASS emulator smoke completed

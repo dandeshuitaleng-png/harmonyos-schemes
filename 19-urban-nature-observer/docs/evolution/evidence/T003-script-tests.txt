@@ -1,0 +1,8 @@
+test_failure_cannot_inherit_previous_pass (test_smoke_support.SmokeEvidenceTests.test_failure_cannot_inherit_previous_pass) ... ok
+test_hdc_errors_are_detected_even_with_zero_exit_code (test_smoke_support.SmokeEvidenceTests.test_hdc_errors_are_detected_even_with_zero_exit_code) ... ok
+test_incomplete_run_is_not_pass (test_smoke_support.SmokeEvidenceTests.test_incomplete_run_is_not_pass) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.006s
+
+OK

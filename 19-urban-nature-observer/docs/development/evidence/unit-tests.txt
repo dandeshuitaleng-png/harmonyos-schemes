@@ -1,0 +1,20 @@
+✔ all task/environment combinations accept every valid feature and reject incomplete input (0.693791ms)
+✔ uncertain observation is exclusive in both directions; deselection works (1.1475ms)
+✔ flower and fruit may coexist but not with absent or unclear (0.196791ms)
+✔ versioned archive restores records without retaining unknown fields (0.236291ms)
+✔ malformed, future versions and invalid records are refused (0.243625ms)
+✔ capacity is bounded and worst-case valid payload fits Preferences 8192-byte limit (0.210042ms)
+✔ save/restore then deletion survive a fresh storage instance (39.843625ms)
+✔ failed save rolls cache and disk back, then permits a successful retry (10.093458ms)
+✔ failed delete retains prior records, including after reopening storage (14.101375ms)
+✔ rollback failure blocks further writes and reads until a new session (6.928083ms)
+✔ corrupt data cannot be overwritten; a read exception remains retryable (14.035208ms)
+✔ concurrent writes and reads cannot race an in-flight flush (6.733708ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 614.227916

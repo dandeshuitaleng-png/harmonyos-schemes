@@ -1,5 +1,28 @@
 # 城市自然观察 · 发布证据台账
 
+> 2026-09-23最新：E1记录边界改进与本地18项测试/模拟器闭环通过；T004全仓guard因原始26号缺AGENTS阻塞。当前HAP与逐项结论见 `../evolution/release-review.md`，以下9月21日产物与状态为历史。发布仍blocked。
+
+更新：2026-09-21。
+
+| Gate | Evidence | Status |
+| --- | --- | --- |
+| Build | SDK 26内置编译；ArkTS、HAP打包成功；SHA-256 `c109f08207bba11313ec098a416faf4be06d09fd23dd02fa1eb2166527a93211` | verified（未签名） |
+| Model / Storage | 12项测试，包括无效数据、互斥、容量、回滚及并发 | verified（自动化） |
+| Emulator | API 24保存、进程重启恢复、再次观察、取消/确认删除、清空后重启 | verified（模拟器） |
+| Permissions | 无网络、定位、相机等权限或相关上传实现 | verified（静态） |
+| Visual | 手机模拟器浅色截图复核 | partial |
+| Signing / Real device | 未配置本项目签名，未完成真机验证 | blocked |
+| Accessibility / Theme / Tablet | 深色、大字号、读屏、平板待测 | pending |
+| Store / Usability | 主体、隐私URL、上架截图与新手访谈待完成 | blocked |
+
+**发布结论：blocked；离线MVP核心闭环已通过模拟器验证。** 完整证据与已知限制见 `../development/VALIDATION.md`。
+
+---
+
+## 历史台账（以下内容保留为旧版证据）
+
+# 城市自然观察 · 发布证据台账
+
 更新：2026-08-31。
 
 | Gate | Evidence | Status |

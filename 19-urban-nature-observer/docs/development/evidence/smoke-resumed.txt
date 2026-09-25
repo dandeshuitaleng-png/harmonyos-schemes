@@ -1,0 +1,13 @@
+PASS 本机观察 · 1/10
+PASS 公园 · 叶缘
+PASS 边缘看起来平滑
+PASS 叶缘 · 已选择
+PASS 公园 · 已选择
+PASS 边缘看起来平滑
+PASS 本机观察 · 2/10
+PASS 本机观察 · 2/10
+PASS 本机观察 · 1/10
+PASS 本机观察 · 1/10
+PASS 本机观察 · 0/10
+PASS 本机观察 · 0/10
+PASS emulator smoke completed

@@ -1,0 +1,4 @@
+Initial attempt from project subdirectory: 未发现编号方案目录 (invocation error, rerun from repository root).
+Repository-root guard failed: 26-breath-half-hour 缺少 AGENTS.md
+HEAD d05b4aa0aa1beaa0c3910eadddc9b3a2b7b257cf git ls-tree for that path is empty: ''
+All current tracked modifications are in 19-urban-nature-observer.
